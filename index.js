@@ -1,20 +1,15 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const app = express();
-const PORT = process.env.PORT | 4000;
-const URL = "mongodb://127.0.0.1:27017"
+const express=require('express');
+ const app = express();
 app.use(express.json());
+const mongoose = require('mongoose');
+const PORT=3000;
 
 
-//to connect mongoose
-
-mongoose.connect("mongodb://127.0.0.1:27017/good_reades") 
+mongoose.connect('mongodb://localhost/my_database').then(()=>{}).catch(()=>{})
 
 
-//to start server
+
 app.listen(PORT,(err)=>{
-    if(!err) {
-       return  console.log("server runnig",PORT);
-    }
+    if(!err) return console.log(`server start at port ${PORT}`);
     console.log(err);
-})//listen
+})
