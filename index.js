@@ -1,13 +1,26 @@
 const express=require('express');
- const app = express();
+const app = express();
 app.use(express.json());
 const mongoose = require('mongoose');
-const PORT=3000;
+const PORT= process.env.Port || 3000 ;
+const URL = process.env.url || "mongodb://localhost" ;
 
 
-mongoose.connect('mongodb://localhost/my_database').then(()=>{}).catch(()=>{})
+////////////////Routers
+
+// const bookRouter = require('./router/book/book')
+// app.use(['/book' , '/books'], bookRouter);
 
 
+
+
+
+
+
+
+mongoose.connect(`${URL}/goodReads`).then(()=>{
+    console.log(`connect mongoose is successfully! ${URL}`);
+}).catch((err)=>{console.log(err);})
 
 app.listen(PORT,(err)=>{
     if(!err) return console.log(`server start at port ${PORT}`);
