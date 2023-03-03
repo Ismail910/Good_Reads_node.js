@@ -8,8 +8,8 @@ const URL = process.env.url || "mongodb://localhost" ;
 
 ////////////////Routers
 
-// const bookRouter = require('./router/book/book')
-// app.use(['/book' , '/books'], bookRouter);
+const bookRouter = require('./router/book/book')
+app.use(['/book' , '/books'], bookRouter);
 
 
 
@@ -19,7 +19,7 @@ const URL = process.env.url || "mongodb://localhost" ;
 
 
 mongoose.connect(`${URL}/goodReads`).then(()=>{
-    console.log(`connect mongoose is successfully! ${URL}`);
+    console.log(`connect mongoose is successfully!`);
 }).catch((err)=>{console.log(err);})
 
 app.listen(PORT,(err)=>{
