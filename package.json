@@ -1,7 +1,6 @@
 {
   "name": "good_reads_node",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -24,5 +23,8 @@
     "mongoose": "^7.0.0",
     "nodemon": "^2.0.21",
     "validator": "^13.9.0"
-  }
+  },
+  "devDependencies": {},
+  "keywords": [],
+  "description": ""
 }
