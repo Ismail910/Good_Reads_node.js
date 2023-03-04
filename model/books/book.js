@@ -4,10 +4,9 @@ const bookchema = new mongoose.Schema({
     name: { type: String, require: true },
     img: { type: String, require: true },
     summary: { type: String, required: true },
-
     //////////////ref
-    reviews: [{ "type": mongoose.Schema.Types.ObjectId, ref: "review" }],
-    rating: { "type": mongoose.Schema.Types.ObjectId, ref : "rating" },
+    reviews: [{ type : mongoose.Schema.Types.ObjectId, ref: "review" }],
+    rating: { type: mongoose.Schema.Types.ObjectId, ref : "rating" },
     category: { type: mongoose.Schema.Types.ObjectId, ref: "category" },
     author:  {type: mongoose.Schema.Types.ObjectId, ref: "author" },
 

@@ -20,8 +20,6 @@ app.use('/admin/author',authorRouter);
 app.use('/rating' , ratingRouter);
 
 
-
-
 //to connect  our database my_goodreads
 mongoose.connect(`${URL}/my_goodreads`).then(()=>{
     console.log('Connected to MongoDB');

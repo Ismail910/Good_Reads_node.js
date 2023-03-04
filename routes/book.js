@@ -25,7 +25,7 @@ router.get('/',async (req ,res)=>{
 //       return res.json(author);
 //    }
 //    catch(err){
-//       res.status(400).send(err);
+//       res.status(500).send(err);
 //    } 
 //  })
 
@@ -48,7 +48,7 @@ router.post('/',async(req,res) =>{
       
     } catch (error) {
      
-        return res.status(404).send(error);
+        return res.status(500).send(error);
 }
 })
 
@@ -62,7 +62,7 @@ router.put('/:id',async (req,res)=>{
      return res.json(book);
   }
   catch(err){
-     res.status(400).send(err);
+     res.status(500).send(err);
   } 
 })
 
@@ -73,7 +73,7 @@ router.put('/:id',async (req,res)=>{
 //      return res.json(author);
 //   }
 //   catch(err){
-//      res.status(400).send(err);
+//      res.status(500).send(err);
 //   }
 // })
 

@@ -6,9 +6,9 @@ const ratingSchema  = new mongoose.Schema({
         type: String,
         required: true,
         enum: ["Read", "Reading", " wantToRead"],
-        default: "Maintenance",
+        default: "Read",
     },
-    book: {type: mongoose.Schema.Types.ObjectId, require:true ,ref: 'book'},
+    // book: {type: mongoose.Schema.Types.ObjectId, require:true ,ref: 'book'},
 
   });
   const ratingModel = mongoose.model("rating", ratingSchema);
