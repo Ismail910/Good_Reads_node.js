@@ -4,15 +4,15 @@ const router = express.Router()
 
 const ratingModel = require('../model/books/rating');
 
-//get all rate
-router.get('/', async (req ,res)=>{
-    try{
-        const rating = await ratingModel.find({});
-        return res.json(rating);
-    }catch(err){
-        res.status(500).send(err);
-    }
-})
+
+// router.get('/', async (req ,res)=>{
+//     try{
+//         const rating = await ratingModel.find({});
+//         return res.json(rating);
+//     }catch(err){
+//         res.status(500).send(err);
+//     }
+// })
 
 //get rating by id
 router.get('/:id', async (req, res)=>{
@@ -34,28 +34,28 @@ router.post('/' , async (req, res)=>{
     }
 })
 
-//delete rate
 
- //delete all author 
- router.delete('/', async (req, res)=>{
-    try{
-        const rating = await ratingModel.deleteMany({});
-        return res.json(rating);
-    }catch(err){
-        res.status(500).send(err);
-    }
- })
 
- //delete rate by id
- router.delete('/:id',async(req,res)=>{
-    try{
-    const rating= await ratingModel.deleteOne({_id:req.params.id});
-     return res.json(rating);
-  }
-  catch(err){
-     res.status(500).send(err);
-  }
-})
+//  //delete all author 
+//  router.delete('/', async (req, res)=>{
+//     try{
+//         const rating = await ratingModel.deleteMany({});
+//         return res.json(rating);
+//     }catch(err){
+//         res.status(500).send(err);
+//     }
+//  })
+
+//  //delete rate by id
+//  router.delete('/:id',async(req,res)=>{
+//     try{
+//     const rating= await ratingModel.deleteOne({_id:req.params.id});
+//      return res.json(rating);
+//   }
+//   catch(err){
+//      res.status(500).send(err);
+//   }
+// })
 
 //updat rate
 router.put('/:id', async(req,res)=>{

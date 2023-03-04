@@ -23,7 +23,7 @@ app.use('/rating' , ratingRouter);
 
 
 //to connect  our database my_goodreads
-mongoose.connect('mongodb://localhost/my_goodreads').then(()=>{
+mongoose.connect(`${URL}/my_goodreads`).then(()=>{
     console.log('Connected to MongoDB');
 }).catch(err=>{
     console.error('Error connecting to MongoDB:', err);

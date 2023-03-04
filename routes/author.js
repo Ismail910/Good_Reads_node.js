@@ -13,7 +13,7 @@ router.post('/',async(req,res) =>{
        return res.sataus(200).json(author);
     } catch (error) {
       //  console.log("error");
-        return res.status(404).send(error);
+        return res.status(500).send(error);
 }
 })//post
 
@@ -24,7 +24,7 @@ router.get('/',async(req,res)=>{
        return res.json(author);
     }
     catch(err){
-       res.status(400).send(err);
+        res.status(500).send(err);
     }
 })//get
 
@@ -36,19 +36,19 @@ router.get('/:id',async(req,res)=>{
       return res.json(author);
    }
    catch(err){
-      res.status(400).send(err);
+      res.status(500).send(err);
    } 
  })//get author by id
 
  //delete all author 
  router.delete('/',async(req,res)=>{
-    const id=req.params.id;
+   //  const id=req.params.id;
     try{
-    const author= await authorModel.deleteOne({});
+    const author= await authorModel.deleteMany({});
      return res.json(author);
   }
   catch(err){
-     res.status(400).send(err);
+     res.status(500).send(err);
   }
 })//delete all author
 
@@ -60,20 +60,19 @@ router.get('/:id',async(req,res)=>{
      return res.json(author);
   }
   catch(err){
-     res.status(400).send(err);
+     res.status(500).send(err);
   }
 })//delete author by id
 
 //update author by id
 router.put('/:id',async (req,res)=>{
     const id=req.params.id;
-
     try{
     const author= await authorModel.updateOne({ID:id},{$set:req.body});
      return res.json(author);
   }
   catch(err){
-     res.status(400).send(err);
+     res.status(500).send(err);
   } 
 })//update author by id
 
