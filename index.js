@@ -5,24 +5,33 @@ const mongoose = require('mongoose');
 const PORT= process.env.Port || 3000 ;
 const URL = process.env.url || "mongodb://localhost" ;
 
+// router author
+const authorRouter = require("./routes/author");
+const bookRouter = require("./routes/book");
+const ratingRouter = require("./routes/rating");
+const reviewsRouter = require("./routes/reviews");
+
+
+
 
 ////////////////Routers
-
-const bookRouter = require('./router/book/book')
 app.use(['/book' , '/books'], bookRouter);
+app.use('/admin/author',authorRouter);
+app.use('/rating' , ratingRouter);
 
 
 
 
+//to connect  our database my_goodreads
+mongoose.connect('mongodb://localhost/my_goodreads').then(()=>{
+    console.log('Connected to MongoDB');
+}).catch(err=>{
+    console.error('Error connecting to MongoDB:', err);
+})//connect
 
 
-
-
-mongoose.connect(`${URL}/goodReads`).then(()=>{
-    console.log(`connect mongoose is successfully!`);
-}).catch((err)=>{console.log(err);})
-
-app.listen(PORT,(err)=>{
+//to listen server in port
+app.listen(PORT,err=>{
     if(!err) return console.log(`server start at port ${PORT}`);
     console.log(err);
-})
+})//listen

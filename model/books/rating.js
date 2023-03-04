@@ -8,8 +8,8 @@ const ratingSchema  = new mongoose.Schema({
         enum: ["Read", "Reading", " wantToRead"],
         default: "Maintenance",
     },
-    book: {type: mongoose.Schema.Types.ObjectId, ref: 'Book'},
+    book: {type: mongoose.Schema.Types.ObjectId, ref: 'book'},
 
   });
-  const ratingModel = mongoose.model("Rating", ratingSchema);
+  const ratingModel = mongoose.model("rating", ratingSchema);
   module.exports = ratingModel;
