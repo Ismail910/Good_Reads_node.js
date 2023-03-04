@@ -8,8 +8,8 @@ const URL = process.env.url || "mongodb://localhost" ;
 // router author
 const authorRouter = require("./routes/author");
 const bookRouter = require("./routes/book");
-const ratingRouter = require("./routes/rating");
-const reviewsRouter = require("./routes/reviews");
+const bookUserRouter = require("./routes/bookUser");
+// const reviewsRouter = require("./routes/reviews");
 
 
 
@@ -17,18 +17,7 @@ const reviewsRouter = require("./routes/reviews");
 ////////////////Routers
 app.use(['/book' , '/books'], bookRouter);
 app.use('/admin/author',authorRouter);
-app.use('/rating' , ratingRouter);
-
-// <<<<<<< HEAD
-// app.use('/admin/author',authorRouter);
-
-// ////////////////Routers
-
-// const bookRouter = require('./router/book/book')
-// app.use(['/book' , '/books'], bookRouter);
-
-
-
+app.use('/bookUser' , bookUserRouter);
 
 
 //to connect  our database my_goodreads

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router()
-const { populate } = require('../model/books/rating');
+const { populate } = require('../model/books/bookUser');
 const bookModel = require('../model/books/book');
 
 
@@ -9,7 +9,7 @@ const bookModel = require('../model/books/book');
 router.get('/',async (req ,res)=>{
 
     try {
-      const books =   await bookModel.find({}).populate('rating') ;
+      const books =   await bookModel.find({}).populate('author') ;
       
       return res.json(books);
     } catch (err) {
@@ -17,21 +17,10 @@ router.get('/',async (req ,res)=>{
     }
 })
 
-// //get author by id
-// router.get('/:id',async(req,res)=>{
-//     const id=req.params.id;
-//     try{
-//      const author= await authorModel.find({ID:id});
-//       return res.json(author);
-//    }
-//    catch(err){
-//       res.status(400).send(err);
-//    } 
-//  })
 
 router.get('/:id',async (req ,res)=>{
    try {
-       const book = await bookModel.find({_id: req.params.id});
+       const book = await bookModel.find({_id: req.params.id}).populate('bookUser');
          return res.json(book)
    } catch (err) {
     res.status(500).send(err)
@@ -48,7 +37,7 @@ router.post('/',async(req,res) =>{
       
     } catch (error) {
      
-        return res.status(404).send(error);
+         res.status(500).send(error);
 }
 })
 
@@ -62,7 +51,7 @@ router.put('/:id',async (req,res)=>{
      return res.json(book);
   }
   catch(err){
-     res.status(400).send(err);
+     res.status(500).send(err);
   } 
 })
 
@@ -73,7 +62,7 @@ router.put('/:id',async (req,res)=>{
 //      return res.json(author);
 //   }
 //   catch(err){
-//      res.status(400).send(err);
+//      res.status(500).send(err);
 //   }
 // })
 
