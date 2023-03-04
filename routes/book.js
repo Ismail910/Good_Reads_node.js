@@ -20,6 +20,7 @@ router.get('/',async (req ,res)=>{
 
 router.get('/:id',async (req ,res)=>{
    try {
+      
        const book = await bookModel.find({_id: req.params.id}).populate('bookUser');
          return res.json(book)
    } catch (err) {
