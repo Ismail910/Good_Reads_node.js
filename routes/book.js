@@ -13,14 +13,14 @@ router.get('/',async (req ,res)=>{
       
       return res.json(books);
     } catch (err) {
-        res.status(500).send(err)
+         return  res.status(500).send(err)
     }
 })
 
 
 router.get('/:id',async (req ,res)=>{
    try {
-       const book = await bookModel.find({_id: req.params.id}).populate('bookUser');
+       const book = await bookModel.find({_id: req.params.id}).populate('author');
          return res.json(book)
    } catch (err) {
     res.status(500).send(err)

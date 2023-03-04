@@ -9,7 +9,7 @@ const authorSchema = new mongoose.Schema({
     lastName:{type:String,require:true,maxLength:10,minLength:3},
     dateOfBirth:{type:String,require:true,
         match:/^[0-9]{2}[\/]{1}[0-9]{2}[\/]{1}[0-9]{4}$/},//match DD/MM/YYYY
-    books:[{type:mongoose.Schema.Types.ObjectId,ref:bookModel}]    
+    // books:[{type:mongoose.Schema.Types.ObjectId,ref:"book"}]    
 })//schema
 
 // to make ID auto increment should make model counter and befor save data 
@@ -19,6 +19,7 @@ authorSchema.pre('save', function (next){
     counterModel.findByIdAndUpdate({_id:'authorId'},{$inc:{sequence_value:1}},{new: true, upsert: true})
                 .then(function (count){
                     doc.ID = count.sequence_value;
+                    console.log(doc.ID);
                     next();
                 })//then
                 .catch(err =>{
@@ -29,16 +30,21 @@ authorSchema.pre('save', function (next){
 
 // to delete all books of author before delete author
 // Define pre remove hook to delete all books of an author
-authorSchema.pre('remove', async function (next) {
-    const author = this;
-    try {
-      // Delete all books of the author
-      await bookModel.deleteMany({ author: author._id });
-      next();
-    } catch (err) {
-      next(err);
-    }
-  });
+
+// Define pre remove hook to remove author from all books
+authorSchema.pre('deleteOne', async function (next) {
+  const author = this;
+  try {
+    console.log("asd");
+    // Update all books with this author to have null for author field
+    await bookModel.deleteMany({ author:{_id:author._id}  } );
+    next();
+  } catch (err) {
+    console.log("er");
+    next(err);
+  }
+});
+
 const authorModel = mongoose.model('author',authorSchema);
 
 module.exports = authorModel;
