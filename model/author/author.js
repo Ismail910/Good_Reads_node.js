@@ -26,18 +26,19 @@ authorSchema.pre('save', function (next){
                     throw err;
                 })//catch
 })//pre
+
 // to delete all books of author before delete author
 // Define pre remove hook to delete all books of an author
-// authorSchema.pre('remove', async function (next) {
-//     const author = this;
-//     try {
-//       // Delete all books of the author
-//       await bookModel.deleteMany({ author: author._id });
-//       next();
-//     } catch (err) {
-//       next(err);
-//     }
-//   });
+authorSchema.pre('remove', async function (next) {
+    const author = this;
+    try {
+      // Delete all books of the author
+      await bookModel.deleteMany({ author: author._id });
+      next();
+    } catch (err) {
+      next(err);
+    }
+  });
 const authorModel = mongoose.model('author',authorSchema);
 
 module.exports = authorModel;

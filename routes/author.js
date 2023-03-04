@@ -4,15 +4,16 @@ const router = express.Router();
 //model
 const authorModel = require('../model/author/author');
 const bookModel = require('../model/books/book')
-//create author
-router.post('/',async(req,res)=>{
- 
-    try{
-     const author=  await authorModel.create(req.body);
-       return res.json(author);
-    }
-    catch(err){
-       res.send(err);
+// //create author
+router.post('/',async(req,res) =>{ 
+    
+    try {
+       const author = await authorModel.create(req.body);
+       //console.log("created author");
+       return res.sataus(200).json(author);
+    } catch (error) {
+      //  console.log("error");
+        return res.status(500).send(error);
 }
 })//post
 
@@ -24,7 +25,7 @@ router.get('/',async(req,res)=>{
        return res.json(author);
     }
     catch(err){
-       res.status(400).send(err);
+        res.status(500).send(err);
     }
 })//get
 
@@ -38,11 +39,12 @@ router.get('/:id',async(req,res)=>{
       return res.json(author);
    }
    catch(err){
-      res.status(400).send(err);
+      res.status(500).send(err);
    } 
  })//get author by id
 
  //delete all author 
+
 //  router.delete('/',async(req,res)=>{
 //     const id=req.params.id;
 //     try{
@@ -51,9 +53,10 @@ router.get('/:id',async(req,res)=>{
 //      return res.json(author);
 //   }
 //   catch(err){
-//      res.status(400).send(err);
+//      res.status(500).send(err);
 //   }
 // })//delete all author    
+
 
  //delete author by id
  router.delete('/:id',async(req,res)=>{
@@ -64,21 +67,20 @@ router.get('/:id',async(req,res)=>{
      return res.json(author);
   }
   catch(err){
-     res.status(400).send(err);
+     res.status(500).send(err);
   }
 })//delete author by id
 
 //update author by id
 router.put('/:id',async (req,res)=>{
     const id=req.params.id;
-
     try{
     const author= await authorModel.updateOne({ID:id},{$set:req.body},{ID:1,photo:1,firstName:1,lastName:1,
         dateOfBirth:1});
      return res.json(author);
   }
   catch(err){
-     res.status(400).send(err);
+     res.status(500).send(err);
   } 
 })//update author by id
 
