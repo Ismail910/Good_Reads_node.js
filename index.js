@@ -2,7 +2,7 @@ const express=require('express');
 const app = express();
 app.use(express.json());
 const mongoose = require('mongoose');
-const PORT= process.env.Port || 3000 ;
+const PORT= process.env.Port || 3330 ;
 const URL = process.env.url || "mongodb://localhost" ;
 
 // router author
