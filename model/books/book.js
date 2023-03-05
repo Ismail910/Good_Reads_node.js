@@ -1,16 +1,16 @@
 const mongoose = require("mongoose");
 
 const bookchema = new mongoose.Schema({
-    name: { type: String, require: true },
-    img: { type: String, require: true },
+    name: { type: String, required: true },
+    img: { type: String, required: true },
     summary: { type: String, required: true },
-
+    
     //////////////ref
-    reviews: [{ "type": mongoose.Schema.Types.ObjectId, ref: "review" }],
-    rating: { "type": mongoose.Schema.Types.ObjectId, ref : "rating" },
+    reviews: [{type: mongoose.Schema.Types.ObjectId, ref: "reviews" }],
+    bookUser: { type: mongoose.Schema.Types.ObjectId,  ref : "bookUser" },//array
     category: { type: mongoose.Schema.Types.ObjectId, ref: "category" },
-    author:  {type: mongoose.Schema.Types.ObjectId, ref: "author" },
-
+    author:  {type: mongoose.Schema.Types.ObjectId,required:true, ref: "author" },
+    authorID: {type:Number,require}
 });
 
 const bookModel = mongoose.model("book", bookchema);
