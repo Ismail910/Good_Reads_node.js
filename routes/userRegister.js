@@ -4,7 +4,7 @@ const userModel = require ('../model/auth/user/user')
 const bcrypt = require("bcrypt")
 const jwt = require('jsonwebtoken');
 const TOKEN_KEY =process.env.TOKEN_KEY || "ITI"
-const  emailFormat = /^[a-zA-Z0-9_.+]+(?<!^[0-9]*)@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
+// const  emailFormat = /^[a-zA-Z0-9_.+]+(?<!^[0-9]*)@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
 
 router.post("/", async (req, res) => {
 
