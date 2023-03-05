@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router()
 const { populate } = require('../model/books/bookUser');
 const bookModel = require('../model/books/book');
+const authorModel = require('../model/author/author');
 
 
 
@@ -75,6 +76,8 @@ router.delete('/:id',async(req,res)=>{
      res.status(500).send(err);
   }
 })
+
+
 
 
 

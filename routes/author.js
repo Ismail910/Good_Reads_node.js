@@ -45,31 +45,43 @@ router.get('/:id',async(req,res)=>{
 
  //delete all author 
 
-//  router.delete('/',async(req,res)=>{
+ router.delete('/',async(req,res)=>{
+    const id=req.params.id;
+    try{
+    const author= await authorModel.deleteMany({},{ID:1,photo:1,firstName:1,lastName:1,
+        dateOfBirth:1});
+        
+     return res.json(author);
+  }
+  catch(err){
+     res.status(500).send(err);
+  }
+})//delete all author    
+
+
+//  //delete author by id
+//  router.delete('/:id',async(req,res)=>{
 //     const id=req.params.id;
 //     try{
-//     const author= await authorModel.deleteMany({},{ID:1,photo:1,firstName:1,lastName:1,
+//     const author= await authorModel.deleteOne({ID:id},{ID:1,photo:1,firstName:1,lastName:1,
 //         dateOfBirth:1});
 //      return res.json(author);
 //   }
 //   catch(err){
 //      res.status(500).send(err);
 //   }
-// })//delete all author    
+// })//delete author by id
 
-
- //delete author by id
- router.delete('/:id',async(req,res)=>{
-    const id=req.params.id;
-    try{
-    const author= await authorModel.deleteOne({ID:id},{ID:1,photo:1,firstName:1,lastName:1,
-        dateOfBirth:1});
-     return res.json(author);
-  }
-  catch(err){
-     res.status(500).send(err);
-  }
-})//delete author by id
+router.delete('/:id',async(req,res)=>{
+   try{
+   const book= await bookModel.deleteMany({"author":req.params.id}).populate("author");
+   const author = await authorModel.findByIdAndDelete(req.params.id); 
+   return res.json(author);
+ }
+ catch(err){
+    res.status(500).send(err);
+ }
+})
 
 //update author by id
 router.put('/:id',async (req,res)=>{
