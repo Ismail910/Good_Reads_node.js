@@ -16,10 +16,11 @@ const authorSchema = new mongoose.Schema({
 // increment counter and assign it to ID 
 authorSchema.pre('save', function (next){
      const  doc =this;
+     console.log(doc.firstName);
     counterModel.findByIdAndUpdate({_id:'authorId'},{$inc:{sequence_value:1}},{new: true, upsert: true})
                 .then(function (count){
                     doc.ID = count.sequence_value;
-                    console.log(doc.ID);
+                 //   console.log(doc.ID);
                     next();
                 })//then
                 .catch(err =>{
@@ -32,19 +33,62 @@ authorSchema.pre('save', function (next){
 // Define pre remove hook to delete all books of an author
 
 // Define pre remove hook to remove author from all books
-authorSchema.pre('deleteOne', async function (next) {
-  const author = this;
+// authorSchema.pre('deleteOne',function (next) { 
+//    try {
+//     const author = this;
+//   //console.log(author.ID);
+//   // Update all books with this author to have null for author field
+//     bookModel.deleteOne({ authorID : 11});
+//     next();
+//   } catch (err) {
+//     console.log("er");
+//     next(err);
+//   }
+  
+// });
+
+// authorSchema.pre('deleteOne', function(next) {
+//   console.log('This:', this.getQuery().ID)
+//   next()
+// });
+
+
+// authorSchema.pre('deleteOne', async function (next) {
+//   const author = this.getQuery().ID;
+//   try {
+//    // bookModel.deleteMany({authorID:1})
+//    console.log(author);
+//   await bookModel.deleteMany({_id:{$in:[author._id]}})            
+  
+//     console.log("del");
+//     next()
+//   } catch (err) {
+//     console.log(err);
+//    // next(err);
+//   }
+// });
+
+
+// Define pre delete all author set id =0
+authorSchema.pre('deleteMany', async function (req,next) {
+  //const author = this;
   try {
-    console.log("asd");
-    // Update all books with this author to have null for author field
-    await bookModel.deleteMany({ author:{_id:author._id}  } );
-    next();
+    counterModel.findByIdAndUpdate({_id:'authorId'},{sequence_value:0}
+    ,{new: true, upsert: true})
+                .then(function (count){
+                  
+                    console.log(count.sequence_value);
+                    //next();
+                })//then
+                .catch(err =>{
+                    console.log('counter error-> : ', err);
+                    throw err;
+                })//catch
+    console.log("del");
   } catch (err) {
     console.log("er");
     next(err);
   }
 });
-
 const authorModel = mongoose.model('author',authorSchema);
-
 module.exports = authorModel;

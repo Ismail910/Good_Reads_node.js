@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router()
 
 const bookModel = require('../model/books/book');
+const authorModel = require('../model/author/author');
 
 
 
@@ -48,7 +49,7 @@ router.put('/:id',async (req,res)=>{
     const id=req.params.id;
 
     try{
-    const book= await bookModel.updateOne({ID:id},{$set:req.body});
+    const book= await bookModel.updateOne({_id:id},{$set:req.body});
      return res.json(book);
   }
   catch(err){
@@ -65,6 +66,8 @@ router.delete('/:id',async(req,res)=>{
      res.status(500).send(err);
   }
 })
+
+
 
 
 
