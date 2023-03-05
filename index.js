@@ -3,12 +3,14 @@ const app = express();
 app.use(express.json());
 const mongoose = require('mongoose');
 const PORT= process.env.Port || 3350 ;
-const URL = process.env.url || "mongodb://localhost" ;
+const URL = process.env.url || "mongodb://127.0.0.1:27017" ;
 
 // router author
 const authorRouter = require("./routes/author");
 const bookRouter = require("./routes/book");
 const bookUserRouter = require("./routes/bookUser");
+const userRegisterRouter = require("./routes/userRegister");
+const userLoginRouter= require("./routes/userLogin");
 // const reviewsRouter = require("./routes/reviews");
 
 
@@ -18,6 +20,8 @@ const bookUserRouter = require("./routes/bookUser");
 app.use(['/book' , '/books'], bookRouter);
 app.use('/admin/author',authorRouter);
 app.use('/bookUser' , bookUserRouter);
+app.use('/register' , userRegisterRouter);
+app.use('/login' , userLoginRouter);
 
 
 //to connect  our database my_goodreads
