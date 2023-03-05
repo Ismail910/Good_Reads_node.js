@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router()
 
 const bookModel = require('../model/books/book');
+const authorModel = require('../model/author/author');
 
 
 
@@ -67,4 +68,8 @@ router.delete('/:id',async(req,res)=>{
   }
 })
 
+
 module.exports = router; 
+
+
+
