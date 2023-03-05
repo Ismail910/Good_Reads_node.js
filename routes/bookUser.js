@@ -35,17 +35,6 @@ router.post('/' , async (req, res)=>{
 })
 
 
-
-//  //delete all author 
-//  router.delete('/', async (req, res)=>{
-//     try{
-//         const rating = await bookUserModel.deleteMany({});
-//         return res.json(rating);
-//     }catch(err){
-//         res.status(500).send(err);
-//     }
-//  })
-
 //  //delete rate by id
 //  router.delete('/:id',async(req,res)=>{
 //     try{

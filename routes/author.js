@@ -10,7 +10,7 @@ router.post('/',async(req,res) =>{
     try {
        const author = await authorModel.create(req.body);
        //console.log("created author");
-       return res.sataus(200).json(author);
+       return res.status(200).json(author);
     } catch (error) {
       //  console.log("error");
         return res.status(500).send(error);
@@ -21,7 +21,7 @@ router.post('/',async(req,res) =>{
 router.get('/',async(req,res)=>{
     try{
      const author=  await authorModel.find({},{ID:1,photo:1,firstName:1,lastName:1,
-                                                dateOfBirth:1});
+                                                dateOfBirth:1,books:1});
        return res.json(author);
     }
     catch(err){
@@ -35,7 +35,7 @@ router.get('/:id',async(req,res)=>{
     try{
      const author= await authorModel.find({ID:id},{ID:1,photo:1,firstName:1,lastName:1,
 
-                                                dateOfBirth:1});
+                                                dateOfBirth:1,books:1});
       return res.json(author);
    }
    catch(err){

@@ -2,14 +2,14 @@ const express=require('express');
 const app = express();
 app.use(express.json());
 const mongoose = require('mongoose');
-const PORT= process.env.Port || 3000 ;
+const PORT= process.env.Port || 3350 ;
 const URL = process.env.url || "mongodb://localhost" ;
 
 // router author
 const authorRouter = require("./routes/author");
 const bookRouter = require("./routes/book");
 const bookUserRouter = require("./routes/bookUser");
-// const reviewsRouter = require("./routes/reviews");
+const reviewsRouter = require("./routes/reviews");
 
 
 
@@ -18,6 +18,8 @@ const bookUserRouter = require("./routes/bookUser");
 app.use(['/book' , '/books'], bookRouter);
 app.use('/admin/author',authorRouter);
 app.use('/bookUser' , bookUserRouter);
+app.use('/reviews' , reviewsRouter);
+
 
 
 //to connect  our database my_goodreads
