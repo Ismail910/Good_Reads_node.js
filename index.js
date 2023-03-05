@@ -10,7 +10,7 @@ const authorRouter = require("./routes/author");
 const bookRouter = require("./routes/book");
 const ratingRouter = require("./routes/rating");
 const reviewsRouter = require("./routes/reviews");
-
+const categoryRouter=require("./routes/Category");
 
 
 
@@ -18,6 +18,7 @@ const reviewsRouter = require("./routes/reviews");
 app.use(['/book' , '/books'], bookRouter);
 app.use('/admin/author',authorRouter);
 app.use('/rating' , ratingRouter);
+app.use('/category' , categoryRouter);
 
 
 
