@@ -11,7 +11,7 @@ const bookRouter = require("./routes/book");
 const bookUserRouter = require("./routes/bookUser");
 const userRegisterRouter = require("./routes/userRegister");
 const userLoginRouter= require("./routes/userLogin");
-const reviewsRouter = require("./routes/reviews");
+// const reviewsRouter = require("./routes/reviews");
 const homeUserRouter = require("./routes/homeUser")
 
 
@@ -23,7 +23,7 @@ app.use('/admin/author',authorRouter);
 app.use('/bookUser' , bookUserRouter);
 app.use('/register' , userRegisterRouter);
 app.use('/login' , userLoginRouter);
-app.use('/reviews' , reviewsRouter);
+// app.use('/reviews' , reviewsRouter);
 app.use('/home',homeUserRouter);
 //middleware auth
 const auth = require("./middlewares/auth");
