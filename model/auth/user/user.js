@@ -8,10 +8,14 @@ const mongoose = require('mongoose');
 const userSchema = new mongoose.Schema({
   first_name: { type: String, required: true },
   last_name: { type: String, required: true},
-  email: { type: String, required: true },
-  password: { type: String ,required: true},
+  email: { type: String, required: true, 
+    match:/^[a-zA-Z0-9_.+]+(?<!^[0-9]*)@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/}, // match   example mmmmm@gmail.com
+  password: { type: String ,required: true,
+    match: /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/}, // match Minimum eight characters, at least one letter and one number:
+  confirmPassword: { type: String, required: true},  // check the same password
   img: { type: String,default:" "},
-  token: { type: String },
+  isAdmin: { type: Boolean ,default: false},
+  token: { type: String }
 });
 
 const userModel = mongoose.model('user',userSchema);
