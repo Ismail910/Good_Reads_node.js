@@ -7,7 +7,12 @@ const bookUserSchema  = new mongoose.Schema({
         enum: ["Readed", "Reading", " wantToRead","notRead"],
         default: "notRead",
     },
-    book: {type: mongoose.Schema.Types.ObjectId, required:true ,ref: 'book'},// add it in book-> bookUser
+
+    book: {type: mongoose.Schema.Types.ObjectId, required:true ,ref: 'book'},
+    user: { type: mongoose.Schema.Types.ObjectId,required:true, ref: "user" },
+
+
+
 
   });
   const bookUserModel = mongoose.model("bookUser", bookUserSchema);

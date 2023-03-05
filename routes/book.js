@@ -60,6 +60,7 @@ router.put('/:id',async (req,res)=>{
 router.delete('/:id',async(req,res)=>{
     try{
     const book= await bookModel.deleteOne({_id:req.params.id});
+
      return res.json(book);
   }
   catch(err){
@@ -68,7 +69,7 @@ router.delete('/:id',async(req,res)=>{
 })
 
 
+module.exports = router; 
 
 
 
-module.exports = router ; 
