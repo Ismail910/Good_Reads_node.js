@@ -7,8 +7,11 @@ const bookUserSchema  = new mongoose.Schema({
         enum: ["Readed", "Reading", " wantToRead","notRead"],
         default: "notRead",
     },
+
     book: {type: mongoose.Schema.Types.ObjectId, required:true ,ref: 'book'},
     user: { type: mongoose.Schema.Types.ObjectId,required:true, ref: "user" },
+
+
 
 
   });

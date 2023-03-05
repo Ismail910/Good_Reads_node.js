@@ -72,6 +72,7 @@ router.get('/:id',async(req,res)=>{
 //   }
 // })//delete author by id
 
+//delete author and delete his all books 
 router.delete('/:id',async(req,res)=>{
    try{
    const book= await bookModel.deleteMany({"author":req.params.id}).populate("author");
