@@ -9,11 +9,7 @@ const bookUserSchema  = new mongoose.Schema({
     },
 
     book: {type: mongoose.Schema.Types.ObjectId, required:true ,ref: 'book'},
-    user: { type: mongoose.Schema.Types.ObjectId,required:true, ref: "user" },
-
-
-
-
+    // user: { type: mongoose.Schema.Types.ObjectId,required:true, ref: "user" },
   });
   const bookUserModel = mongoose.model("bookUser", bookUserSchema);
   module.exports = bookUserModel;

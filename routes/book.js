@@ -12,7 +12,7 @@ const reviewModel = require('../model/books/Reviews');
 router.get('/',async (req ,res)=>{
 
     try {
-      const books =   await bookModel.find({}).populate('category').populate('author') ;
+      const books =   await bookModel.find({}).populate('category').populate('author').populate('bookUser') ;
       
       return res.json(books);
     } catch (err) {
@@ -23,7 +23,7 @@ router.get('/',async (req ,res)=>{
 
 router.get('/:id',async (req ,res)=>{
    try {
-       const book = await bookModel.find({_id: req.params.id}).populate('category').populate('author');
+       const book = await bookModel.find({_id: req.params.id}).populate('category').populate('author').populate('bookUser') ;
 
          return res.json(book)
    } catch (err) {
@@ -61,10 +61,21 @@ router.put('/:id',async (req,res)=>{
 
  
 
+router.delete('/',async(req,res)=>{
+   try{
+    
+     const book= await bookModel.deleteMany({});
+    return res.json(book);
+ }
+ catch(err){
+    res.status(500).send(err);
+ }
+})
+
 router.delete('/:id',async(req,res)=>{
     try{
-      await bookUserModel.deleteOne({'book':req.params.id}).populate('book');
-      await reviewModel.deleteMany({'book':req.params.id}).populate('book');
+      await bookUserModel.deleteMany({book:req.params.id});
+      await reviewModel.deleteMany({ book:req.params.id});
       const book= await bookModel.deleteOne({_id:req.params.id});
      return res.json(book);
   }

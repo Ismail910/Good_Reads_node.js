@@ -18,4 +18,5 @@ router.get('/all',async(req,res)=>{
 })//get
 
 
+
 module.exports=router;
