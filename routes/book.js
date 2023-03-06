@@ -3,6 +3,8 @@ const router = express.Router()
 
 const bookModel = require('../model/books/book');
 const authorModel = require('../model/author/author');
+const bookUserModel = require('../model/books/bookUser');
+const reviewModel = require('../model/books/Reviews');
 
 
 
@@ -10,7 +12,7 @@ const authorModel = require('../model/author/author');
 router.get('/',async (req ,res)=>{
 
     try {
-      const books =   await bookModel.find({}).populate('bookUser').populate('author') ;
+      const books =   await bookModel.find({}).populate('category').populate('author') ;
       
       return res.json(books);
     } catch (err) {
@@ -21,7 +23,7 @@ router.get('/',async (req ,res)=>{
 
 router.get('/:id',async (req ,res)=>{
    try {
-       const book = await bookModel.find({_id: req.params.id}).populate('bookUser').populate('author');
+       const book = await bookModel.find({_id: req.params.id}).populate('category').populate('author');
 
          return res.json(book)
    } catch (err) {
@@ -57,9 +59,13 @@ router.put('/:id',async (req,res)=>{
   } 
 })
 
+ 
+
 router.delete('/:id',async(req,res)=>{
     try{
-    const book= await bookModel.deleteOne({_id:req.params.id});
+      await bookUserModel.deleteOne({'book':req.params.id}).populate('book');
+      await reviewModel.deleteMany({'book':req.params.id}).populate('book');
+      const book= await bookModel.deleteOne({_id:req.params.id});
      return res.json(book);
   }
   catch(err){
@@ -68,7 +74,7 @@ router.delete('/:id',async(req,res)=>{
 })
 
 
+module.exports = router; 
 
 
 
-module.exports = router ; 
