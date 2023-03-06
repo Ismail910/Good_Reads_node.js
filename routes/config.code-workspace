@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "../config"
+		},
+		{
+			"path": "../model"
+		},
+		{
+			"path": "../node_modules"
+		},
+		{
+			"path": "."
+		}
+	]
+}

@@ -3,6 +3,7 @@ const router = express.Router()
 
 
 const bookUserModel = require('../model/books/bookUser');
+const bookModel = require('../model/books/book');
 
 
 router.get('/', async (req ,res)=>{
@@ -27,8 +28,10 @@ router.get('/:id', async (req, res)=>{
 //create bookUser
 router.post('/' , async (req, res)=>{
     try{
-        const bookUser = await bookUserModel.create(req.body);
-        return res.json(bookUser);
+        const rating = await bookUserModel.create(req.body);
+        await bookModel.updateOne({'bookUser': rating._id})
+        return res.json(rating);
+
     }catch(err){
         res.status(500).send(err);
     }
@@ -55,5 +58,16 @@ router.put('/:id', async(req,res)=>{
         res.status(500).send(err);
     }
 })
+
+router.delete('/',async(req,res)=>{
+    try{
+     
+      const rating= await bookUserModel.deleteMany({});
+     return res.json(rating);
+  }
+  catch(err){
+     res.status(500).send(err);
+  }
+ })
 
 module.exports = router;
