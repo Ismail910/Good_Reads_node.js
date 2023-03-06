@@ -3,6 +3,8 @@ const router = express.Router()
 
 const bookModel = require('../model/books/book');
 const authorModel = require('../model/author/author');
+const bookUserModel = require('../model/books/bookUser');
+const reviewModel = require('../model/books/Reviews');
 
 
 
@@ -57,10 +59,13 @@ router.put('/:id',async (req,res)=>{
   } 
 })
 
+ 
+
 router.delete('/:id',async(req,res)=>{
     try{
-    const book= await bookModel.deleteOne({_id:req.params.id});
-
+      await bookUserModel.deleteOne({'book':req.params.id}).populate('book');
+      await reviewModel.deleteMany({'book':req.params.id}).populate('book');
+      const book= await bookModel.deleteOne({_id:req.params.id});
      return res.json(book);
   }
   catch(err){

@@ -25,8 +25,6 @@ router.post("/", async (req, res) => {
       // if (email != emailFormat) {
       //     return res.status(409).send("email not valid");
       //     }
-        
-  
       // check if user already exist
       // Validate if user exist in our database
       const oldUser = await userModel.findOne({ email });
