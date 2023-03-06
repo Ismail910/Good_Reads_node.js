@@ -7,10 +7,9 @@ const bookModel = require('../model/books/book')
 router.get('/all',async(req,res)=>{
     try {
         const books = await bookModel
-        .find({}, { img: 1, name: 1, "author.firstName": 1, "bookUser.rating": 1
-        , "bookUser.status": 1 })
-        .populate("bookUser")
-        .populate("author");
+        .find({}, { img: 1, name: 1, author: 1 })
+        .populate({path: 'author',select: {'firstName':1,"_id":0}})
+          
         return res.json(books);
     } catch (error) {
         return res.status(500).send(error);

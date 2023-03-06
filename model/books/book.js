@@ -8,7 +8,7 @@ const bookchema = new mongoose.Schema({
 
     //////////////ref
     reviews: [{type: mongoose.Schema.Types.ObjectId, ref: "reviews" }],
-    bookUser: { type: mongoose.Schema.Types.ObjectId,  ref : "bookUser" },//array
+    bookUser: { type: mongoose.Schema.Types.ObjectId,  ref : "bookUser" },
     category: { type: mongoose.Schema.Types.ObjectId, ref: "category" },
     author:  {type: mongoose.Schema.Types.ObjectId,required:true, ref: "author" },
     authorID: {type:Number,require}
