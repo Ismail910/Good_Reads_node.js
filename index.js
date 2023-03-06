@@ -2,7 +2,10 @@ const express=require('express');
 const app = express();
 app.use(express.json());
 const mongoose = require('mongoose');
+
 const PORT= process.env.Port || 5000 ;
+
+
 const URL = process.env.url || "mongodb://127.0.0.1:27017" ;
 
 // router author
@@ -57,7 +60,6 @@ mongoose.connect(`${URL}/my_goodreads`).then(()=>{
 }).catch(err=>{
     console.error(err);
 })//connect
-
 
 //to listen server in port
 app.listen(PORT,err=>{
