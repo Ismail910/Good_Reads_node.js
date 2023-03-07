@@ -18,11 +18,20 @@ router.post('/',async(req,res) =>{
 })//post
 
 //get all auuthor
-router.get('/',async(req,res)=>{
+router.get('/page/:page',async(req,res)=>{
     try{
-     const author=  await authorModel.find({},{ID:1,photo:1,firstName:1,lastName:1,
-                                                dateOfBirth:1,books:1});
-       return res.json(author);
+
+      const page=parseInt(req.params.page);
+      const limit=5;
+     const author=  await authorModel.find({},
+      {ID:1,photo:1,firstName:1,lastName:1,dateOfBirth:1,books:1})
+      .limit(limit).skip((page-1)*limit).exec();
+      const objAuthor=
+      {
+         page:page,
+         data:author
+      };
+       return res.json(objAuthor);
     }
     catch(err){
         res.status(500).send(err);

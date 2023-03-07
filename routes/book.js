@@ -12,7 +12,7 @@ router.get('/',async (req ,res)=>{
 
     try {
       const book = await bookModel.find({},{'name': 1,'img':1, "summary":0,"category":1,"author":1})
-      return res.json(books);
+      return res.json(book);
     } catch (err) {
          return  res.status(500).send(err)
     }
