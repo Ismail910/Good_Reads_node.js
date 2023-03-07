@@ -9,7 +9,7 @@ const authorSchema = new mongoose.Schema({
     lastName:{type:String,require:true,maxLength:10,minLength:3},
     dateOfBirth:{type:String,require:true,
         match:/^[0-9]{2}[\/]{1}[0-9]{2}[\/]{1}[0-9]{4}$/},//match DD/MM/YYYY
-        book: { type: mongoose.Schema.Types.ObjectId,required:true, ref: "book" }  
+        // book: { type: mongoose.Schema.Types.ObjectId,required:true, ref: "book" }  
 })//schema
 
 // to make ID auto increment should make model counter and befor save data 

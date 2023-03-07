@@ -12,7 +12,7 @@ const reviewModel = require('../model/books/Reviews');
 router.get('/',async (req ,res)=>{
 
     try {
-      const books =   await bookModel.find({}).populate('category').populate('author').populate('bookUser') ;
+      const books =   await bookModel.find({});
       
       return res.json(books);
     } catch (err) {
@@ -23,7 +23,7 @@ router.get('/',async (req ,res)=>{
 
 router.get('/:id',async (req ,res)=>{
    try {
-       const book = await bookModel.find({_id: req.params.id}).populate('category').populate('author').populate('bookUser').populate('reviews') ;
+       const book = await bookModel.find({_id: req.params.id});
 
          return res.json(book)
    } catch (err) {

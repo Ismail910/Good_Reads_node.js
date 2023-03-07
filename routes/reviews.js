@@ -31,7 +31,7 @@ router.get('/:id', async (req,res)=>{
 router.post('/',async(req,res)=>{
     try{
         const review = await reviewModel.create(req.body);
-        return res.status(200).json(review);
+        return res.json(review);
     }
     catch(err){
         return res.status(500).send(err);
@@ -41,7 +41,7 @@ router.post('/',async(req,res)=>{
 
 
 //update review
-router.put('/',async(req,res)=>{
+router.put('/:id',async(req,res)=>{
     try{
         const review = await reviewModel.updateOne({_id:req.params.id},{$set:req.body});
         return res.json(review);
