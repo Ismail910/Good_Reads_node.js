@@ -11,8 +11,13 @@ const reviewModel = require('../model/books/Reviews');
 router.get('/',async (req ,res)=>{
 
     try {
+<<<<<<< HEAD
       const books =   await bookModel.find({},{})
       .populate('category').populate('author') ; 
+=======
+      const books =   await bookModel.find({});
+      
+>>>>>>> e0e72d64b7ca539dc17a7a5cb19fd53a19f86b6a
       return res.json(books);
     } catch (err) {
          return  res.status(500).send(err)
@@ -21,8 +26,13 @@ router.get('/',async (req ,res)=>{
 
 router.get('/:id',async (req ,res)=>{
    try {
+<<<<<<< HEAD
        const book = await bookModel.find({_id: req.params.id},{'name': 1,'img':1, "summary":0,"category":1,"author":1})
      
+=======
+       const book = await bookModel.find({_id: req.params.id});
+
+>>>>>>> e0e72d64b7ca539dc17a7a5cb19fd53a19f86b6a
          return res.json(book)
    } catch (err) {
     res.status(500).send(err)
