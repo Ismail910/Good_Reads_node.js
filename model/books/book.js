@@ -9,7 +9,8 @@ const bookchema = new mongoose.Schema({
     reviews: [{type: mongoose.Schema.Types.ObjectId, ref: "reviews" }],
     bookUser: { type: mongoose.Schema.Types.ObjectId,  ref : "bookUser" },
     category: { type: mongoose.Schema.Types.ObjectId, ref: "category" },
-    author:  {type: mongoose.Schema.Types.ObjectId,required:true, ref: "author" },
+     author:  {type: mongoose.Schema.Types.ObjectId,required:true, ref: "author" },
+    // user:  {type: mongoose.Schema.Types.ObjectId,required:true, ref: "user" },
     authorID: {type:Number,require}
 });
 
