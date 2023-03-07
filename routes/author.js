@@ -35,7 +35,8 @@ router.get('/:id',async(req,res)=>{
     try{
      const author= await authorModel.find({ID:id},{ID:1,photo:1,firstName:1,lastName:1,
 
-                                                dateOfBirth:1,books:1});
+                                                dateOfBirth:1,books:1,});
+   // const author= await authorModel.find({_id:id}).populate('book');
       return res.json(author);
    }
    catch(err){

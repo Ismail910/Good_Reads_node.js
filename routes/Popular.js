@@ -13,7 +13,7 @@ router.get('/popularB', async (req, res)=>{
         res.status(500).send(err);
     }
 })
-router.get('/popularA', async (req,res))
+router.get('/popularA', async (req,res)=>{})
 
 module.exports = router; 
 
