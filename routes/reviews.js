@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const reviewModel = require('../model/books/Reviews')
+const bookModel = require('../model/books/book');
 
 
 //get all reviews
@@ -31,6 +32,7 @@ router.get('/:id', async (req,res)=>{
 router.post('/',async(req,res)=>{
     try{
         const review = await reviewModel.create(req.body);
+        await bookModel.updateOne({'bookUser': review._id}) 
         return res.json(review);
     }
     catch(err){
