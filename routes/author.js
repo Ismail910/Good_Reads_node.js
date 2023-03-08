@@ -6,12 +6,11 @@ const authorModel = require('../model/author/author');
 const bookModel = require('../model/books/book')
 // //create author
 router.post('/',async(req,res) =>{ 
-    
     try {
        const author = await authorModel.create(req.body);
        //console.log("created author");
-       return res.status(200).json(author);
-    } catch (error) {
+       return res.json(author);
+    } catch(error) {
       //  console.log("error");
         return res.status(500).send(error);
 }
