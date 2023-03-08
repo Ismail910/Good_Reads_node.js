@@ -12,9 +12,7 @@ router.get('/',async (req ,res)=>{
 
     try {
 
-      const books =   await bookModel.find({});
-      
-
+      const book = await bookModel.find({},{'name': 1,'img':1, "summary":0,"category":1,"author":1})
       return res.json(books);
     } catch (err) {
          return  res.status(500).send(err)
@@ -23,8 +21,8 @@ router.get('/',async (req ,res)=>{
 
 router.get('/:id',async (req ,res)=>{
    try {
-      
-       const book = await bookModel.find({_id: req.params.id});
+
+       const book = await bookModel.find({_id: req.params.id},{'name': 1,'img':1, "summary":0,"category":1,"author":1})
          return res.json(book)
    } catch (err) {
     res.status(500).send(err)
