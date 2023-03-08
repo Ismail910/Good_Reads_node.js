@@ -5,24 +5,21 @@ const auth = require("../middlewares/auth");
 //model
 const authorModel = require('../model/author/author');
 const bookModel = require('../model/books/book')
-// //create author
-router.post('/',auth,async(req,res) =>{ 
+
+router.post('/',async(req,res) =>{ 
     
     try {
        const author = await authorModel.create(req.body);
-       //console.log("created author");
        return res.status(200).json(author);
     } catch (error) {
-      //  console.log("error");
         return res.status(500).send(error);
 }
-})//post
+})
 
-//get all auuthor
 router.get('/page/:page',async(req,res)=>{
     try{
 
-      const page=parseInt(req.params.page);
+      const page=req.params.page;
       const limit=5;
       const countAuthor=await authorModel.find({}).count();
       const totalPages=Math.ceil(countAuthor/limit);
@@ -62,8 +59,7 @@ router.get('/:id',async(req,res)=>{
 
  //delete all author 
 
- router.delete('/',auth,async(req,res)=>{
-    const id=req.params.id;
+ router.delete('/',async(req,res)=>{
     try{
     const author= await authorModel.deleteMany({},{ID:1,photo:1,firstName:1,lastName:1,
         dateOfBirth:1});
@@ -90,16 +86,18 @@ router.get('/:id',async(req,res)=>{
 // })//delete author by id
 
 //delete author and delete his all books 
-router.delete('/:id',auth,async(req,res)=>{
+router.delete('/:id',async(req,res)=>{
    try{
-   const book= await bookModel.deleteMany({"author":req.params.id}).populate("author");
-   const author = await authorModel.findByIdAndDelete(req.params.id); 
-   return res.json(author);
+      const idAuthor=req.params.id
+      const author= await authorModel.findOne({ID:idAuthor},{_id:1});
+       await bookModel.deleteMany({"author":author._id});
+       await authorModel.deleteOne({ID:idAuthor}); 
+      return res.status(200).json("deleted");
  }
  catch(err){
     res.status(500).send(err);
  }
-})
+});
 
 //update author by id
 router.put('/:id',auth,async (req,res)=>{
