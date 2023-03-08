@@ -51,6 +51,7 @@ router.get('/:id',async(req,res)=>{
     try{
     const author= await authorModel.deleteMany({},{ID:1,photo:1,firstName:1,lastName:1,
         dateOfBirth:1});
+   const book= await bookModel.deleteMany({},{});
         
      return res.json(author);
   }
@@ -76,7 +77,7 @@ router.get('/:id',async(req,res)=>{
 //delete author and delete his all books 
 router.delete('/:id',async(req,res)=>{
    try{
-   const book= await bookModel.deleteMany({"author":req.params.id}).populate("author");
+   const book= await bookModel.deleteMany({"author":req.params.id})//.populate("author");
    const author = await authorModel.findByIdAndDelete(req.params.id); 
    return res.json(author);
  }
