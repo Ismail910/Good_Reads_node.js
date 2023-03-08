@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
+const auth = require("../middlewares/auth");
 
 //model
 const authorModel = require('../model/author/author');
 const bookModel = require('../model/books/book')
 // //create author
-router.post('/',async(req,res) =>{ 
+router.post('/',auth,async(req,res) =>{ 
     
     try {
        const author = await authorModel.create(req.body);
@@ -61,7 +62,7 @@ router.get('/:id',async(req,res)=>{
 
  //delete all author 
 
- router.delete('/',async(req,res)=>{
+ router.delete('/',auth,async(req,res)=>{
     const id=req.params.id;
     try{
     const author= await authorModel.deleteMany({},{ID:1,photo:1,firstName:1,lastName:1,
@@ -89,7 +90,7 @@ router.get('/:id',async(req,res)=>{
 // })//delete author by id
 
 //delete author and delete his all books 
-router.delete('/:id',async(req,res)=>{
+router.delete('/:id',auth,async(req,res)=>{
    try{
    const book= await bookModel.deleteMany({"author":req.params.id}).populate("author");
    const author = await authorModel.findByIdAndDelete(req.params.id); 
@@ -101,7 +102,7 @@ router.delete('/:id',async(req,res)=>{
 })
 
 //update author by id
-router.put('/:id',async (req,res)=>{
+router.put('/:id',auth,async (req,res)=>{
     const id=req.params.id;
     try{
     const author= await authorModel.updateOne({ID:id},{$set:req.body},{ID:1,photo:1,firstName:1,lastName:1,
