@@ -4,6 +4,8 @@ const router = express.Router()
 const bookModel = require('../model/books/book');
 const bookUserModel = require('../model/books/bookUser');
 const reviewModel = require('../model/books/Reviews');
+const authorModel = require('../model/author/author');
+const CategoryModel =require('../model/Category/Category')
 
 
 
@@ -12,8 +14,8 @@ router.get('/',async (req ,res)=>{
 
     try {
 
-      const book = await bookModel.find({},{'name': 1,'img':1, "summary":0,"category":1,"author":1})
-      return res.json(books);
+      const book = await bookModel.find({},{'name':1,'img':1,'category':1,'author':1})
+      return res.json(book);
     } catch (err) {
          return  res.status(500).send(err)
     }
@@ -22,7 +24,14 @@ router.get('/',async (req ,res)=>{
 router.get('/:id',async (req ,res)=>{
    try {
 
-       const book = await bookModel.find({_id: req.params.id},{'name': 1,'img':1, "summary":0,"category":1,"author":1})
+       const book = await bookModel.find({_id: req.params.id},{})
+       .populate({path:'bookUser', select: {'rating':1,'status':1}})
+       .populate({path:'reviews', select: {'comment':1,'like':1,'date':1}})
+       .populate({path:'author', select: {'firstName':1,'lastName':1}})
+       .populate({path:'category', select: {'name':1}})
+
+
+
          return res.json(book)
    } catch (err) {
     res.status(500).send(err)
@@ -33,7 +42,8 @@ router.post('/',async(req,res) =>{
     
     try {
        const book = await bookModel.create(req.body);
-       console.log(book);
+       await authorModel.updateOne({'books': book._id});
+       await CategoryModel.updateOne({'books': book._id});
        return res.json(book);
       
     } catch (error) {

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-const counterModel = require('../counter/count')
-const bookModel = require('../books/book')
+const counterModel = require('../counter/count');
+// const bookModel = require('../books/book');
 const authorSchema = new mongoose.Schema({
     ID:{type:Number,unique:true,require:true},
     photo:{type:String },
@@ -8,8 +8,8 @@ const authorSchema = new mongoose.Schema({
     firstName:{type:String,require:true,maxLength:10,minLength:3},
     lastName:{type:String,require:true,maxLength:10,minLength:3},
     dateOfBirth:{type:String,require:true,
-        match:/^[0-9]{2}[\/]{1}[0-9]{2}[\/]{1}[0-9]{4}$/},//match DD/MM/YYYY
-        books: [{ type: mongoose.Schema.Types.ObjectId, ref: "book" }] 
+    match:/^[0-9]{2}[\/]{1}[0-9]{2}[\/]{1}[0-9]{4}$/},//match DD/MM/YYYY
+    books: [{ type: mongoose.Schema.Types.ObjectId,ref: "book" }]  
 })//schema
 
 // to make ID auto increment should make model counter and befor save data 
@@ -89,6 +89,7 @@ authorSchema.pre('deleteMany', async function (req,next) {
     console.log("er");
     next(err);
   }
+  
 });
 const authorModel = mongoose.model('author',authorSchema);
 module.exports = authorModel;
