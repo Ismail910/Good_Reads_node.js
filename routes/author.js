@@ -20,21 +20,21 @@ router.get('/page/:page',async(req,res)=>{
 
       const page=req.params.page;
       const limit=5;
-      const countAuthor=await authorModel.find({}).count();
-      const totalPages=Math.ceil(countAuthor/limit);
-      const author=  await authorModel.find({},
+      const countAuthors=await authorModel.find({}).count();
+      const totalPages=Math.ceil(countAuthors/limit);
+      const authors=  await authorModel.find({},
       {ID:1,photo:1,firstName:1,lastName:1,dateOfBirth:1,books:1})
       .limit(limit).skip((page-1)*limit).exec();
-      const objAuthor=
+      const objAuthors=
       {
          pages:
          {
             totalPages,
             page
          },
-         data:author
+         data:authors
       };
-       return res.json(objAuthor);
+       return res.json(objAuthors);
     }
     catch(err){
         res.status(500).send(err);

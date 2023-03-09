@@ -10,11 +10,30 @@ const CategoryModel =require('../model/Category/Category')
 
 
 
-router.get('/',async (req ,res)=>{
+router.get('/page/:page',async (req ,res)=>{
 
     try {
-      const book = await bookModel.find({},{'name':1,'img':1,'category':1,'author':1})
-      return res.json(book);
+
+        const page=req.params.page;
+        const limit=5;
+        const countbooks=await bookModel.find({}).count();
+        const totalPages=Math.ceil(countbooks/limit);
+
+      const books = await bookModel.find({},{'name':1,'img':1,'category':1,'author':1})
+        .limit(limit)
+        .skip((page-1)*limit)
+        .exec();
+
+        const objbooks=
+        {
+           pages:
+           {
+              totalPages,
+              page
+           },
+           data:books
+        };
+      return res.json(objbooks);
     } catch (err) {
          return  res.status(500).send(err)
     }
