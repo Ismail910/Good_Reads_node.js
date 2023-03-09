@@ -92,7 +92,7 @@ router.delete('/:id',async(req,res)=>{
       const author= await authorModel.findOne({ID:idAuthor},{_id:1});
        await bookModel.deleteMany({"author":author._id});
        await authorModel.deleteOne({ID:idAuthor}); 
-      return res.status(200).json("deleted");
+       return res.status(200).json("deleted");
  }
  catch(err){
     res.status(500).send(err);
