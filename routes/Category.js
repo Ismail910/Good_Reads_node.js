@@ -11,7 +11,6 @@ router.get('/',async (req ,res)=>{
 
     try {
       const Categories =   await CategoryModel.find({}) ;
-      
       return res.json(Categories);
     } catch (err) {
         res.status(500).send(err)
@@ -20,10 +19,10 @@ router.get('/',async (req ,res)=>{
 
 
 
-router.get('/:id',async (req ,res)=>{
+router.get('/:id',async (req ,res)=>{//get All book and all authror ref this category 
    try {
        const category = await CategoryModel.find({_id: req.params.id});
-         return res.json(category)
+         return res.json(category)  
    } catch (err) {
     res.status(500).send(err)
    }
@@ -36,7 +35,7 @@ router.post('/',async(req,res) =>{
        const category = await CategoryModel.create(req.body);
        console.log(category);
        await category.save();
-       return res.status(200).json(category);
+       return res.json(category);
       
     } catch (error) {
      
