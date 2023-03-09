@@ -10,7 +10,6 @@ router.get('/popularB', async (req, res)=>{
         .populate({path:'category', select: {'name':1, _id:0}});
         console.log(popularBook);
         return res.json(popularBook);
-
     }catch(err){
         res.status(500).send(err);
     }
@@ -18,18 +17,16 @@ router.get('/popularB', async (req, res)=>{
 
 ///////////////// popular author   aggregate([{$group: {_id:"$book", avg_val:{$avg:"$rating"}}}]);
 
-router.get('/[popularA]', async (req,res)=>{
+router.get('/popularA', async (req,res)=>{
     try{
-        
         popularBook.forEach((ele )=>{
-           const sortAuthor = authorModel.find({_id:ele.author},{'firstName':1,'lastName':1,'photo':1});
+           const sortAuthor = authorModel.find({_id:ele.author },{'firstName':1,'lastName':1,'photo':1});
             console.log( sortAuthor );
            return res.json(sortAuthor); 
         })
     }catch(err){
         res.status(500).send(err);
        }
-
     }
 )
 module.exports = router; 
