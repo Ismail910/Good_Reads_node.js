@@ -10,10 +10,6 @@ const bookchema = new mongoose.Schema({
     bookUser: { type: mongoose.Schema.Types.ObjectId,  ref : "bookUser" },
     category: { type: mongoose.Schema.Types.ObjectId, ref: "category" },
     author:  {type: mongoose.Schema.Types.ObjectId,required:true, ref: "author" },
-   
-    authorID: {type:Number,require}
-  
-
 });
 
 const bookModel = mongoose.model("book", bookchema);

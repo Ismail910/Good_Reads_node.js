@@ -6,6 +6,7 @@ const router = express.Router();
 const bookModel = require('../model/books/book')
 const bookUserModel = require('../model/books/bookUser');
 
+
 async function cal_avreg(){
        // calculate average for all books
        const avrgrating = await bookUserModel
@@ -31,10 +32,10 @@ router.get("/all",async(req,res)=>{
 })//get
 
 
-//display all books not read
+//display all books with filter status
 router.get('/home?status?email',async (req,res)=>{
     try{
-    //add user
+ 
     const books = await bookModel
      .find({},{ img: 1, name: 1,avg_rate:1, author: 1,bookUser:1 })
      .populate({path: 'author',select: {'firstName':1,"_id":0}})

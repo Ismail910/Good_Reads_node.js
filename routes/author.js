@@ -7,7 +7,6 @@ const authorModel = require('../model/author/author');
 const bookModel = require('../model/books/book')
 
 router.post('/',async(req,res) =>{ 
-    
     try {
        const author = await authorModel.create(req.body);
        return res.status(200).json(author);
@@ -46,10 +45,13 @@ router.get('/page/:page',async(req,res)=>{
 router.get('/:id',async(req,res)=>{
     const id=req.params.id;
     try{
-     const author= await authorModel.find({ID:id},{ID:1,photo:1,firstName:1,lastName:1,
+   //   const author= await authorModel.find({ID:id},{ID:1,photo:1,firstName:1,lastName:1,
 
-                                                dateOfBirth:1,books:1,});
-   // const author= await authorModel.find({_id:id}).populate('book');
+   //                                              dateOfBirth:1,books:1,});
+   const author = await authorModel.find({ID:id},{photo:1,firstName:1,lastName:1,dateOfBirth:1,books:1})
+   .populate({path: 'books',select: {'name':1,"_id":0}})
+   .populate({path: 'bookUser',select: {'rating':1,'status':1,"_id":0},match:{"status" :req.query.status}})
+   .populate({path:'user',match:{"email":req.query.email}});
       return res.json(author);
    }
    catch(err){
@@ -63,6 +65,7 @@ router.get('/:id',async(req,res)=>{
     try{
     const author= await authorModel.deleteMany({},{ID:1,photo:1,firstName:1,lastName:1,
         dateOfBirth:1});
+   const book= await bookModel.deleteMany({},{});
         
      return res.json(author);
   }
