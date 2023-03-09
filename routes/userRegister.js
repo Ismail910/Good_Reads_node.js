@@ -17,14 +17,7 @@ router.post("/", async (req, res) => {
       if (!(email && password && confirmPassword && first_name && last_name)) {
         res.status(400).send("All input is required except image");
       }
-         // check password pattern
-        //  if (password !=  /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/) {
-        //   return res.status(409).send("password not valid");
-        // }
 
-      // if (email != emailFormat) {
-      //     return res.status(409).send("email not valid");
-      //     }
       // check if user already exist
       // Validate if user exist in our database
       const oldUser = await userModel.findOne({ email });
@@ -37,9 +30,7 @@ router.post("/", async (req, res) => {
       encryptedPassword = await bcrypt.hash(password, 10);
       encryptedConfirmPassword = await bcrypt.hash(confirmPassword,10)
 
-      // if(encryptedConfirmPassword !== encryptedPassword) {
-      //   return res.status(403).send("Not Match Password"); 
-      // }
+
       // Create user in our database
       const user = await userModel.create({
         first_name,
@@ -69,3 +60,20 @@ router.post("/", async (req, res) => {
   });
 
   module.exports = router ; 
+
+
+
+           // check password pattern
+        //  if (password !=  /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/) {
+        //   return res.status(409).send("password not valid");
+        // }
+
+      // if (email != emailFormat) {
+      //     return res.status(409).send("email not valid");
+      //     }
+
+
+
+            // if(encryptedConfirmPassword !== encryptedPassword) {
+      //   return res.status(403).send("Not Match Password"); 
+      // }

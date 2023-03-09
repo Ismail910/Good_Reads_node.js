@@ -2,7 +2,7 @@
 const express = require('express');
 const router = express.Router()
 const bcrypt = require("bcrypt")
-const env = require('dotenv');
+// const env = require('dotenv');
 const jwt = require('jsonwebtoken');
 
 const userModel = require ('../model/auth/user/user')
@@ -41,7 +41,6 @@ router.post("/", async (req, res) => {
     } catch (err) {
       console.log(err);
     }
-    // Our register logic ends here
   });
 
     module.exports = router ; 
