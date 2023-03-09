@@ -7,11 +7,28 @@ const CategoryModel = require('../model/Category/Category');
 
 
 
-router.get('/',async (req ,res)=>{
-
+router.get('/page/:page',async (req ,res)=>{
+    
     try {
-      const Categories =   await CategoryModel.find({}) ;
-      return res.json(Categories);
+        const page=req.params.page;
+        const limit=5;
+        const countCategory=await CategoryModel.find({}).count();
+        const totalPages=Math.ceil(countCategory/limit);
+        const Categories =   await CategoryModel.find({})
+        .limit(limit)
+        .skip((page-1)*limit)
+        .exec();
+
+      const objCategories=
+      {
+         pages:
+         {
+            totalPages,
+            page
+         },
+         data:Categories
+      };
+       return res.json(objCategories);
     } catch (err) {
         res.status(500).send(err)
     }
