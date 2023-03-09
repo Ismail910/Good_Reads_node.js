@@ -5,6 +5,7 @@ const router = express.Router();
 //model
 const bookModel = require('../model/books/book')
 const bookUserModel = require('../model/books/bookUser');
+const auth=require('../middlewares/auth');
 
 
 async function cal_avreg(){
@@ -47,6 +48,19 @@ router.get("/all/page/:page",async(req,res)=>{
         return res.status(500).send(error);
     }
 })//get
+
+// router.get("/all",async(req,res)=>{
+//     try {
+//         cal_avreg();
+//      const books = await bookModel
+//      .find({},{ img: 1, name: 1,avg_rate:1, author: 1,bookUser:1 })
+//      .populate({path: 'author',select: {'firstName':1,"_id":0}})
+//      .populate({path: 'bookUser',select: {'rating':1,'status':1,"_id":0}});
+//         return res.json(books);
+//     } catch (error) {
+//         return res.status(500).send(error);
+//     }
+// })//get
 
 
 //display all books with filter status

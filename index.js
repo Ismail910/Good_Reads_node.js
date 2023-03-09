@@ -35,10 +35,10 @@ app.use('/home',homeUserRouter);
 
 
 //middleware auth
-const auth = require("./middlewares/auth");
-app.post("/welcome", auth, (req, res) => {
-  res.status(200).send("Welcome 🙌 ");
-});
+// const auth = require("./middlewares/auth");
+// app.post("/welcome", auth, (req, res) => {
+//   res.status(200).send("Welcome 🙌 ");
+// });
 //end middleware auth
 
 

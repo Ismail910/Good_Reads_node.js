@@ -6,6 +6,7 @@ const bookUserModel = require('../model/books/bookUser');
 const reviewModel = require('../model/books/Reviews');
 const authorModel = require('../model/author/author');
 const CategoryModel =require('../model/Category/Category')
+const auth = require("../middlewares/auth");
 
 
 
@@ -56,7 +57,7 @@ router.get('/:id',async (req ,res)=>{
    }
 })
 
-router.post('/',async(req,res) =>{ 
+router.post('/',auth,async(req,res) =>{ 
     
     try {
        const book = await bookModel.create(req.body);
@@ -69,7 +70,7 @@ router.post('/',async(req,res) =>{
 }
 })
 
-router.put('/:id',async (req,res)=>{
+router.put('/:id',auth,async (req,res)=>{
     const id=req.params.id;
     const data = {
       name : req.body.name,
@@ -99,7 +100,7 @@ router.put('/:id',async (req,res)=>{
 //  }
 // })
 
-router.delete('/:id',async(req,res)=>{
+router.delete('/:id',auth,async(req,res)=>{
     try{
       await bookUserModel.deleteMany({book:req.params.id});
       await reviewModel.deleteMany({ book:req.params.id});

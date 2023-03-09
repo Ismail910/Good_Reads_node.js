@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router()
 
 const CategoryModel = require('../model/Category/Category');
-
+const auth = require ('../middlewares/auth')
 
 
 
@@ -46,7 +46,7 @@ router.get('/:id',async (req ,res)=>{//get All book and all authror ref this cat
 })
 
 //body is json(name=......?)
-router.post('/',async(req,res) =>{ 
+router.post('/',auth,async(req,res) =>{ 
     
     try {
        const category = await CategoryModel.create(req.body);
@@ -62,7 +62,7 @@ router.post('/',async(req,res) =>{
 
 
 //params==>url(data)
-router.put('/:id',async (req,res)=>{
+router.put('/:id',auth,async (req,res)=>{
     const id=req.params.id;
 //{$set:req.body}
     try{
@@ -75,7 +75,7 @@ router.put('/:id',async (req,res)=>{
 })
 
 
-router.delete('/:id',async(req,res)=>{
+router.delete('/:id',auth,async(req,res)=>{
     const id=req.params.id;
     try{
     const category= await CategoryModel.deleteOne({_id:id});

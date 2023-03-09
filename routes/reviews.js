@@ -2,10 +2,11 @@ const express = require('express');
 const router = express.Router();
 const reviewModel = require('../model/books/Reviews')
 const bookModel = require('../model/books/book');
+const auth=require('../middlewares/auth');
 
 
 //get all reviews
-router.get('/', async(req , res)=>{
+router.get('/',async(req , res)=>{
     try{
         const reviews= await reviewModel.find({});
         return res.json(reviews);
@@ -29,7 +30,7 @@ router.get('/:id', async (req,res)=>{
 
 //create review
 
-router.post('/',async(req,res)=>{
+router.post('/',auth,async(req,res)=>{
     try{
         const review = await reviewModel.create(req.body);
         await bookModel.updateOne({'reviews': review._id}) 
@@ -43,7 +44,7 @@ router.post('/',async(req,res)=>{
 
 
 //update review
-router.put('/:id',async(req,res)=>{
+router.put('/:id',auth,async(req,res)=>{
     try{
         const review = await reviewModel.updateOne({_id:req.params.id},{$set:req.body});
         return res.json(review);
