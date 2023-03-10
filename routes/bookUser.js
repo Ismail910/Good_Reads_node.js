@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router()
-const auth = require ('../middlewares/auth')
+const {authAdmin} = require ('../middlewares/auth');
 
 
 const bookUserModel = require('../model/books/bookUser');
@@ -27,7 +27,7 @@ router.get('/:id', async (req, res)=>{
 })
 
 //create bookUser   (((((Uesr can`t create book )))))
-router.post('/',auth, async (req, res)=>{
+router.post('/',authAdmin, async (req, res)=>{
     try{
         const rating = await bookUserModel.create(req.body);
         await bookModel.updateOne({'bookUser': rating._id})
@@ -40,7 +40,7 @@ router.post('/',auth, async (req, res)=>{
 
 
 //  //delete rate by id
- router.delete('/:id',auth,async(req,res)=>{
+ router.delete('/:id',authAdmin,async(req,res)=>{
     try{
     const bookUser= await bookUserModel.deleteOne({_id:req.params.id});
      return res.json(bookUser);
@@ -50,7 +50,7 @@ router.post('/',auth, async (req, res)=>{
   }
 })
 //updat rate
-router.put('/:id',auth, async(req,res)=>{
+router.put('/:id',authAdmin, async(req,res)=>{
     try{
         const bookUser = await bookUserModel.updateOne({_id:req.params.id},{$set:req.body});
         return res.json(bookUser);
@@ -59,7 +59,7 @@ router.put('/:id',auth, async(req,res)=>{
     }
 })
 ////////////////////////// (
-router.delete('/',auth,async(req,res)=>{
+router.delete('/',authAdmin,async(req,res)=>{
     try{
      
       const rating= await bookUserModel.deleteMany({});

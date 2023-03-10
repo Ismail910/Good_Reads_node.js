@@ -5,8 +5,9 @@ const bookModel = require('../model/books/book');
 const bookUserModel = require('../model/books/bookUser');
 const reviewModel = require('../model/books/Reviews');
 const authorModel = require('../model/author/author');
-const CategoryModel =require('../model/Category/Category')
-const auth = require("../middlewares/auth");
+const CategoryModel =require('../model/Category/Category');
+const {authAdmin} = require("../middlewares/auth");
+
 
 
 
@@ -57,9 +58,11 @@ router.get('/:id',async (req ,res)=>{
    }
 })
 
-router.post('/',auth,async(req,res) =>{ 
+router.post('/',authAdmin,async(req,res) =>{ 
     
     try {
+
+   
        const book = await bookModel.create(req.body);
        await authorModel.updateOne({'books': book._id});
        await CategoryModel.updateOne({'books': book._id});
@@ -70,7 +73,7 @@ router.post('/',auth,async(req,res) =>{
 }
 })
 
-router.put('/:id',auth,async (req,res)=>{
+router.put('/:id',authAdmin,async (req,res)=>{
     const id=req.params.id;
     const data = {
       name : req.body.name,
@@ -100,7 +103,7 @@ router.put('/:id',auth,async (req,res)=>{
 //  }
 // })
 
-router.delete('/:id',auth,async(req,res)=>{
+router.delete('/:id',authAdmin,async(req,res)=>{
     try{
       await bookUserModel.deleteMany({book:req.params.id});
       await reviewModel.deleteMany({ book:req.params.id});
