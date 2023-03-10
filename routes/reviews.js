@@ -28,12 +28,12 @@ router.get('/:id', async (req,res)=>{
 })
 
 
-//create review
+//create review  
 
 router.post('/',auth,async(req,res)=>{
     try{
         const review = await reviewModel.create(req.body);
-        await bookModel.updateOne({'reviews': review._id}) 
+        await bookModel.updateOne({'reviews': review._id},{$push: review}) 
         return res.json(review);
     }
     catch(err){

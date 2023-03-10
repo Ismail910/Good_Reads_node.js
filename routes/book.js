@@ -57,12 +57,18 @@ router.get('/:id',async (req ,res)=>{
    }
 })
 
+// PersonModel.update(
+//    { _id: person._id }, 
+//    { $push: { friends: friend } },
+//    done
+// );
+
 router.post('/',auth,async(req,res) =>{ 
     
     try {
        const book = await bookModel.create(req.body);
-       await authorModel.updateOne({'books': book._id});
-       await CategoryModel.updateOne({'books': book._id});
+       await authorModel.updateOne({'books':book._id},{$push: book});
+       await CategoryModel.updateOne({'books': book._id},{$push: book});
        return res.json(book);
       
     } catch (error) {
@@ -81,6 +87,8 @@ router.put('/:id',auth,async (req,res)=>{
     }
     try{
     const book= await bookModel.updateOne({_id:id},{$set:data});
+    await authorModel.updateOne({'books':book._id},{$set: data});
+    await CategoryModel.updateOne({'books': book._id},{$set: data});
      return res.json(book);
   }
   catch(err){

@@ -26,11 +26,11 @@ router.get('/:id', async (req, res)=>{
     }
 })
 
-//create bookUser   (((((Uesr can`t create book )))))
+//create bookUser   (((((Uesr can`t create book ))))) 
 router.post('/',auth, async (req, res)=>{
     try{
         const rating = await bookUserModel.create(req.body);
-        await bookModel.updateOne({'bookUser': rating._id})
+        await bookModel.updateOne({'bookUser': rating._id},{$set: rating})
         return res.json(rating);
 
     }catch(err){
@@ -49,10 +49,11 @@ router.post('/',auth, async (req, res)=>{
      res.status(500).send(err);
   }
 })
-//updat rate
+
 router.put('/:id',auth, async(req,res)=>{
     try{
         const bookUser = await bookUserModel.updateOne({_id:req.params.id},{$set:req.body});
+        await bookModel.updateOne({'bookUser': bookUser._id},{$set: bookUser})
         return res.json(bookUser);
     }catch(err){
         res.status(500).send(err);
