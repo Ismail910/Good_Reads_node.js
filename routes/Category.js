@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router()
 
 const CategoryModel = require('../model/Category/Category');
+const bookModel = require('../model/books/book');
 
 
 
@@ -62,7 +63,9 @@ router.put('/:id',async (req,res)=>{
 router.delete('/:id',async(req,res)=>{
     const id=req.params.id;
     try{
-    const category= await CategoryModel.deleteOne({_id:id});
+        await bookModel.deleteMany({category: req.params.id});
+
+    const category= await CategoryModel.findByIdAndDelete({_id:id});
      return res.json(category);
   }
   catch(err){
