@@ -42,8 +42,7 @@ router.post('/',async(req,res) =>{
     
     try {
        const book = await bookModel.create(req.body);
-       await authorModel.updateOne({'books': book._id});
-       await CategoryModel.updateOne({'books': book._id});
+      
        return res.json(book);
       
     } catch (error) {
@@ -62,6 +61,7 @@ router.put('/:id',async (req,res)=>{
     }
     try{
     const book= await bookModel.updateOne({_id:id},{$set:data});
+    //await bookModel.updateOne({_id:id},{$push:{'bookUser':book.bookUser} });
      return res.json(book);
   }
   catch(err){
@@ -70,16 +70,16 @@ router.put('/:id',async (req,res)=>{
 })
 
  
-// router.delete('/',async(req,res)=>{
-//    try{
+router.delete('/',async(req,res)=>{
+   try{
     
-//      const book= await bookModel.deleteMany({});
-//     return res.json(book);
-//  }
-//  catch(err){
-//     res.status(500).send(err);
-//  }
-// })
+     const book= await bookModel.deleteMany({});
+    return res.json(book);
+ }
+ catch(err){
+    res.status(500).send(err);
+ }
+})
 
 router.delete('/:id',async(req,res)=>{
     try{

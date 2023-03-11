@@ -1,4 +1,5 @@
 const express = require('express');
+const userModel = require('../model/auth/user/user');
 const { count } = require('../model/books/book');
 const router = express.Router();
 
@@ -33,15 +34,18 @@ router.get("/all",async(req,res)=>{
 
 
 //display all books with filter status
-router.get('/home?status?email',async (req,res)=>{
+router.get('/home/:status/:userID',async (req,res)=>{
     try{
  
-    const books = await bookModel
-     .find({},{ img: 1, name: 1,avg_rate:1, author: 1,bookUser:1 })
-     .populate({path: 'author',select: {'firstName':1,"_id":0}})
-     .populate({path: 'bookUser',select: {'rating':1,'status':1,"_id":0},match:{"status" :req.query.status}})
-     .populate({path:'user',match:{"email":req.query.email}});
-        return res.json(books);
+    const details = await bookUserModel 
+        .find({status:req.params.status,user:req.params.userID},{status:1,rating:1,book:1})
+        .populate({path:'book',model:'book',select:{img: 1, name: 1,avg_rate:1}
+            ,populate:{
+                path:'author',
+                model:'author',
+                select:{'firstName':1,'lastName':1,"_id":0}
+            }})
+        return res.json(details);
     } catch (error) {
         return res.status(500).send(error);
     }
