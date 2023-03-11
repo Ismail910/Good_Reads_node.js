@@ -48,7 +48,7 @@ router.get('/:id', async (req, res) => {
    }
 })
 
-router.post('/', auth, async (req, res) => {
+router.post('/',authAdmin, async (req, res) => {
    try {
       const book = await bookModel.create(req.body);
       await authorModel.updateOne({ _id: book.author }, { $push: { 'books': book._id } });
