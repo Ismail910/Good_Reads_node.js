@@ -1,11 +1,12 @@
 const express = require('express');
 const { count } = require('../model/books/book');
 const router = express.Router();
+const {authUser} = require ('../middlewares/auth');
 
 //model
 const bookModel = require('../model/books/book')
 const bookUserModel = require('../model/books/bookUser');
-const auth=require('../middlewares/auth');
+
 
 
 async function cal_avreg(){
@@ -19,7 +20,7 @@ async function cal_avreg(){
        });
 }
 //display all books with details
-router.get("/all/page/:page",async(req,res)=>{
+router.get("/all/page/:page",authUser,async(req,res)=>{
     try {
         cal_avreg();
 
@@ -64,7 +65,7 @@ router.get("/all/page/:page",async(req,res)=>{
 
 
 //display all books with filter status
-router.get('/home/page/:page?status?email',async (req,res)=>{
+router.get('/home/page/:page?status?email',authUser,async (req,res)=>{
     try{
     const page=req.params.page;
     const limit=5;
