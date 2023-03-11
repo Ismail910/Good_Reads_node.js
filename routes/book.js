@@ -5,8 +5,9 @@ const bookModel = require('../model/books/book');
 const bookUserModel = require('../model/books/bookUser');
 const reviewModel = require('../model/books/Reviews');
 const authorModel = require('../model/author/author');
-const CategoryModel = require('../model/Category/Category')
-const auth = require("../middlewares/auth");
+const CategoryModel =require('../model/Category/Category');
+const {authAdmin} = require("../middlewares/auth");
+
 
 
 router.get('/page/:page', async (req, res) => {
@@ -47,7 +48,7 @@ router.get('/:id', async (req, res) => {
    }
 })
 
-router.post('/', auth, async (req, res) => {
+router.post('/',authAdmin, async (req, res) => {
    try {
       const book = await bookModel.create(req.body);
       await authorModel.updateOne({ _id: book.author }, { $push: { 'books': book._id } });
@@ -58,36 +59,37 @@ router.post('/', auth, async (req, res) => {
    }
 })
 
-router.put('/:id', auth, async (req, res) => {
-   const data = {
-      name: req.body.name,
-      img: req.body.img,
-      name: req.body.name,
-      category: req.body.category,
-      author: req.body.author
-   }
-   try {
-      const book = await bookModel.updateOne({ _id: req.params.id }, { $set: data });
-      await authorModel.updateOne({ 'books': book._id }, { $set: data });
-      await CategoryModel.updateOne({ 'books': book._id }, { $set: data });
-      return res.json(book);
-   }
-   catch (err) {
-      res.status(500).send(err);
-   }
+router.post('/',authAdmin,async(req,res) =>{ 
+    
+    try {
+
+   
+       const book = await bookModel.create(req.body);
+       await authorModel.updateOne({'books': book._id});
+       await CategoryModel.updateOne({'books': book._id});
+       return res.json(book);
+      
+    } catch (error) {
+         res.status(500).send(error);
+}
 })
 
-
-router.delete('/:id', auth, async (req, res) => {
-   try {
-      await bookUserModel.deleteMany({ book: req.params.id });
-      await reviewModel.deleteMany({ book: req.params.id });
-      const book = await bookModel.deleteOne({ _id: req.params.id });
-      return res.json(book);
-   }
-   catch (err) {
-      res.status(500).send(err);
-   }
+router.put('/:id',authAdmin,async (req,res)=>{
+    const id=req.params.id;
+    const data = {
+      name : req.body.name,
+      img : req.body.img,
+      name : req.body.name,
+      category : req.body.category,
+      author : req.body.author
+    }
+    try{
+    const book= await bookModel.updateOne({_id:id},{$set:data});
+     return res.json(book);
+  }
+  catch(err){
+     res.status(500).send(err);
+  } 
 })
 
 //////   (this mathod just used for test)
@@ -101,6 +103,18 @@ router.delete('/:id', auth, async (req, res) => {
 //     res.status(500).send(err);
 //  }
 // })
+
+router.delete('/:id',authAdmin,async(req,res)=>{
+    try{
+      await bookUserModel.deleteMany({book:req.params.id});
+      await reviewModel.deleteMany({ book:req.params.id});
+      const book= await bookModel.deleteOne({_id:req.params.id});
+     return res.json(book);
+  }
+  catch(err){
+     res.status(500).send(err);
+  }
+})
 
 
 module.exports = router;
