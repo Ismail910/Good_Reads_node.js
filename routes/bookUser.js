@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router()
-const {authAdmin} = require ('../middlewares/auth');
+const {authUser} = require ('../middlewares/auth');
 
 
 const bookUserModel = require('../model/books/bookUser');
@@ -27,7 +27,7 @@ router.get('/:id', async (req, res)=>{
 })
 
 //create bookUser   (((((Uesr can`t create book )))))
-router.post('/',authAdmin, async (req, res)=>{
+router.post('/',authUser, async (req, res)=>{
     try{
         const rating = await bookUserModel.create(req.body);
         await bookModel.updateOne({_id:rating.book},{$set:{'bookUser':rating._id}})
@@ -40,7 +40,7 @@ router.post('/',authAdmin, async (req, res)=>{
 
 
 //  //delete rate by id
- router.delete('/:id',authAdmin,async(req,res)=>{
+ router.delete('/:id',authUser,async(req,res)=>{
     try{
     const bookUser= await bookUserModel.deleteOne({_id:req.params.id});
      return res.json(bookUser);
@@ -50,7 +50,7 @@ router.post('/',authAdmin, async (req, res)=>{
   }
 })
 //updat rate
-router.put('/:id',authAdmin, async(req,res)=>{
+router.put('/:id',authUser, async(req,res)=>{
     try{
         const bookUser = await bookUserModel.updateOne({_id:req.params.id},{$set:req.body});
         await bookModel.updateOne({'bookUser': bookUser._id},{$set: bookUser})
@@ -60,7 +60,7 @@ router.put('/:id',authAdmin, async(req,res)=>{
     }
 })
 ////////////////////////// (
-router.delete('/',authAdmin,async(req,res)=>{
+router.delete('/',authUser,async(req,res)=>{
     try{
      
       const rating= await bookUserModel.deleteMany({});
