@@ -5,7 +5,7 @@ const router = express.Router();
 //model
 const bookModel = require('../model/books/book')
 const bookUserModel = require('../model/books/bookUser');
-const auth=require('../middlewares/auth');
+
 
 
 async function cal_avreg(){
