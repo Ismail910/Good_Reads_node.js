@@ -8,7 +8,7 @@ const auth=require('../middlewares/auth');
 //get all reviews
 router.get('/',async(req , res)=>{
     try{
-        const reviews= await reviewModel.find({});
+        const reviews= await reviewModel.find({}).populate('user');
         return res.json(reviews);
     }catch(err){
         res.status(404).send(err);
@@ -17,22 +17,22 @@ router.get('/',async(req , res)=>{
 
 //get review by id
 
-router.get('/:id', async (req,res)=>{
-    try{
-        const review = await reviewModel.findById({_id:req.params.id});
-        return res.json(review);
-    }
-    catch(err){
-        res.status(404).send(err);
-    }
-})
+// router.get('/:id', async (req,res)=>{
+//     try{
+//         const review = await reviewModel.findById({_id:req.params.id}).populate('user');
+//         return res.json(review);
+//     }
+//     catch(err){
+//         res.status(404).send(err);
+//     }
+// })
 
 
 //create review  
 
 router.post('/',auth,async(req,res)=>{
     try{
-        const review = await reviewModel.create(req.body);
+        const review = (await reviewModel.create(req.body));
         await bookModel.updateOne({_id:review.book},{$push:{'reviews':review._id}});
         return res.json(review);
     }
