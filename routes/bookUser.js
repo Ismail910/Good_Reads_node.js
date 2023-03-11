@@ -1,8 +1,6 @@
 const express = require('express');
 const router = express.Router()
 const {authUser} = require ('../middlewares/auth');
-
-
 const bookUserModel = require('../model/books/bookUser');
 const bookModel = require('../model/books/book');
 
