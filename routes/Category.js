@@ -3,15 +3,32 @@ const express = require('express');
 const router = express.Router()
 
 const CategoryModel = require('../model/Category/Category');
+const {authAdmin} = require ('../middlewares/auth');
 
 
 
-
-router.get('/',async (req ,res)=>{
-
+router.get('/page/:page',async (req ,res)=>{
+    
     try {
-      const Categories =   await CategoryModel.find({}) ;
-      return res.json(Categories);
+        const page=req.params.page;
+        const limit=5;
+        const countCategory=await CategoryModel.find({}).count();
+        const totalPages=Math.ceil(countCategory/limit);
+        const Categories =   await CategoryModel.find({})
+        .limit(limit)
+        .skip((page-1)*limit)
+        .exec();
+
+      const objCategories=
+      {
+         pages:
+         {
+            totalPages,
+            page
+         },
+         data:Categories
+      };
+       return res.json(objCategories);
     } catch (err) {
         res.status(500).send(err)
     }
@@ -29,7 +46,7 @@ router.get('/:id',async (req ,res)=>{//get All book and all authror ref this cat
 })
 
 //body is json(name=......?)
-router.post('/',async(req,res) =>{ 
+router.post('/',authAdmin,async(req,res) =>{ 
     
     try {
        const category = await CategoryModel.create(req.body);
@@ -45,7 +62,7 @@ router.post('/',async(req,res) =>{
 
 
 //params==>url(data)
-router.put('/:id',async (req,res)=>{
+router.put('/:id',authAdmin,async (req,res)=>{
     const id=req.params.id;
 //{$set:req.body}
     try{
@@ -58,7 +75,7 @@ router.put('/:id',async (req,res)=>{
 })
 
 
-router.delete('/:id',async(req,res)=>{
+router.delete('/:id',authAdmin,async(req,res)=>{
     const id=req.params.id;
     try{
     const category= await CategoryModel.deleteOne({_id:id});
