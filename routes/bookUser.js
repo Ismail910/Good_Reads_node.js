@@ -30,7 +30,7 @@ router.get('/:id', async (req, res)=>{
 router.post('/',authAdmin, async (req, res)=>{
     try{
         const rating = await bookUserModel.create(req.body);
-        await bookModel.updateOne({'bookUser': rating._id})
+        await bookModel.updateOne({_id:rating.book},{$set:{'bookUser':rating._id}})
         return res.json(rating);
 
     }catch(err){
@@ -53,6 +53,7 @@ router.post('/',authAdmin, async (req, res)=>{
 router.put('/:id',authAdmin, async(req,res)=>{
     try{
         const bookUser = await bookUserModel.updateOne({_id:req.params.id},{$set:req.body});
+        await bookModel.updateOne({'bookUser': bookUser._id},{$set: bookUser})
         return res.json(bookUser);
     }catch(err){
         res.status(500).send(err);

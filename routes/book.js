@@ -10,51 +10,52 @@ const {authAdmin} = require("../middlewares/auth");
 
 
 
-
-
-router.get('/page/:page',async (req ,res)=>{
-
-    try {
-
-        const page=req.params.page;
-        const limit=5;
-        const countbooks=await bookModel.find({}).count();
-        const totalPages=Math.ceil(countbooks/limit);
-
-      const books = await bookModel.find({},{'name':1,'img':1,'category':1,'author':1})
-        .limit(limit)
-        .skip((page-1)*limit)
-        .exec();
-
-        const objbooks=
-        {
-           pages:
-           {
-              totalPages,
-              page
-           },
-           data:books
-        };
+router.get('/page/:page', async (req, res) => {
+   try {
+      const page = req.params.page;
+      const limit = 5;
+      const countbooks = await bookModel.find({}).count();
+      const totalPages = Math.ceil(countbooks / limit);
+      const books = await bookModel.find({}, { 'name': 1, 'img': 1, 'category': 1, 'author': 1 })
+         .limit(limit)
+         .skip((page - 1) * limit)
+         .exec();
+      const objbooks =
+      {
+         pages:
+         {
+            totalPages,
+            page
+         },
+         data: books
+      };
       return res.json(objbooks);
-    } catch (err) {
-         return  res.status(500).send(err)
-    }
+   } catch (err) {
+      return res.status(500).send(err)
+   }
 })
 
-router.get('/:id',async (req ,res)=>{
+router.get('/:id', async (req, res) => {
    try {
-
-       const book = await bookModel.find({_id: req.params.id},{})
-       .populate({path:'bookUser', select: {'rating':1,'status':1}})
-       .populate({path:'reviews', select: {'comment':1,'like':1,'date':1}})
-       .populate({path:'author', select: {'firstName':1,'lastName':1}})
-       .populate({path:'category', select: {'name':1}})
-
-
-
-         return res.json(book)
+      const book = await bookModel.find({ _id: req.params.id }, {})
+         .populate({ path: 'bookUser', select: { 'rating': 1, 'status': 1 } })
+         .populate({ path: 'reviews', select: { 'comment': 1, 'like': 1, 'date': 1 } })
+         .populate({ path: 'author', select: { 'firstName': 1, 'lastName': 1 } })
+         .populate({ path: 'category', select: { 'name': 1 } })
+      return res.json(book)
    } catch (err) {
-    res.status(500).send(err)
+      res.status(500).send(err)
+   }
+})
+
+router.post('/', auth, async (req, res) => {
+   try {
+      const book = await bookModel.create(req.body);
+      await authorModel.updateOne({ _id: book.author }, { $push: { 'books': book._id } });
+      await CategoryModel.updateOne({ _id: book.category }, { $push: { 'books': book._id } });
+      return res.json(book);
+   } catch (error) {
+      res.status(500).send(error);
    }
 })
 
@@ -91,10 +92,10 @@ router.put('/:id',authAdmin,async (req,res)=>{
   } 
 })
 
- 
+//////   (this mathod just used for test)
+
 // router.delete('/',async(req,res)=>{
 //    try{
-    
 //      const book= await bookModel.deleteMany({});
 //     return res.json(book);
 //  }
@@ -116,7 +117,7 @@ router.delete('/:id',authAdmin,async(req,res)=>{
 })
 
 
-module.exports = router; 
+module.exports = router;
 
 
 

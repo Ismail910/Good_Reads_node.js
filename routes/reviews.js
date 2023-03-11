@@ -28,12 +28,12 @@ router.get('/:id', async (req,res)=>{
 })
 
 
-//create review
+//create review  
 
 router.post('/',authUser,async(req,res)=>{
     try{
         const review = await reviewModel.create(req.body);
-        await bookModel.updateOne({'reviews': review._id}) 
+        await bookModel.updateOne({_id:review.book},{$push:{'reviews':review._id}});
         return res.json(review);
     }
     catch(err){
@@ -47,6 +47,7 @@ router.post('/',authUser,async(req,res)=>{
 router.put('/:id',authUser,async(req,res)=>{
     try{
         const review = await reviewModel.updateOne({_id:req.params.id},{$set:req.body});
+        await bookModel.updateOne({'reviews': review._id},{$set: review})
         return res.json(review);
     }
     catch(err){
