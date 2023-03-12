@@ -65,8 +65,7 @@ router.post('/',authAdmin,async(req,res) =>{
 
    
        const book = await bookModel.create(req.body);
-       await authorModel.updateOne({'books': book._id});
-       await CategoryModel.updateOne({'books': book._id});
+      
        return res.json(book);
       
     } catch (error) {
@@ -85,6 +84,7 @@ router.put('/:id',authAdmin,async (req,res)=>{
     }
     try{
     const book= await bookModel.updateOne({_id:id},{$set:data});
+    //await bookModel.updateOne({_id:id},{$push:{'bookUser':book.bookUser} });
      return res.json(book);
   }
   catch(err){

@@ -28,7 +28,9 @@ router.get('/:id', async (req, res)=>{
 router.post('/',authUser, async (req, res)=>{
     try{
         const rating = await bookUserModel.create(req.body);
+
         await bookModel.updateOne({_id:rating.book},{$set:{'bookUser':rating._id}})
+
         return res.json(rating);
 
     }catch(err){
