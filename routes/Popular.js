@@ -26,11 +26,8 @@ router.get('/popularAuthor', async (req,res)=>{
 
         console.log(popularBook);
         // const unsortAuthorPopular =[5][2];
-        
         // popularBook.forEach(ele =>{
-               
         //         let find=0;
-               
                 
         //         for (let i of unsortAuthorPopular) {
         //             if(i[0]==ele.author){
