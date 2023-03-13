@@ -1,6 +1,7 @@
 const express=require('express');
 const bookModel = require('../model/books/book');
 const authorModel = require('../model/author/author');
+const CategoryModel = require('../model/Category/Category');
 const router = express.Router();
 const popularBooks=[];
 router.get('/popularBook', async (req, res)=>{
@@ -71,5 +72,33 @@ router.get('/popularAuthor', async (req,res)=>{
        }
     }
 )
+
+
+router.get('/popularCategory', async (req,res)=>{
+    try{
+       
+        const popularBook = await bookModel.find({},{'avg_rate':1,"category":1})
+        .sort({avg_rate: -1}).limit(5)
+        // .populate({path:'category', select: {'name':1, _id:0}})
+
+        //const popularCategory = await CategoryModel.find({_id:},{})
+        
+         const data = popularBook.forEach(async (ele )=>{
+            await CategoryModel.find({_id:ele.category},{})
+
+            
+            
+        })
+        console.log(data);
+
+        console.log(popularBook);
+
+        return res.json({"sortAuthor":"jjj"});
+    }catch(err){
+        res.status(500).send(err);
+       }
+    }
+)
+    
 module.exports = router; 
 
