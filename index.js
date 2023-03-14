@@ -5,7 +5,6 @@ const mongoose = require('mongoose');
 
 const PORT= process.env.Port || 5000 ;
 
-
 const URL = process.env.url || "mongodb://127.0.0.1:27017" ;
 
 // router author

@@ -48,7 +48,7 @@ router.get('/:id', async (req, res) => {
    }
 })
 
-router.post('/', auth, async (req, res) => {
+router.post('/',authAdmin, async (req, res) => {
    try {
       const book = await bookModel.create(req.body);
       await authorModel.updateOne({ _id: book.author }, { $push: { 'books': book._id } });
@@ -57,21 +57,6 @@ router.post('/', auth, async (req, res) => {
    } catch (error) {
       res.status(500).send(error);
    }
-})
-
-router.post('/',authAdmin,async(req,res) =>{ 
-    
-    try {
-
-   
-       const book = await bookModel.create(req.body);
-       await authorModel.updateOne({'books': book._id});
-       await CategoryModel.updateOne({'books': book._id});
-       return res.json(book);
-      
-    } catch (error) {
-         res.status(500).send(error);
-}
 })
 
 router.put('/:id',authAdmin,async (req,res)=>{
