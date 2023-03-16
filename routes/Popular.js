@@ -24,9 +24,8 @@ router.get('/popularAuthor', async (req,res)=>{
         const popularBook = await bookModel.find({},{'name':1, 'img':1,'summary':1,'avg_rate':1,"category":1,"author":1})
         .sort({avg_rate: -1}).limit(5)
         .populate({path:'category', select: {'name':1, _id:0}});
-
         console.log(popularBook);
-        // const unsortAuthorPopular =[5][2];
+        const unsortAuthorPopular =[5][2];
         // popularBook.forEach(ele =>{
         //         let find=0;
                 
@@ -80,14 +79,9 @@ router.get('/popularCategory', async (req,res)=>{
         const popularBook = await bookModel.find({},{'avg_rate':1,"category":1})
         .sort({avg_rate: -1}).limit(5)
         // .populate({path:'category', select: {'name':1, _id:0}})
-
         //const popularCategory = await CategoryModel.find({_id:},{})
-        
          const data = popularBook.forEach(async (ele )=>{
             await CategoryModel.find({_id:ele.category},{})
-
-            
-            
         })
         console.log(data);
 

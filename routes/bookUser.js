@@ -24,13 +24,11 @@ router.get('/:id', async (req, res)=>{
     }
 })
 
-//create bookUser   (((((Uesr can`t create book )))))
+//create bookUser  
 router.post('/',authUser, async (req, res)=>{
     try{
         const rating = await bookUserModel.create(req.body);
-
         await bookModel.updateOne({_id:rating.book},{$set:{'bookUser':rating._id}})
-
         return res.json(rating);
 
     }catch(err){
@@ -38,17 +36,6 @@ router.post('/',authUser, async (req, res)=>{
     }
 })
 
-
-//  //delete rate by id
- router.delete('/:id',authUser,async(req,res)=>{
-    try{
-    const bookUser= await bookUserModel.deleteOne({_id:req.params.id});
-     return res.json(bookUser);
-  }
-  catch(err){
-     res.status(500).send(err);
-  }
-})
 //updat rate
 router.put('/:id',authUser, async(req,res)=>{
     try{
@@ -59,16 +46,26 @@ router.put('/:id',authUser, async(req,res)=>{
         res.status(500).send(err);
     }
 })
+
 ////////////////////////// (
-router.delete('/',authUser,async(req,res)=>{
-    try{
+    // router.delete('/:id',authUser,async(req,res)=>{
+    //     try{
+    //     const bookUser= await bookUserModel.deleteOne({_id:req.params.id});
+    //      return res.json(bookUser);
+    //   }
+    //   catch(err){
+    //      res.status(500).send(err);
+    //   }
+    // })
+// router.delete('/',authUser,async(req,res)=>{
+//     try{
      
-      const rating= await bookUserModel.deleteMany({});
-     return res.json(rating);
-  }
-  catch(err){
-     res.status(500).send(err);
-  }
- })
+//       const rating= await bookUserModel.deleteMany({});
+//      return res.json(rating);
+//   }
+//   catch(err){
+//      res.status(500).send(err);
+//   }
+//  })
 
 module.exports = router;

@@ -15,8 +15,6 @@ router.get('/',async(req , res)=>{
     }
 })
 
-//get review by id
-
 // router.get('/:id', async (req,res)=>{
 //     try{
 //         const review = await reviewModel.findById({_id:req.params.id}).populate('user');
@@ -44,6 +42,7 @@ router.post('/',authUser,async(req,res)=>{
 
 
 //update review
+
 router.put('/:id',authUser,async(req,res)=>{
     try{
         const review = await reviewModel.updateOne({_id:req.params.id},{$set:req.body});

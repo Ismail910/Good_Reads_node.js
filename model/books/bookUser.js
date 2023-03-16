@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const bookUserSchema  = new mongoose.Schema({
-    rating: {type: Number, min: 1.0, max: 5.0 ,default:1 },
+    rating: {type: Number, min: 1.0, max: 5.0 ,default:1.0},
     status: {
         type: String,
         enum: ["Read", "Reading", "wantToRead","notRead"],

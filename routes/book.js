@@ -16,7 +16,7 @@ router.get('/page/:page', async (req, res) => {
       const limit = 5;
       const countbooks = await bookModel.find({}).count();
       const totalPages = Math.ceil(countbooks / limit);
-      const books = await bookModel.find({}, { 'name': 1, 'img': 1, 'category': 1, 'author': 1 })
+      const books = await bookModel.find({}, { 'id':1,'name': 1, 'img': 1,'category': 1, 'author': 1 })
          .limit(limit)
          .skip((page - 1) * limit)
          .exec();
