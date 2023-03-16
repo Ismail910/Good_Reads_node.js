@@ -28,7 +28,7 @@ router.get('/:id', async (req, res)=>{
 router.post('/',authUser, async (req, res)=>{
     try{
         const rating = await bookUserModel.create(req.body);
-        await bookModel.updateOne({_id:rating.book},{$set:{'bookUser':rating._id}})
+        await bookModel.updateOne({id:rating.book},{$set:{'bookUser':rating._id}})
         return res.json(rating);
 
     }catch(err){
@@ -39,7 +39,7 @@ router.post('/',authUser, async (req, res)=>{
 //updat rate
 router.put('/:id',authUser, async(req,res)=>{
     try{
-        const bookUser = await bookUserModel.updateOne({_id:req.params.id},{$set:req.body});
+        const bookUser = await bookUserModel.updateOne({id:req.params.id},{$set:req.body});
         await bookModel.updateOne({'bookUser': bookUser._id},{$set: bookUser})
         return res.json(bookUser);
     }catch(err){
