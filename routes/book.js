@@ -2,26 +2,54 @@ const express = require('express');
 const router = express.Router()
 
 const bookModel = require('../model/books/book');
+const bookUserModel = require('../model/books/bookUser');
+const reviewModel = require('../model/books/Reviews');
 const authorModel = require('../model/author/author');
+const CategoryModel =require('../model/Category/Category')
+const auth = require("../middlewares/auth");
 
 
 
 
-router.get('/',async (req ,res)=>{
+router.get('/page/:page',async (req ,res)=>{
 
     try {
-      const books =   await bookModel.find({}).populate('category').populate('author') ;
-      
-      return res.json(books);
+
+        const page=req.params.page;
+        const limit=5;
+        const countbooks=await bookModel.find({}).count();
+        const totalPages=Math.ceil(countbooks/limit);
+
+      const books = await bookModel.find({},{'name':1,'img':1,'category':1,'author':1})
+        .limit(limit)
+        .skip((page-1)*limit)
+        .exec();
+
+        const objbooks=
+        {
+           pages:
+           {
+              totalPages,
+              page
+           },
+           data:books
+        };
+      return res.json(objbooks);
     } catch (err) {
          return  res.status(500).send(err)
     }
 })
 
-
 router.get('/:id',async (req ,res)=>{
    try {
-       const book = await bookModel.find({_id: req.params.id}).populate('category').populate('author');
+
+       const book = await bookModel.find({_id: req.params.id},{})
+       .populate({path:'bookUser', select: {'rating':1,'status':1}})
+       .populate({path:'reviews', select: {'comment':1,'like':1,'date':1}})
+       .populate({path:'author', select: {'firstName':1,'lastName':1}})
+       .populate({path:'category', select: {'name':1}})
+
+
 
          return res.json(book)
    } catch (err) {
@@ -29,27 +57,38 @@ router.get('/:id',async (req ,res)=>{
    }
 })
 
+// PersonModel.update(
+//    { _id: person._id }, 
+//    { $push: { friends: friend } },
+//    done
+// );
 
-router.post('/',async(req,res) =>{ 
+router.post('/',auth,async(req,res) =>{ 
     
     try {
        const book = await bookModel.create(req.body);
-       console.log(book);
+       await authorModel.updateOne({'books':book._id},{$push: book});
+       await CategoryModel.updateOne({'books': book._id},{$push: book});
        return res.json(book);
       
     } catch (error) {
-     
          res.status(500).send(error);
 }
 })
 
-
-
-router.put('/:id',async (req,res)=>{
+router.put('/:id',auth,async (req,res)=>{
     const id=req.params.id;
-
+    const data = {
+      name : req.body.name,
+      img : req.body.img,
+      name : req.body.name,
+      category : req.body.category,
+      author : req.body.author
+    }
     try{
-    const book= await bookModel.updateOne({_id:id},{$set:req.body});
+    const book= await bookModel.updateOne({_id:id},{$set:data});
+    await authorModel.updateOne({'books':book._id},{$set: data});
+    await CategoryModel.updateOne({'books': book._id},{$set: data});
      return res.json(book);
   }
   catch(err){
@@ -57,10 +96,23 @@ router.put('/:id',async (req,res)=>{
   } 
 })
 
-router.delete('/:id',async(req,res)=>{
-    try{
-    const book= await bookModel.deleteOne({_id:req.params.id});
+ 
+// router.delete('/',async(req,res)=>{
+//    try{
+    
+//      const book= await bookModel.deleteMany({});
+//     return res.json(book);
+//  }
+//  catch(err){
+//     res.status(500).send(err);
+//  }
+// })
 
+router.delete('/:id',auth,async(req,res)=>{
+    try{
+      await bookUserModel.deleteMany({book:req.params.id});
+      await reviewModel.deleteMany({ book:req.params.id});
+      const book= await bookModel.deleteOne({_id:req.params.id});
      return res.json(book);
   }
   catch(err){
