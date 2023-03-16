@@ -17,7 +17,7 @@ router.get('/', async (req ,res)=>{
 //get bookUser by id
 router.get('/:id', async (req, res)=>{
     try{
-        const bookUser = await bookUserModel.findById({_id:req.parmas.id});
+        const bookUser = await bookUserModel.findById({id:req.parmas.id});
         return res.json(bookUser);
     }catch(err){
         res.status(500).send(err);

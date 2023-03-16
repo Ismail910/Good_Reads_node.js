@@ -19,7 +19,7 @@ bookchema.pre('save', function (next){
     
    counterModel.findByIdAndUpdate({_id:'bookid'},{$inc:{sequence_value:1}},{new: true, upsert: true})
                .then(function (count){
-                   doc.ID = count.sequence_value;
+                   doc.id = count.sequence_value;
                    next();
                })
                .catch(err =>{

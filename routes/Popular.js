@@ -6,7 +6,7 @@ const router = express.Router();
 const popularBooks=[];
 router.get('/popularBook', async (req, res)=>{
     try{
-        const popularBook = await bookModel.find({},{'name':1, 'img':1,'summary':1,'avg_rate':1,"category":1})
+        const popularBook = await bookModel.find({},{'name':1, 'img':1,'summary':1,'avg_rate':1,"category":1,"id":1})
         .sort({avg_rate: -1}).limit(5)
         .populate({path:'category', select: {'name':1, _id:0}});
         console.log(popularBook);
@@ -81,7 +81,7 @@ router.get('/popularCategory', async (req,res)=>{
         // .populate({path:'category', select: {'name':1, _id:0}})
         //const popularCategory = await CategoryModel.find({_id:},{})
          const data = popularBook.forEach(async (ele )=>{
-            await CategoryModel.find({_id:ele.category},{})
+            await CategoryModel.find({id:ele.category},{})
         })
         console.log(data);
 
