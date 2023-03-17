@@ -1,7 +1,6 @@
 //framework to work with APIs 
 const express = require('express');
 const router = express.Router()
-
 const CategoryModel = require('../model/Category/Category');
 const {authAdmin} = require ('../middlewares/auth');
 
@@ -12,8 +11,8 @@ router.get('/page/:page',async (req ,res)=>{
     try {
         const page=req.params.page;
         const limit=5;
-        const countCategory=await CategoryModel.find({}).count();
-        const totalPages=Math.ceil(countCategory/limit);
+        const countCategory=await CategoryModel.find({}).count(); //num category
+        const totalPages=Math.ceil(countCategory/limit); //num pages
         const Categories =   await CategoryModel.find({})
         .limit(limit)
         .skip((page-1)*limit)

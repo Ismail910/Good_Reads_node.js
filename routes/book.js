@@ -59,6 +59,20 @@ router.post('/',authAdmin, async (req, res) => {
    }
 })
 
+router.post('/',authAdmin,async(req,res) =>{ 
+    
+    try {
+
+   
+       const book = await bookModel.create(req.body);
+      
+       return res.json(book);
+      
+    } catch (error) {
+         res.status(500).send(error);
+}
+})
+
 router.put('/:id',authAdmin,async (req,res)=>{
     const id=req.params.id;
     const data = {
@@ -70,6 +84,7 @@ router.put('/:id',authAdmin,async (req,res)=>{
     }
     try{
     const book= await bookModel.updateOne({_id:id},{$set:data});
+    //await bookModel.updateOne({_id:id},{$push:{'bookUser':book.bookUser} });
      return res.json(book);
   }
   catch(err){
