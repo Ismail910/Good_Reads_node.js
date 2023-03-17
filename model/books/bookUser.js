@@ -15,7 +15,7 @@ const bookUserSchema  = new mongoose.Schema({
 
   bookUserSchema.pre('save', function (next){
     const  doc =this;
-   counterModel.findByIdAndUpdate({_id:'bookid'},{$inc:{sequence_value:1}},{new: true, upsert: true})
+   counterModel.findByIdAndUpdate({_id:'bookUserid'},{$inc:{sequence_value:1}},{new: true, upsert: true})
                .then(function (count){
                    doc.id = count.sequence_value;
                    next();
