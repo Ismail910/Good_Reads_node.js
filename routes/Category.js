@@ -37,7 +37,7 @@ router.get('/page/:page',async (req ,res)=>{
 
 router.get('/:id',async (req ,res)=>{//get All book and all authror ref this category 
    try {
-       const category = await CategoryModel.find({_id: req.params.id});
+       const category = await CategoryModel.find({id: req.params.id});
          return res.json(category)  
    } catch (err) {
     res.status(500).send(err)
