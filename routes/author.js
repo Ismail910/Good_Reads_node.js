@@ -9,7 +9,7 @@ const bookModel = require('../model/books/book')
 router.post('/',authAdmin,async(req,res) =>{ 
     try {
        const author = await authorModel.create(req.body);
-       return res.status(200).json(author);
+       return res.json(author);
     } catch (error) {
         return res.status(500).send(error);
 }
@@ -17,7 +17,6 @@ router.post('/',authAdmin,async(req,res) =>{
 
 router.get('/page/:page',async(req,res)=>{
     try{
-
       const page=req.params.page;
       const limit=5;
       const countAuthors=await authorModel.find({}).count();

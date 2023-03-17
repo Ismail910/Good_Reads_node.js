@@ -55,6 +55,7 @@ router.post("/", async (req, res) => {
       // return new user
       res.status(201).json(user);
     } catch (err) {
+      res.status(500).send(err);
       console.log(err);
     }
     // Our register logic ends here
