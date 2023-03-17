@@ -50,11 +50,9 @@ router.post('/',authAdmin,async(req,res) =>{
     try {
        const category = await CategoryModel.create(req.body);
        console.log(category);
-       await category.save();
+      //  await category.save();  
        return res.json(category);
-      
     } catch (error) {
-     
         return res.status(500).send(error);
 }
 })
@@ -79,7 +77,7 @@ router.delete('/:id',authAdmin,async(req,res)=>{
     try{
     const category= await CategoryModel.deleteOne({_id:id});
      return res.json(category);
-  }
+       }
   catch(err){
      res.status(500).send(err);
   }

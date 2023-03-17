@@ -7,6 +7,7 @@ const CategorySchema = new mongoose.Schema({
     books: [{ type: mongoose.Schema.Types.ObjectId,ref: "book" }]  
 });
 
+
 CategorySchema.pre('save', function (next){
     const  doc =this;
    counterModel.findByIdAndUpdate({_id:'categoryID'},{$inc:{sequence_value:1}},{new: true, upsert: true})
@@ -18,7 +19,9 @@ CategorySchema.pre('save', function (next){
                    console.log('counter error-> : ', err);
                    throw err;
                })
-})//pre
+  })//pre
+
+
 //this model that db see it when it makes quiries
 const CategoryModel = mongoose.model("category", CategorySchema);
 

@@ -39,7 +39,7 @@ router.post("/", async (req, res) => {
       }
       res.status(400).send("Invalid Credentials");
     } catch (err) {
-      res.status(500).send(err);  
+      //res.status(500).send(err);  
       console.log(err);
     }
   });
