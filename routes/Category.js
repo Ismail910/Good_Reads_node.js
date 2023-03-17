@@ -1,7 +1,6 @@
 //framework to work with APIs 
 const express = require('express');
 const router = express.Router()
-
 const CategoryModel = require('../model/Category/Category');
 const {authAdmin} = require ('../middlewares/auth');
 

@@ -1,11 +1,9 @@
-// const express = require('express');
 const mongoose = require('mongoose');
-// const app = express();
-// const PORT = 3000;
-// app.use(express.json());
+const counterModel = require('../../counter/count');
 
 
 const userSchema = new mongoose.Schema({
+  id:{type:Number,unique:true,require:true},
   first_name: { type: String, required: true },
   last_name: { type: String, required: true},
   email: { type: String, required: true,unique:true,
@@ -19,6 +17,21 @@ const userSchema = new mongoose.Schema({
 
 });
 
+
+
+userSchema.pre('save', function (next){
+  const  doc =this;
+  
+ counterModel.findByIdAndUpdate({_id:'userID'},{$inc:{sequence_value:1}},{new: true, upsert: true})
+             .then(function (count){
+                 doc.id = count.sequence_value;
+                 next();
+             })
+             .catch(err =>{
+                 console.log('counter error-> : ', err);
+                 throw err;
+             })
+})//pre
 const userModel = mongoose.model('user',userSchema);
 
 module.exports = userModel;

@@ -4,8 +4,7 @@ const app = express();
 app.use(express.json());
 const mongoose = require('mongoose');
 
-const PORT= process.env.Port || 5000 ;
-
+const PORT= process.env.Port || 5000;
 
 const URL = process.env.url || "mongodb://127.0.0.1:27017" ;
 
