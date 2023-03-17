@@ -9,7 +9,6 @@ const CategorySchema = new mongoose.Schema({
 
 CategorySchema.pre('save', function (next){
     const  doc =this;
-    
    counterModel.findByIdAndUpdate({_id:'categoryID'},{$inc:{sequence_value:1}},{new: true, upsert: true})
                .then(function (count){
                    doc.id = count.sequence_value;

@@ -14,7 +14,7 @@ async function cal_avreg(){
        // calculate average for all books
        const avrgrating = await bookUserModel
        .aggregate([{$group: {_id:"$book", avg_val:{$avg:"$rating"}}}]);
-      console.log(avrgrating);
+    //   console.log(avrgrating);
        //assign average to book
        avrgrating.forEach( async(element) => {
            await bookModel.updateOne({_id:element._id},{$set:{avg_rate:element.avg_val}})
