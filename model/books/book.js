@@ -5,7 +5,7 @@ const bookchema = new mongoose.Schema({
     img: { type: String, required: true },
     summary: { type: String, required: true },
     avg_rate:{type:Number,default:0},
-    //////////////ref
+    //////ref
     reviews: [{type: mongoose.Schema.Types.ObjectId, ref: "reviews" }],
 
     

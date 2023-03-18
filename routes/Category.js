@@ -4,9 +4,12 @@ const router = express.Router()
 
 const CategoryModel = require('../model/Category/Category');
 
+
 const bookModel = require('../model/books/book');
 
 const auth = require ('../middlewares/auth')
+
+const {authAdmin} = require ('../middlewares/auth');
 
 
 
@@ -16,11 +19,13 @@ router.get('/page/:page',async (req ,res)=>{
     try {
         const page=req.params.page;
         const limit=5;
+
         //عدد الكاتيجوري اللي عاوزاه تظهر
         const countCategory=await CategoryModel.find({}).count();
         //بعد عدد الكاتيجوري
         const totalPages=Math.ceil(countCategory/limit);
         //عدد الصفحات
+        
         const Categories =   await CategoryModel.find({})
         .limit(limit)
         .skip((page-1)*limit)
@@ -53,7 +58,7 @@ router.get('/:id',async (req ,res)=>{//get All book and all authror ref this cat
 })
 
 //body is json(name=......?)
-router.post('/',auth,async(req,res) =>{ 
+router.post('/',authAdmin,async(req,res) =>{ 
     
     try {
        const category = await CategoryModel.create(req.body);
@@ -69,7 +74,7 @@ router.post('/',auth,async(req,res) =>{
 
 
 //params==>url(data)
-router.put('/:id',auth,async (req,res)=>{
+router.put('/:id',authAdmin,async (req,res)=>{
     const id=req.params.id;
 //{$set:req.body}
     try{
@@ -80,13 +85,10 @@ router.put('/:id',auth,async (req,res)=>{
      res.status(500).send(err);
   } 
 })
-
-
-router.delete('/:id',auth,async(req,res)=>{
+router.delete('/:id',authAdmin,async(req,res)=>{
     const id=req.params.id;
     try{
         await bookModel.deleteMany({category: req.params.id});
-
     const category= await CategoryModel.findByIdAndDelete({_id:id});
      return res.json(category);
   }
@@ -94,5 +96,4 @@ router.delete('/:id',auth,async(req,res)=>{
      res.status(500).send(err);
   }
 })
-
 module.exports = router ; 

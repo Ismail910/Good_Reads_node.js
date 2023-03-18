@@ -11,7 +11,7 @@ router.post("/", async (req, res) => {
     // Our register logic starts here
     try {
       // Get user input
-      const { first_name, last_name, email, password,confirmPassword,img } = req.body;
+      const { first_name, last_name, email, password,confirmPassword,img ,isAdmin} = req.body;
   
       // Validate user input
       if (!(email && password && confirmPassword && first_name && last_name)) {
@@ -38,11 +38,12 @@ router.post("/", async (req, res) => {
         email: email.toLowerCase(), // sanitize: convert email to lowercase
         password: encryptedPassword,
         confirmPassword: encryptedConfirmPassword,
-        img
+        img,
+        isAdmin
       });
       // Create token
       const token = jwt.sign(
-        { user_id: user._id, email },
+        {user},
         TOKEN_KEY,
         {
           expiresIn: "2h",
@@ -50,7 +51,7 @@ router.post("/", async (req, res) => {
       );
       // save user token
       user.token = token;
-  
+        
       // return new user
       res.status(201).json(user);
     } catch (err) {

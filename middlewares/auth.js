@@ -29,7 +29,7 @@ const jwt = require ('jsonwebtoken');
 const { model } = require('mongoose');
 const TOKEN_KEY = "ITI"
 
-const auth = function (req,res,next){
+exports.authAdmin = function (req,res,next){
      const token = req.headers["x-token"]; 
 
      if(!token) 
@@ -37,14 +37,55 @@ const auth = function (req,res,next){
         return res.status(403).send("A token is required for authentication");
      }
      try{
-        const decoded = jwt.verify(token,TOKEN_KEY) 
-        req.user = decoded;                        
+          jwt.verify(token,TOKEN_KEY,(err,decoded)=>
+         {
+          if (decoded.user.isAdmin != true) 
+          return res.status(401).json({ message: "Not authorized" })
+
+            req.user = decoded;  
+            return next();
+
+         }) ;
+       
+      
       }
      catch(err)
      {
          return res.status(401).send("invalid Token");   
      }
-     return next();  
+     //return next();  
 }
 
-module.exports = auth;  
+
+
+
+exports.authUser = function (req,res,next){
+   const token = req.headers["x-token"]; 
+
+   if(!token) 
+   {
+      return res.status(403).send("A token is required for authentication");
+   }
+   try{
+        jwt.verify(token,TOKEN_KEY,(err,decoded)=>
+       {
+        if (decoded.user.isAdmin == true) 
+        return res.status(401).json({ message: "Not authorized" })
+
+          req.user = decoded;  
+          return next();
+
+       }) ;
+     
+                            
+    }
+   catch(err)
+   {
+       return res.status(401).send("invalid Token");   
+   }
+   //return next();  
+}
+
+
+
+//module.exports= auth;  

@@ -1,4 +1,5 @@
 const express=require('express');
+const cors = require('cors');
 const app = express();
 app.use(express.json());
 const mongoose = require('mongoose');
@@ -29,6 +30,9 @@ const homeUserRouter = require("./routes/homeUser");
 
 
 
+
+
+app.use(cors({origin: '*'}));
 ////////////////Routers
 app.use(['/book' , '/books'], bookRouter);
 app.use('/admin/author',authorRouter);
