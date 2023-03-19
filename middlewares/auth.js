@@ -21,8 +21,8 @@
 //   } catch (err) {
 //     return res.status(401).send("Invalid Token");
 //   }
-
 // };
+
 
 // module.exports = verifyToken;
 const jwt = require ('jsonwebtoken');
@@ -45,9 +45,13 @@ exports.authAdmin = function (req,res,next){
             req.user = decoded;  
             return next();
 
+
          }) ;
        
       
+
+                     
+
       }
      catch(err)
      {

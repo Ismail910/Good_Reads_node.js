@@ -1,7 +1,6 @@
 //framework to work with APIs 
 const express = require('express');
 const router = express.Router()
-
 const CategoryModel = require('../model/Category/Category');
 
 
@@ -50,7 +49,7 @@ router.get('/page/:page',async (req ,res)=>{
 
 router.get('/:id',async (req ,res)=>{//get All book and all authror ref this category 
    try {
-       const category = await CategoryModel.find({_id: req.params.id});
+       const category = await CategoryModel.find({id: req.params.id});
          return res.json(category)  
    } catch (err) {
     res.status(500).send(err)
@@ -63,11 +62,9 @@ router.post('/',authAdmin,async(req,res) =>{
     try {
        const category = await CategoryModel.create(req.body);
        console.log(category);
-       await category.save();
+      //  await category.save();  
        return res.json(category);
-      
     } catch (error) {
-     
         return res.status(500).send(error);
 }
 })
@@ -91,7 +88,7 @@ router.delete('/:id',authAdmin,async(req,res)=>{
         await bookModel.deleteMany({category: req.params.id});
     const category= await CategoryModel.findByIdAndDelete({_id:id});
      return res.json(category);
-  }
+       }
   catch(err){
      res.status(500).send(err);
   }
