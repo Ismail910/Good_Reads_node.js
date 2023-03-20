@@ -45,7 +45,13 @@ exports.authAdmin = function (req,res,next){
             req.user = decoded;  
             return next();
 
-         }) ;                  
+
+         }) ;
+       
+      
+
+                     
+
       }
      catch(err)
      {

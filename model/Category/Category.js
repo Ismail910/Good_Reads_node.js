@@ -4,7 +4,7 @@ const counterModel = require('../counter/count');
 const CategorySchema = new mongoose.Schema({
     id:{type:Number,unique:true,require:true},
     name: {type: String, require: true ,unique:true},
-    books: [{ type: mongoose.Schema.Types.ObjectId,ref: "book" }]  
+    
 });
 
 
@@ -26,3 +26,4 @@ CategorySchema.pre('save', function (next){
 const CategoryModel = mongoose.model("category", CategorySchema);
 
 module.exports = CategoryModel;
+// books: [{ type: mongoose.Schema.Types.ObjectId,ref: "book" }]  
