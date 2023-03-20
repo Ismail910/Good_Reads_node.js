@@ -1,9 +1,8 @@
 const express=require('express');
-const cors = require('cors');
 const app = express();
 app.use(express.json());
 const mongoose = require('mongoose');
-
+var cors = require('cors');
 const PORT= process.env.Port || 5000 ;
 
 
@@ -21,7 +20,7 @@ const categoryRouter=require("./routes/Category");
 const homeUserRouter = require("./routes/homeUser");
 
 
-app.use(cors({origin: '*'}));
+app.use(cors());
 ////////////////Routers
 app.use(['/book' , '/books'], bookRouter);
 app.use('/admin/author',authorRouter);
