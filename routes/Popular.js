@@ -1,11 +1,12 @@
 const express=require('express');
 const bookModel = require('../model/books/book');
 const authorModel = require('../model/author/author');
+const CategoryModel = require('../model/Category/Category');
 const router = express.Router();
 const popularBooks=[];
 router.get('/popularBook', async (req, res)=>{
     try{
-        const popularBook = await bookModel.find({},{'name':1, 'img':1,'summary':1,'avg_rate':1,"category":1})
+        const popularBook = await bookModel.find({},{'name':1, 'img':1,'summary':1,'avg_rate':1,"category":1,"id":1})
         .sort({avg_rate: -1}).limit(5)
         .populate({path:'category', select: {'name':1, _id:0}});
         console.log(popularBook);
@@ -55,6 +56,7 @@ router.get('/popularAuthor', async (req,res)=>{
             // }
         // popularBook.map(ele =>{
                
+
         //         let find=0;
         //         console.log(unsortAuthorPopular.length);
                 
@@ -95,11 +97,43 @@ router.get('/popularAuthor', async (req,res)=>{
         // console.log("out");
         // console.log(sortAuthor);
         
+        // =======
+//         const popularBook = await bookModel.find({},{'name':1, 'img':1,'summary':1,'avg_rate':1,"category":1,"author":1})
+//         .sort({avg_rate: -1}).limit(5)
+//         .populate({path:'category', select: {'name':1, _id:0}});
+//         console.log(popularBook);
+//         const unsortAuthorPopular =[5][2];
+//         // popularBook.forEach(ele =>{
+// >>>>>>> 2333421426caff4d65cac799a916f01879f16cc7
+
         return res.json({"sortAuthor":"jjj"});
     }catch(err){
         res.status(500).send(err);
        }
     }
 )
+
+
+router.get('/popularCategory', async (req,res)=>{
+    try{
+       
+        const popularBook = await bookModel.find({},{'avg_rate':1,"category":1})
+        .sort({avg_rate: -1}).limit(5)
+        // .populate({path:'category', select: {'name':1, _id:0}})
+        //const popularCategory = await CategoryModel.find({_id:},{})
+         const data = popularBook.forEach(async (ele )=>{
+            await CategoryModel.find({id:ele.category},{})
+        })
+        console.log(data);
+
+        console.log(popularBook);
+
+        return res.json({"sortAuthor":"jjj"});
+    }catch(err){
+        res.status(500).send(err);
+       }
+    }
+)
+    
 module.exports = router; 
 

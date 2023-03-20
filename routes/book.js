@@ -7,6 +7,7 @@ const reviewModel = require('../model/books/Reviews');
 const authorModel = require('../model/author/author');
 const CategoryModel =require('../model/Category/Category');
 const {authAdmin} = require("../middlewares/auth");
+const {storageBook}=require('../middlewares/upload');
 
 
 
@@ -16,7 +17,9 @@ router.get('/page/:page', async (req, res) => {
       const limit = 5;
       const countbooks = await bookModel.find({}).count();
       const totalPages = Math.ceil(countbooks / limit);
-      const books = await bookModel.find({}, { 'name': 1, 'img': 1, 'category': 1, 'author': 1 })
+      const books = await bookModel.find({}, { 'id':1,'name': 1, 'img': 1,'category': 1, 'author': 1 })
+      .populate({ path: 'category', select: { 'name': 1 } })
+      .populate({ path: 'author', select: { 'firstName': 1, 'lastName': 1 } })
          .limit(limit)
          .skip((page - 1) * limit)
          .exec();
@@ -37,7 +40,7 @@ router.get('/page/:page', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
    try {
-      const book = await bookModel.find({ _id: req.params.id }, {})
+      const book = await bookModel.find({ _id: req.params.id })
          .populate({ path: 'bookUser', select: { 'rating': 1, 'status': 1 } })
          .populate({ path: 'reviews', select: { 'comment': 1, 'like': 1, 'date': 1 } })
          .populate({ path: 'author', select: { 'firstName': 1, 'lastName': 1 } })
@@ -48,9 +51,17 @@ router.get('/:id', async (req, res) => {
    }
 })
 
-router.post('/',authAdmin, async (req, res) => {
+router.post('/',[authAdmin,storageBook], async (req, res) => {
    try {
-      const book = await bookModel.create(req.body);
+
+      const objBook = {
+         name: req.body.name,
+         summary: req.body.summary,
+         category:req.body.category,
+         author:req.body.author,
+          img: req.file.path
+      };
+      const book = await bookModel.create(objBook);
       await authorModel.updateOne({ _id: book.author }, { $push: { 'books': book._id } });
       await CategoryModel.updateOne({ _id: book.category }, { $push: { 'books': book._id } });
       return res.json(book);
