@@ -1,18 +1,31 @@
 const express = require('express');
 const router = express.Router();
 const {authAdmin} = require("../middlewares/auth");
+const {storageAuthor}=require("../middlewares/upload");
 
 //model
 const authorModel = require('../model/author/author');
-const bookModel = require('../model/books/book')
+const bookModel = require('../model/books/book');
 
-router.post('/',authAdmin,async(req,res) =>{ 
+
+
+router.post('/',[authAdmin,storageAuthor],async(req,res) =>{ 
     try {
-       const author = await authorModel.create(req.body);
-       return res.json(author);
+     ;
+        const objAuthor = {
+          firstName: req.body.firstName,
+          lastName: req.body.lastName,
+          dateOfBirth:req.body.dateOfBirth,
+          photo: req.file.path
+       };
+      
+       //return res.json(objAuthor);
+
+       const author = await authorModel.create(objAuthor);
+      return res.json(author);
     } catch (error) {
-        return res.status(500).send(error);
-}
+        return res.send("error");
+       }
 })
 
 router.get('/page/:page',async(req,res)=>{
