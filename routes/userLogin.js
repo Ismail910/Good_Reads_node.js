@@ -35,9 +35,11 @@ router.post("/", async (req, res) => {
         user.token = token;
 
         // user
+        // const response={message:'success',token:user.token}
         res.status(200).json(user);
       }
-      res.status(400).send("Invalid Credentials");
+      const errResponse = {message:'passwoer or email is invalid'}
+      res.status(400).send(errResponse);
     } catch (err) {
       //res.status(500).send(err);  
       console.log(err);
