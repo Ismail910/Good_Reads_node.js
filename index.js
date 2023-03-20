@@ -1,14 +1,11 @@
 const express=require('express');
-const cors = require('cors');
 const app = express();
 app.use(express.json());
 const mongoose = require('mongoose');
 
+var cors = require('cors');
+const PORT= process.env.Port || 5000 ;
 
-// const PORT= process.env.Port || 5002 ;
-
-
-const PORT= process.env.Port || 5000;
 
 
 const URL = process.env.url || "mongodb://127.0.0.1:27017" ;
@@ -33,14 +30,17 @@ const categoryRouter=require("./routes/Category");
 const homeUserRouter = require("./routes/homeUser");
 
 
-
-
-
-
-app.use(cors({origin: '*'}));
-
 app.use(cors());
+// =======
 
+
+
+
+// app.use(cors({origin: '*'}));
+
+// app.use(cors());
+
+// >>>>>>> 2333421426caff4d65cac799a916f01879f16cc7
 ////////////////Routers
 app.use(['/book' , '/books'], bookRouter);
 app.use('/admin/author',authorRouter);

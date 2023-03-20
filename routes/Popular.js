@@ -21,13 +21,44 @@ router.get('/popularBook', async (req, res)=>{
 
 router.get('/popularAuthor', async (req,res)=>{
     try{
-        const popularBook = await bookModel.find({},{'name':1, 'img':1,'summary':1,'avg_rate':1,"category":1,"author":1})
-        .sort({avg_rate: -1}).limit(5)
-        .populate({path:'category', select: {'name':1, _id:0}});
+        const popularBook = await bookModel.find({},{'avg_rate':1,"author":1})
+        .sort({avg_rate: -1}).limit(5)//.aggregate([{$group:{_id:"$author",count_val:{$count:"$author"}}}])
         console.log(popularBook);
-        const unsortAuthorPopular =[5][2];
-        // popularBook.forEach(ele =>{
+            var unsortAuthorPopular=[] ;
+            for(i=0;i<5;i++){
+                unsortAuthorPopular[i]=[];
+            }
+        
+            // console.log(unsortAuthorPopular[0][1]);
+            //console.log(popularBook.length);
+
+            for(i=0;i<popularBook.length;i++){
+                for(j=0;j<5;j++){
+                     console.log(unsortAuthorPopular[j][0]+"   "+popularBook[i].author);
+                    if((unsortAuthorPopular[j][0])==(popularBook[i].author)){
+                        unsortAuthorPopular[j][1]++;
+                        console.log("asd");
+                        break;
+                    } 
+                    if(typeof unsortAuthorPopular[j][0]==="undefined"){
+                        unsortAuthorPopular[j][0]=popularBook[i].author;
+                        unsortAuthorPopular[j][1] =1;
+                        console.log("asd2");
+                        break;
+                    } 
+                }
+                
+                
+            }
+
+            // for(i=0;i<5;i++){
+            //     console.log(unsortAuthorPopular[i][0]+"   "+unsortAuthorPopular[i][1]);
+            // }
+        // popularBook.map(ele =>{
+               
+
         //         let find=0;
+        //         console.log(unsortAuthorPopular.length);
                 
         //         for (let i of unsortAuthorPopular) {
         //             if(i[0]==ele.author){
@@ -56,15 +87,25 @@ router.get('/popularAuthor', async (req,res)=>{
 
 
         // const sortAuthor=
-        // await popularBook.forEach(async (ele )=>{
-        //     await authorModel.find({_id:ele.author},{})
+        // popularBook.map(async (ele )=>{
+        //   const Author = await authorModel.find({_id:ele.author},{})
+        //    console.log("dddddddd");
 
-             
+        //    console.log(Author);
             
         // })
+        // console.log("out");
         // console.log(sortAuthor);
+        
+        // =======
+//         const popularBook = await bookModel.find({},{'name':1, 'img':1,'summary':1,'avg_rate':1,"category":1,"author":1})
+//         .sort({avg_rate: -1}).limit(5)
+//         .populate({path:'category', select: {'name':1, _id:0}});
+//         console.log(popularBook);
+//         const unsortAuthorPopular =[5][2];
+//         // popularBook.forEach(ele =>{
+// >>>>>>> 2333421426caff4d65cac799a916f01879f16cc7
 
-      
         return res.json({"sortAuthor":"jjj"});
     }catch(err){
         res.status(500).send(err);

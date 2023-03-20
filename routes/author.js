@@ -54,19 +54,21 @@ router.get('/page/:page',async(req,res)=>{
 })//get
 
 //get author by id
-router.get('/:id?userId',async(req,res)=>{
+router.get('/:id/:userId',async(req,res)=>{
     const id=req.params.id;
     const userId=req.params.userId;
     try{
-   //   const author= await authorModel.find({ID:id},{ID:1,photo:1,firstName:1,lastName:1,
-
-   //                                              dateOfBirth:1,books:1,});
    const author = await authorModel.find({ID:id},{photo:1,firstName:1,lastName:1,dateOfBirth:1,books:1})
-   .populate({path:'books',model:'book',select: {'name':1,"_id":0},
-   populate:{path:'bookUser',model:'bookUser', select:{rating:1,status:1},match:{user:userId}}})
-   // .populate({path: 'bookUser',select: {'rating':1,'status':1,"_id":0}})
-   // .populate({path:'user',match:{"email":req.query.email}});
-      return res.json(author);
+   .populate({path:'books',model:'book',select: {'name':1,img:1,"_id":0},populate:{path:'bookUser',model:'bookUser',
+   select:{rating:1,status:1},match:{user:userId}}})
+   return res.send(author);
+// =======
+//    .populate({path:'books',model:'book',select: {'name':1,"_id":0},
+//    populate:{path:'bookUser',model:'bookUser', select:{rating:1,status:1},match:{user:userId}}})
+//    // .populate({path: 'bookUser',select: {'rating':1,'status':1,"_id":0}})
+//    // .populate({path:'user',match:{"email":req.query.email}});
+//       return res.json(author);
+// >>>>>>> 2333421426caff4d65cac799a916f01879f16cc7
    }
    catch(err){
       res.status(500).send(err);
