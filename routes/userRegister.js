@@ -11,8 +11,8 @@ router.post("/", async (req, res) => {
     // Our register logic starts here
     try {
       // Get user input
+      const errResEmail={message:'User Already Exist. Please Login'}
       const { first_name, last_name, email, password,confirmPassword,img ,isAdmin} = req.body;
-  
       // Validate user input
       if (!(email && password && confirmPassword && first_name && last_name)) {
         res.status(400).send("All input is required except image");
@@ -23,9 +23,9 @@ router.post("/", async (req, res) => {
       const oldUser = await userModel.findOne({ email });
   
       if (oldUser) {
-        return res.status(409).send("User Already Exist. Please Login");
+        console.log("User already")
+        return res.status(409).send(errResEmail);
       }
-
       //Encrypt user password
       encryptedPassword = await bcrypt.hash(password, 10);
       encryptedConfirmPassword = await bcrypt.hash(confirmPassword,10)
@@ -51,7 +51,8 @@ router.post("/", async (req, res) => {
       );
       // save user token
       user.token = token;
-        
+      // const response={message:'success',token:user.token}
+
       // return new user
       res.status(201).json(user);
     } catch (err) {

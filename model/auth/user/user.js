@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema({
   first_name: { type: String, required: true },
   last_name: { type: String, required: true},
   email: { type: String, required: true,unique:true,
-    match:/^[a-zA-Z0-9_.+]+(?<!^[0-9]*)@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/}, // match   example mmmmm@gmail.com
+  }, // match   example mmmmm@gmail.com
   password: { type: String ,required: true,
     match: /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/}, // match Minimum eight characters, at least one letter and one number:
   confirmPassword: { type: String, required: true},  // check the same password
