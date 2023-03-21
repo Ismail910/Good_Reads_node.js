@@ -1,4 +1,5 @@
 const express=require('express');
+const path=require('path');
 const app = express();
 app.use(express.json());
 const mongoose = require('mongoose');
@@ -32,7 +33,7 @@ const homeUserRouter = require("./routes/homeUser");
 
 app.use(cors());
 // =======
-
+app.use('/assets', express.static(path.join(__dirname, 'assets')));
 
 
 
@@ -40,7 +41,6 @@ app.use(cors());
 
 // app.use(cors());
 
-// >>>>>>> 2333421426caff4d65cac799a916f01879f16cc7
 ////////////////Routers
 app.use(['/book' , '/books'], bookRouter);
 app.use('/admin/author',authorRouter);

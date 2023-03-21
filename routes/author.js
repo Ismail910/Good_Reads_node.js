@@ -11,7 +11,7 @@ const bookModel = require('../model/books/book');
 
 router.post('/',[authAdmin,storageAuthor],async(req,res) =>{ 
     try {
-     ;
+
         const objAuthor = {
           firstName: req.body.firstName,
           lastName: req.body.lastName,
@@ -19,12 +19,12 @@ router.post('/',[authAdmin,storageAuthor],async(req,res) =>{
           photo: req.file.path
        };
       
-       //return res.json(objAuthor);
+       console.log(objAuthor);
 
        const author = await authorModel.create(objAuthor);
       return res.json(author);
     } catch (error) {
-        return res.send("error");
+        return res.send(error);
        }
 })
 
