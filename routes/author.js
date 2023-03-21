@@ -19,12 +19,12 @@ router.post('/',[authAdmin,storageAuthor],async(req,res) =>{
           photo: req.file.path
        };
       
-     //  return res.json(objAuthor);
+       console.log(objAuthor);
 
        const author = await authorModel.create(objAuthor);
       return res.json(author);
     } catch (error) {
-        return res.send("error");
+        return res.send(error);
        }
 })
 

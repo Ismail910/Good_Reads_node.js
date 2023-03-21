@@ -36,6 +36,7 @@ router.post('/',authUser, async (req, res)=>{
             }  
 })
 
+
 //updat rate
 router.put('/:id',authUser, async(req,res)=>{
     try{
