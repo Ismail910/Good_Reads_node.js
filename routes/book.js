@@ -74,7 +74,6 @@ router.post('/',authAdmin,async(req,res) =>{
     
     try {
 
-   
        const book = await bookModel.create(req.body);
       
        return res.json(book);

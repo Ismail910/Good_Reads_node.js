@@ -54,7 +54,7 @@ router.get('/:id',async (req ,res)=>{//get All book and all authror ref this cat
    } catch (err) {
     res.status(500).send(err)
    }
-})
+});
 
 //body is json(name=......?)
 router.post('/',authAdmin,async(req,res) =>{ 
@@ -93,4 +93,16 @@ router.delete('/:id',authAdmin,async(req,res)=>{
      res.status(500).send(err);
   }
 })
+
+
+router.get('/',async (req ,res)=>{ 
+    try {
+        const category = await CategoryModel.find({});
+          return res.json(category)  
+    } catch (err) {
+     res.status(500).send(err)
+    }
+ });
+
+
 module.exports = router ; 
