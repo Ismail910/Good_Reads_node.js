@@ -34,8 +34,11 @@ router.get("/all/page/:page/:userID",async(req,res)=>{
          ,populate:{
              path:'author',
              model:'author',
-             select:{'firstName':1,'lastName':1,"_id":0}
-             
+             select:{'firstName':1,'lastName':1,"_id":0}        
+    },populate:{
+        path:'category',
+        model:'category',
+        select:{name:1}
     }})
      .limit(limit).skip((page-1)*limit).exec();
 
@@ -97,6 +100,10 @@ router.get('/home/page/:page/:status/:userID',authUser,async (req,res)=>{
             path:'author',
             model:'author',
             select:{'firstName':1,'lastName':1,"_id":0}
+    },populate:{
+        path:'category',
+        model:'category',
+        select:{name:1}
     }})
  .limit(limit).skip((page-1)*limit).exec();
      const objBooks=

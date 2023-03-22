@@ -1,10 +1,8 @@
 const multer=require('multer');
-const path=require('path');
-
    const author=  multer.diskStorage({
     destination:function(req,file,callbackFunc)
     {
-       callbackFunc(null,path.join(__dirname,'../assets/authors'))
+       callbackFunc(null,'./assets/authors')
     },filename:function(req,file,callbackFunc)
     {
        var nameImage=new Date().toISOString().replace(/:/g,'-') +file.originalname;
@@ -13,10 +11,11 @@ const path=require('path');
    });
 
 
+   
 const book=multer.diskStorage({
     destination:function(req,file,callbackFunc)
     {
-       callbackFunc(null,path.join(__dirname,'../assets/books'))
+       callbackFunc(null,'./assets/books')
     },filename:function(req,file,callbackFunc)
     {
        var nameImage=new Date().toISOString().replace(/:/g,'-') + file.originalname;
