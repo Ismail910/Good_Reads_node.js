@@ -21,7 +21,7 @@ async function cal_avreg(){
        });
 }
 //display all books with details
-router.get("/all/page/:page/:userID",authUser,async(req,res)=>{
+router.get("/all/page/:page/:userID",async(req,res)=>{
     try {
         cal_avreg();
       const page=req.params.page;
@@ -84,7 +84,7 @@ router.get("/all/page/:page",async(req,res)=>{
     }
 })//get
 
-router.get('/home/page/:page/:status/:userID',async (req,res)=>{
+router.get('/home/page/:page/:status/:userID',authUser,async (req,res)=>{
     try{
     const page=req.params.page;
     const limit=5;

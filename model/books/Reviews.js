@@ -5,7 +5,7 @@ const reviewSchema  = new mongoose.Schema({
     id:{type:Number,unique:true,require:true},
     comment: String,
     like: {type:Boolean, default:false},
-    date: {type: Date, default: new Date("<YYYY-mm-ddTHH:MM:ss>")},
+    date: {type: Date, default: new Date()},
     book: { type: mongoose.Schema.Types.ObjectId,required:true, ref: "book" },
     user: { type: mongoose.Schema.Types.ObjectId,required:true, ref: "user" },
 
