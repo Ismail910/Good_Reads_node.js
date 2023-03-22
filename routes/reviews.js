@@ -15,26 +15,27 @@ router.get('/',async(req , res)=>{
     }
 })
 
-// router.get('/:id', async (req,res)=>{
-//     try{
-//         const review = await reviewModel.findById({_id:req.params.id}).populate('user');
-//         return res.json(review);
-//     }
-//     catch(err){
-//         res.status(404).send(err);
-//     }
-// })
+router.get('/:id', async (req,res)=>{
+    try{
+        const review = await reviewModel.findById({_id:req.params.id}).populate('user');
+        return res.json(review);
+    }
+    catch(err){
+        res.status(404).send(err);
+    }
+})
 
 
 //create review  
 
-router.post('/',authUser,async(req,res)=>{
+router.post('/',async(req,res)=>{
     try{
-        const review = (await reviewModel.create(req.body));
+        const review = await reviewModel.create(req.body);
         await bookModel.updateOne({_id:review.book},{$push:{'reviews':review._id}});
         return res.json(review);
     }
     catch(err){
+        console.log(err);
         return res.status(500).send(err);
     }
 })

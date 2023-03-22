@@ -87,7 +87,7 @@ router.get("/all/page/:page",async(req,res)=>{
     }
 })//get
 
-router.get('/home/page/:page/:status/:userID',authUser,async (req,res)=>{
+router.get('/home/page/:page/:status/:userID',async (req,res)=>{
     try{
     const page=req.params.page;
     const limit=5;
