@@ -118,10 +118,22 @@ router.delete('/:id',authAdmin,async(req,res)=>{
 });
 
 //update author by id
-router.put('/:id',authAdmin,async (req,res)=>{
+router.put('/:id',[authAdmin,storageAuthor],async (req,res)=>{
     const id=req.params.id;
     try{
-    const author= await authorModel.updateOne({ID:id},{$set:req.body},{ID:1,photo:1,firstName:1,lastName:1,
+      const objAuthor = {
+         firstName: req.body.firstName,
+         lastName: req.body.lastName,
+         dateOfBirth:req.body.dateOfBirth,
+      };
+      if(req.file)
+      {
+         objAuthor.photo=req.file.path;
+
+      }
+     
+      console.log(objAuthor);
+    const author= await authorModel.updateOne({ID:id},{$set:objAuthor},{ID:1,photo:1,firstName:1,lastName:1,
         dateOfBirth:1});
      return res.json(author);
   }
