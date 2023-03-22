@@ -16,14 +16,14 @@ router.post("/", async (req, res) => {
   
       // Validate user input
       if (!(email && password)) {
-        res.status(400).send("All input is required");
+       return res.status(400).send("All input is required");
       }
       // Validate if user exist in our database
       const user = await userModel.findOne({ email });
   
       if (user && (await bcrypt.compare(password, user.password))) {
         // Create token
-        const token = jwt.sign(
+        const token =  jwt.sign(
           {user},
           TOKEN_KEY,
           {
@@ -33,16 +33,19 @@ router.post("/", async (req, res) => {
   
         // save user token
         user.token = token;
-
-        // user
+        // user   
         // const response={message:'success',token:user.token}
-        res.status(200).json(user);
+       return res.status(200).json(user);
       }
       const errResponse = {message:'passwoer or email is invalid'}
-      res.status(400).send(errResponse);
+      return res.status(400).send(errResponse);
     } catch (err) {
-     // res.status(500).send(err);  
+<<<<<<< HEAD
+    //  res.status(500).send(err);  
        console.log(err);
+=======
+      return res.status(500).send(err);
+>>>>>>> 0f75ea10b26b914247829ebb4b1b8d6792f2857c
     }
   });
 

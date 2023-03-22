@@ -21,7 +21,7 @@ async function cal_avreg(){
        });
 }
 //display all books with details
-router.get("/all/page/:page/:userID",authUser,async(req,res)=>{
+router.get("/all/page/:page/:userID",async(req,res)=>{
     try {
         cal_avreg();
       const page=req.params.page;
@@ -68,7 +68,14 @@ router.get("/all/page/:page",async(req,res)=>{
       const limit=5;
       const bookCount=await bookModel.find({}).count();
       const totalPages=Math.ceil(bookCount/limit); 
-      const books = await bookModel.find({},{img:1,name:1,avg_rate:1,summary:1,id:1})
+      const books = await bookModel.find({},{img:1,name:1,avg_rate:1,summary:1,id:1,author:1,category:1})
+      .populate({
+        path:'author',
+        select:{'firstName':1,'lastName':1,"_id":0}        
+        }).populate({
+            path:'category',
+            select:{'name':1}
+        })
      .limit(limit).skip((page-1)*limit).exec();
 
      const objBooks=
