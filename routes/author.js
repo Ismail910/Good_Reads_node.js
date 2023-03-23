@@ -111,8 +111,10 @@ router.get('/:id/:userId',async(req,res)=>{
 router.delete('/:id',authAdmin,async(req,res)=>{
    try{
       const idAuthor=req.params.id
-       await bookModel.deleteMany({}).populate({path:"author",match:{"ID":idAuthor}});
-       await authorModel.deleteOne({ID:idAuthor}); 
+       await bookModel.deleteMany({author:idAuthor});
+
+       //.populate({path:"author",match:{"ID":idAuthor}});
+       await authorModel.deleteOne({_id:idAuthor}); 
        return res.status(200).json("deleted");
  }
  catch(err){

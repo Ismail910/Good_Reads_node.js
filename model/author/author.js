@@ -7,8 +7,11 @@ const authorSchema = new mongoose.Schema({
           // match:/^\(?(\d{3})\)?[-]?(\d{3})[-]?(\d{5})$/ },//match [(code area)(xxx-xxxxx)
     firstName:{type:String,require:true,maxLength:10,minLength:3},
     lastName:{type:String,require:true,maxLength:10,minLength:3},
-    dateOfBirth:{type:String,require:true,
-    match:/^[0-9]{2}[\/]{1}[0-9]{2}[\/]{1}[0-9]{4}$/},//match DD/MM/YYYY
+    dateOfBirth:{type:String,require:true
+     // match:/^[0-9]{4}[\/]{1}[0-9]{2}[\/]{1}[0-9]{2}[\/]{1}$/ }
+    //match:/^[0-9]{2}[\/]{1}[0-9]{2}[\/]{1}[0-9]{4}$/}
+    },//match DD/MM/YYYY
+    
     books: [{ type: mongoose.Schema.Types.ObjectId,ref: "book" }]  
 })//schema
 
