@@ -25,7 +25,7 @@ router.get('/:id', async (req, res)=>{
 })
 
 //create bookUser  
-router.post('/', authUser ,async (req, res)=>{
+router.post('/' ,async (req, res)=>{
             try{
             const rating = await bookUserModel.create(req.body);
             await bookModel.updateOne({_id:rating.book},{$set:{'bookUser':rating._id}})
