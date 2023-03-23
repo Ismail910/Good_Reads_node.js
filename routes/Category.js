@@ -2,6 +2,7 @@
 const express = require('express');
 const router = express.Router()
 const CategoryModel = require('../model/Category/Category');
+const BookModel=require('../model/books/book');
 
 
 const bookModel = require('../model/books/book');
@@ -47,14 +48,35 @@ router.get('/page/:page',async (req ,res)=>{
 
 
 
-router.get('/:id',async (req ,res)=>{//get All book and all authror ref this category 
+router.get('/:id/page/:page',async (req ,res)=>{//get All book and all authror ref this category 
    try {
-       const category = await CategoryModel.find({id: req.params.id});
-         return res.json(category)  
+   /* const page=req.params.page;
+    const limit=5;
+    const countCategory=await BookModel.find({'category':idCategory}).count();
+    const totalPages=Math.ceil(countCategory/limit);
+  */
+
+    const idCategory=req.params.id;
+    const books = await BookModel.find({'category':idCategory});
+    
+       /*.limit(limit)
+       .skip((page-1)*limit)
+       .exec();*/
+
+     /*const objBooks=
+     {
+        pages:
+        {
+           totalPages,
+           page
+        },
+        data:books
+     };*/
+      return res.json(books);
    } catch (err) {
     res.status(500).send(err)
    }
-})
+});
 
 //body is json(name=......?)
 router.post('/',authAdmin,async(req,res) =>{ 
@@ -93,4 +115,16 @@ router.delete('/:id',authAdmin,async(req,res)=>{
      res.status(500).send(err);
   }
 })
+
+
+router.get('/',async (req ,res)=>{ 
+    try {
+        const category = await CategoryModel.find({});
+          return res.json(category)  
+    } catch (err) {
+     res.status(500).send(err)
+    }
+ });
+
+
 module.exports = router ; 

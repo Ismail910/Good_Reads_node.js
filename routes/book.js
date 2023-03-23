@@ -17,7 +17,7 @@ router.get('/page/:page', async (req, res) => {
       const limit = 5;
       const countbooks = await bookModel.find({}).count();
       const totalPages = Math.ceil(countbooks / limit);
-      const books = await bookModel.find({}, { 'id':1,'name': 1, 'img': 1,'category': 1, 'author': 1 })
+      const books = await bookModel.find({}, { 'id':1,'name': 1, 'img': 1,'category': 1, 'author': 1 ,'summary':1})
       .populate({ path: 'category', select: { 'name': 1 } })
       .populate({ path: 'author', select: { 'firstName': 1, 'lastName': 1 } })
          .limit(limit)
@@ -70,31 +70,24 @@ router.post('/',[authAdmin,storageBook], async (req, res) => {
    }
 })
 
-router.post('/',authAdmin,async(req,res) =>{ 
-    
-    try {
 
-   
-       const book = await bookModel.create(req.body);
-      
-       return res.json(book);
-      
-    } catch (error) {
-         res.status(500).send(error);
-}
-})
-
-router.put('/:id',authAdmin,async (req,res)=>{
-    const id=req.params.id;
-    const data = {
-      name : req.body.name,
-      img : req.body.img,
-      name : req.body.name,
-      category : req.body.category,
-      author : req.body.author
-    }
+router.put('/:id',[authAdmin,storageBook],async (req,res)=>{
+ 
     try{
-    const book= await bookModel.updateOne({_id:id},{$set:data});
+      const id=req.params.id;
+
+      const objBook = {
+         name: req.body.name,
+         summary: req.body.summary,
+         category:req.body.category,
+         author:req.body.author,
+      };
+      if(req.file)
+      {
+         objBook.img=req.file.path;
+  
+      }
+    const book= await bookModel.updateOne({_id:id},{$set:objBook});
     //await bookModel.updateOne({_id:id},{$push:{'bookUser':book.bookUser} });
      return res.json(book);
   }

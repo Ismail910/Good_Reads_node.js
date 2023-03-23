@@ -55,6 +55,9 @@ router.get('/page/:page',async(req,res)=>{
 
 //get author by id
 router.get('/:id/:userId',async(req,res)=>{
+
+   "await bookModel.find({}).populate({path:'category',model:'category', match:{_id:catID} });"
+   //////////////
     const id=req.params.id;
     const userId=req.params.userId;
     try{
@@ -142,6 +145,19 @@ router.put('/:id',[authAdmin,storageAuthor],async (req,res)=>{
   } 
 })//update author by id
 
+
+
+
+router.get('/',async(req,res)=>{
+   try{
+     const authors=  await authorModel.find({},
+       {ID:1,firstName:1,lastName:1});
+      return res.json(authors);
+   }
+   catch(err){
+       res.status(500).send(err);
+   }
+});
 
 module.exports = router;
 
