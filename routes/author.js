@@ -62,7 +62,7 @@ router.get('/:id/:userId',async(req,res)=>{
     const userId=req.params.userId;
     try{
    const author = await authorModel.find({ID:id},{photo:1,firstName:1,lastName:1,dateOfBirth:1,books:1})
-   .populate({path:'books',model:'book',select: {'name':1,img:1,"_id":0},populate:{path:'bookUser',model:'bookUser',
+   .populate({path:'books',model:'book',select: {'name':1,img:1,avg_rate:1,"_id":0},populate:{path:'bookUser',model:'bookUser',
    select:{rating:1,status:1},match:{user:userId}}})
    return res.send(author);
 // =======

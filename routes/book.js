@@ -38,10 +38,11 @@ router.get('/page/:page', async (req, res) => {
    }
 })
 
-router.get('/:id', async (req, res) => {
+router.get('/:id/:userID', async (req, res) => {
    try {
       const book = await bookModel.find({ _id: req.params.id })
-         .populate({ path: 'bookUser', select: { 'rating': 1, 'status': 1 } })
+         .populate({ path: 'bookUser', select: { 'rating': 1, 'status': 1 },
+         match:{'user':req.params.userID} })
          .populate({ path: 'reviews', select: { 'comment': 1, 'like': 1, 'date': 1 } })
          .populate({ path: 'author', select: { 'firstName': 1, 'lastName': 1 } })
          .populate({ path: 'category', select: { 'name': 1 } })

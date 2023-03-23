@@ -28,18 +28,18 @@ router.get('/:id', async (req,res)=>{
 
 //create review  
 
-// router.post('/',async(req,res)=>{
-//     try{
+router.post('/',async(req,res)=>{
+    try{
 
-//         const review = await reviewModel.create(req.body);
-//         await bookModel.updateOne({_id:review.book},{$push:{'reviews':review._id}});
-//         return res.json(review);
-//     }
-//     catch(err){
-//         console.log(err);
-//         return res.status(500).send(err);
-//     }
-// })
+        const review = await reviewModel.create(req.body);
+        await bookModel.updateOne({_id:review.book},{$push:{'reviews':review._id}});
+        return res.json(review);
+    }
+    catch(err){
+        console.log(err);
+        return res.status(500).send(err);
+    }
+})
 
 
 

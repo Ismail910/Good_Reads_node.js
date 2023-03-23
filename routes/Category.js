@@ -48,7 +48,7 @@ router.get('/page/:page',async (req ,res)=>{
 
 
 
-router.get('/:id/page/:page',async (req ,res)=>{//get All book and all authror ref this category 
+router.get('/:id/page/:page/userId',async (req ,res)=>{//get All book and all authror ref this category 
    try {
    /* const page=req.params.page;
     const limit=5;
@@ -57,7 +57,9 @@ router.get('/:id/page/:page',async (req ,res)=>{//get All book and all authror r
   */
 
     const idCategory=req.params.id;
-    const books = await BookModel.find({'category':idCategory});
+    const userId =req.params.userId; 
+    const books = await BookModel.find({'category':idCategory}).populate({path:'books',model:'book',select: {'name':1,img:1,'avg_rate':1,"_id":0},populate:{path:'bookUser',model:'bookUser',
+    select:{rating:1,status:1},match:{user:userId}}});
     
        /*.limit(limit)
        .skip((page-1)*limit)
@@ -104,6 +106,7 @@ router.put('/:id',authAdmin,async (req,res)=>{
      res.status(500).send(err);
   } 
 })
+
 router.delete('/:id',authAdmin,async(req,res)=>{
     const id=req.params.id;
     try{
