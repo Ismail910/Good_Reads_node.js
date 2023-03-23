@@ -90,6 +90,7 @@ router.put('/:id',[authAdmin,storageBook],async (req,res)=>{
       }
     const book= await bookModel.updateOne({_id:id},{$set:objBook});
     //await bookModel.updateOne({_id:id},{$push:{'bookUser':book.bookUser} });
+    console.log("1asd1");
      return res.json(book);
   }
   catch(err){
