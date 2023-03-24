@@ -56,8 +56,7 @@ router.get('/page/:page',async(req,res)=>{
 //get author by id
 router.get('/:id/:userId',async(req,res)=>{
 
-   "await bookModel.find({}).populate({path:'category',model:'category', match:{_id:catID} });"
-   //////////////
+
     const id=req.params.id;
     const userId=req.params.userId;
     try{
