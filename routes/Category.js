@@ -1,6 +1,7 @@
 //framework to work with APIs 
 const express = require('express');
-const router = express.Router()
+const router = express.Router();
+require('dotenv').config();
 const CategoryModel = require('../model/Category/Category');
 const BookModel=require('../model/books/book');
 
@@ -18,7 +19,7 @@ router.get('/page/:page',async (req ,res)=>{
     
     try {
         const page=req.params.page;
-        const limit=5;
+        const limit=process.env.limit;
 
         //عدد الكاتيجوري اللي عاوزاه تظهر
         const countCategory=await CategoryModel.find({}).count();

@@ -1,5 +1,6 @@
 const express = require('express');
-const router = express.Router()
+const router = express.Router();
+require('dotenv').config();
 
 const bookModel = require('../model/books/book');
 const bookUserModel = require('../model/books/bookUser');
@@ -14,7 +15,7 @@ const {storageBook}=require('../middlewares/upload');
 router.get('/page/:page', async (req, res) => {
    try {
       const page = req.params.page;
-      const limit = 5;
+      const limit = process.env.limit;
       const countbooks = await bookModel.find({}).count();
       const totalPages = Math.ceil(countbooks / limit);
       const books = await bookModel.find({}, { 'id':1,'name': 1, 'img': 1,'category': 1, 'author': 1 ,'summary':1})

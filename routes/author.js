@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const {authAdmin} = require("../middlewares/auth");
 const {storageAuthor}=require("../middlewares/upload");
-
+require('dotenv').config();
 //model
 const authorModel = require('../model/author/author');
 const bookModel = require('../model/books/book');
@@ -31,7 +31,8 @@ router.post('/',[authAdmin,storageAuthor],async(req,res) =>{
 router.get('/page/:page',async(req,res)=>{
     try{
       const page=req.params.page;
-      const limit=5;
+      const limit = process.env.limit;
+      console.log(limit);
       const countAuthors=await authorModel.find({}).count();
       const totalPages=Math.ceil(countAuthors/limit);
       const authors=  await authorModel.find({},
