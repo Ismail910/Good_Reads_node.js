@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const {authAdmin} = require("../middlewares/auth");
 const {storageAuthor}=require("../middlewares/upload");
-
+require('dotenv').config();
 //model
 const authorModel = require('../model/author/author');
 const bookModel = require('../model/books/book');
@@ -31,7 +31,8 @@ router.post('/',[authAdmin,storageAuthor],async(req,res) =>{
 router.get('/page/:page',async(req,res)=>{
     try{
       const page=req.params.page;
-      const limit=5;
+      const limit = process.env.limit;
+      console.log(limit);
       const countAuthors=await authorModel.find({}).count();
       const totalPages=Math.ceil(countAuthors/limit);
       const authors=  await authorModel.find({},
@@ -55,9 +56,12 @@ router.get('/page/:page',async(req,res)=>{
 
 //get author by id
 router.get('/:id/:userId',async(req,res)=>{
+
+
     const id=req.params.id;
     const userId=req.params.userId;
     try{
+
    const author = await authorModel.find({ID:id},{photo:1,firstName:1,lastName:1,_id:1,dateOfBirth:1,books:1})
    .populate({path:'books',model:'book',select: {'name':1,avg_rate:1,img:1,"_id":1,bookUser:1,category:1}
    // ,populate:{path:'category',model:'category',select:{name:1}}
@@ -146,6 +150,7 @@ router.get('/:id/:userId',async(req,res)=>{
                   ,dateOfBirth:author[0].dateOfBirth,books:booksAuthor}
    return res.send(result);
 
+
    }
    catch(err){
       res.status(500).send(err);
@@ -185,8 +190,10 @@ router.get('/:id/:userId',async(req,res)=>{
 router.delete('/:id',authAdmin,async(req,res)=>{
    try{
       const idAuthor=req.params.id
-       await bookModel.deleteMany({}).populate({path:"author",match:{"ID":idAuthor}});
-       await authorModel.deleteOne({ID:idAuthor}); 
+       await bookModel.deleteMany({author:idAuthor});
+
+       //.populate({path:"author",match:{"ID":idAuthor}});
+       await authorModel.deleteOne({_id:idAuthor}); 
        return res.status(200).json("deleted");
  }
  catch(err){
@@ -219,6 +226,19 @@ router.put('/:id',[authAdmin,storageAuthor],async (req,res)=>{
   } 
 })//update author by id
 
+
+
+
+router.get('/',async(req,res)=>{
+   try{
+     const authors=  await authorModel.find({},
+       {ID:1,firstName:1,lastName:1});
+      return res.json(authors);
+   }
+   catch(err){
+       res.status(500).send(err);
+   }
+});
 
 module.exports = router;
 
