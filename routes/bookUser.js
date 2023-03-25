@@ -43,7 +43,6 @@ router.put('/:id', async(req,res)=>{
         console.log("asd1");
         const bookUser = await bookUserModel.updateOne({_id:req.params.id},{$set:req.body});
         await bookModel.updateOne({_id:bookUser.book},{$set:{'bookUser':bookUser._id}})
-        
         console.log(bookUser);
         console.log("bookUser");
 

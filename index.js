@@ -52,11 +52,7 @@ app.use('/category' , categoryRouter);
 
 
 
-app.use('/bookUser' , bookUserRouter);
-app.use('/register' , userRegisterRouter);
-app.use('/login' , userLoginRouter);
-//app.use('/reviews' , reviewsRouter);
-app.use('/home',homeUserRouter);
+
 //middleware auth
 const auth = require("./middlewares/auth");
 
