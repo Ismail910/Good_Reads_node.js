@@ -3,6 +3,7 @@ const userModel = require('../model/auth/user/user');
 const { count } = require('../model/books/book');
 const router = express.Router();
 const {authUser} = require ('../middlewares/auth');
+require('dotenv').config();
 
 //model
 const bookModel = require('../model/books/book')
@@ -25,7 +26,7 @@ router.get("/all/page/:page/:userID",authUser,async(req,res)=>{
     try {
         cal_avreg();
       const page=req.params.page;
-      const limit=5;
+      const limit=process.env.limit;
       const bookCount=await bookModel.find({}).count();
       const totalPages=Math.ceil(bookCount/limit);
      const books = await bookUserModel
@@ -65,7 +66,7 @@ router.get("/all/page/:page",async(req,res)=>{
         cal_avreg();
 
       const page=req.params.page;
-      const limit=5;
+      const limit=process.env.limit;
       const bookCount=await bookModel.find({}).count();
       const totalPages=Math.ceil(bookCount/limit); 
       const books = await bookModel.find({},{img:1,name:1,avg_rate:1,summary:1,id:1,author:1,category:1})
@@ -97,7 +98,7 @@ router.get("/all/page/:page",async(req,res)=>{
 router.get('/home/page/:page/:status/:userID',async (req,res)=>{
     try{
     const page=req.params.page;
-    const limit=5;
+    const limit=process.env.limit;
     const bookCount=await bookModel.find({}).count();
     const totalPages=Math.ceil(bookCount/limit);
     const books = await bookUserModel 

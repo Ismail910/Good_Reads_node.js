@@ -47,7 +47,7 @@ router.post('/',async(req,res)=>{
 
 router.put('/:id',authUser,async(req,res)=>{
     try{
-        const review = await reviewModel.updateOne({_id:req.params.id},{$set:req.body});
+        const review = await reviewModel.updateOne({_id:req.params.id},{$set:{'changeLike':req.body}});
         await bookModel.updateOne({'reviews': review._id},{$set: review})
         return res.json(review);
     }
