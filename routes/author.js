@@ -32,7 +32,6 @@ router.get('/page/:page',async(req,res)=>{
     try{
       const page=req.params.page;
       const limit = process.env.limit;
-      console.log(limit);
       const countAuthors=await authorModel.find({}).count();
       const totalPages=Math.ceil(countAuthors/limit);
       const authors=  await authorModel.find({},
@@ -160,6 +159,7 @@ router.get('/',async(req,res)=>{
        res.status(500).send(err);
    }
 });
+
 
 module.exports = router;
 

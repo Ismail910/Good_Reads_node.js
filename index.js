@@ -17,20 +17,13 @@ const bookRouter = require("./routes/book");
 const bookUserRouter = require("./routes/bookUser");
 const userRegisterRouter = require("./routes/userRegister");
 const userLoginRouter= require("./routes/userLogin");
-
-//const reviewsRouter = require("./routes/reviews");
-
-
-
-
-
-
 const popularRouter= require("./routes/Popular");
 const reviewsRouter = require("./routes/reviews");
 const categoryRouter=require("./routes/Category");
 const homeUserRouter = require("./routes/homeUser");
-
-
+const dashboardRouter=require("./routes/dashboard");
+//middleware auth
+const {authAdmin} = require("./middlewares/auth");
 app.use(cors());
 // =======
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
@@ -39,29 +32,17 @@ app.use('/assets', express.static(path.join(__dirname, 'assets')));
 
 // app.use(cors({origin: '*'}));
 
-// app.use(cors());
+
 
 ////////////////Routers
+app.use('/dashboard',dashboardRouter);
+
 app.use(['/book' , '/books'], bookRouter);
 app.use('/admin/author',authorRouter);
 
 
 // app.use('/rating' , ratingRouter);
 app.use('/category' , categoryRouter);
-
-
-
-
-app.use('/bookUser' , bookUserRouter);
-app.use('/register' , userRegisterRouter);
-app.use('/login' , userLoginRouter);
-//app.use('/reviews' , reviewsRouter);
-app.use('/home',homeUserRouter);
-//middleware auth
-const auth = require("./middlewares/auth");
-
-
-
 app.use('/popular' , popularRouter);
 app.use('/category' , categoryRouter);
 app.use('/bookUser' , bookUserRouter);
