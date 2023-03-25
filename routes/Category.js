@@ -47,12 +47,21 @@ router.get('/page/:page',async (req ,res)=>{
 
 
 
-router.get('/:id',async (req ,res)=>{//get All book and all authror ref this category 
+router.get('/:id/page/:page',async (req ,res)=>{//get All book and all authror ref this category 
    try {
-       const category = await CategoryModel.find({id: req.params.id});
-         return res.json(category)  
+    //    const book = await bookModel.find({id: req.params.id});
+         
+
+         // const book= await bookModel.find({}).populate({path:'category',model:'category', match:{_id:req.params.id} })
+         // return res.json(book)  
+
+const idCategory=req.params.id;
+const categoryID=await CategoryModel.find({_id:idCategory});
+
+const catBooks=await bookModel.find({'category':idCategory});
+return res.json(catBooks);
    } catch (err) {
-    res.status(500).send(err)
+    res.status(500).send(err);
    }
 })
 
