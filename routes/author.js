@@ -74,43 +74,7 @@ router.get('/:id/:userId',async(req,res)=>{
       for (i=0;i<author[0].books.length;i++){
          
          try {
-            // if(author[0].books[i].bookUser?.rating === undefined) {
-               
-            //    booksAuthor[i]={
-            //       rating:1,
-            //       status:"wantToRead",
-            //       book:{
-            //          author:{
-            //             firstName:author[0].firstName,
-            //             lastName:author[0].lastName
-            //          },
-            //          _id:author[0].books[i]._id,
-            //          name:author[0].books[i].name,
-            //          img:author[0].books[i].img,
-            //          avg_rate:author[0].books[i].avg_rate,
-            //          id:author[0].books[i].id
-            //       }
-                  
-            //    }
-            // }
-            // else{
-            //    booksAuthor[i]={
-            //       rating:author[0].books[i].bookUser.rating,
-            //       status:author[0].books[i].bookUser.status,
-            //       book:{
-            //          author:{
-            //             firstName:author[0].firstName,
-            //             lastName:author[0].lastName
-            //          },
-            //          _id:author[0].books[i]._id,
-            //          name:author[0].books[i].name,
-            //          img:author[0].books[i].img,
-            //          avg_rate:author[0].books[i].avg_rate,
-            //          id:author[0].books[i].id
-            //       }
-                  
-            //    } 
-            // }
+            
             
             let userRating = null;let userStatus=null;
             if (author[0].books[i].bookUser?.length > 0) {
