@@ -22,7 +22,7 @@ async function cal_avreg(){
        });
 }
 //display all books with details
-router.get("/all/page/:page/:userID",async(req,res)=>{
+router.get("/all/page/:page/:userID",authUser,async(req,res)=>{
     try {
         cal_avreg();
       const page=req.params.page;

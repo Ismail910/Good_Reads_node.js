@@ -4,8 +4,11 @@ const counterModel = require('../counter/count');
 const reviewSchema  = new mongoose.Schema({
     id:{type:Number,unique:true,require:true},
     comment: String,
-    like: {type:Boolean, default:false},
     date: {type: Date, default: new Date()},
+    changeLike: {
+      like:{type:Boolean, default:false},
+      userid:{ type: mongoose.Schema.Types.ObjectId, ref: "user" },
+      dateLike:{type: Date, default: new Date()}},
     book: { type: mongoose.Schema.Types.ObjectId,required:true, ref: "book" },
     user: { type: mongoose.Schema.Types.ObjectId,required:true, ref: "user" },
 
