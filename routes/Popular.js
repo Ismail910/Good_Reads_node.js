@@ -105,8 +105,9 @@ router.get('/popularCategory', async (req,res)=>{
         ]);
         let respopularCategories = await Promise.all(  //wait to store data in array 
         popularCategories.map(async (element) => {
-          let res=element.rate;
-          res.category=CategoryModel.find({_id: element._id}, {name: 1});
+          let res={};
+          res.rate = element.rate;
+          res.category=await CategoryModel.find({_id: element._id}, {name: 1});
           return res;
         })
       );
