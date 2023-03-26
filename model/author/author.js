@@ -19,7 +19,6 @@ const authorSchema = new mongoose.Schema({
 // increment counter and assign it to ID 
 authorSchema.pre('save', function (next){
      const  doc =this;
-     console.log(doc.firstName);
     counterModel.findByIdAndUpdate({_id:'authorId'},{$inc:{sequence_value:1}},{new: true, upsert: true})
                 .then(function (count){
                     doc.ID = count.sequence_value;
