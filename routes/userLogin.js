@@ -40,7 +40,9 @@ router.post("/", async (req, res) => {
       const errResponse = {message:'passwoer or email is invalid'}
       return res.status(400).send(errResponse);
     } catch (err) {
-      return res.status(500).send(err);
+
+          return res.status(500).send(err);
+
     }
   });
 
