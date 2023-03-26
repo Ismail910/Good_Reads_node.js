@@ -14,7 +14,7 @@ router.get('/authors',async(req,res)=>
     return res.json({totalAuthors:total});
     }catch(error)
     {
-        return res.status(404).send(error);
+        return res.status(500).send(error);
 
     }
 
@@ -29,7 +29,7 @@ router.get('/books',async(req,res)=>
     return res.json({totalBooks:total});
     }catch(error)
     {
-        return res.status(404).send(error);
+        return res.status(500).send(error);
 
     }
 
@@ -45,7 +45,7 @@ router.get('/users',async(req,res)=>
     return res.json({totalUsers:total});
     }catch(error)
     {
-        return res.status(404).send(error);
+        return res.status(500).send(error);
 
     }
 
@@ -69,7 +69,7 @@ router.get('/statusReading',async(req,res)=>
     return res.json({totalStatusReading:total});
     }catch(error)
     {
-        return res.status(404).send(error);
+        return res.status(500).send(error);
 
     }
 
@@ -82,7 +82,7 @@ router.get('/topAuthors',async(req,res)=>{
 
     }catch(error)
     {
-        return res.status(404).send(error);
+        return res.status(500).send(error);
 
     }
 })
