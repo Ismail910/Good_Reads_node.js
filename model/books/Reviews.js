@@ -7,7 +7,7 @@ const reviewSchema  = new mongoose.Schema({
     date: {type: Date, default: new Date()},
     changeLike: {
       like:{type:Boolean, default:false},
-      userid:{ type: mongoose.Schema.Types.ObjectId, ref: "user" },
+      userId:{ type: mongoose.Schema.Types.ObjectId, ref: "user" },
       dateLike:{type: Date, default: new Date()}},
     book: { type: mongoose.Schema.Types.ObjectId,required:true, ref: "book" },
     user: { type: mongoose.Schema.Types.ObjectId,required:true, ref: "user" },
