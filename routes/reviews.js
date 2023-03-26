@@ -30,7 +30,6 @@ router.get('/:bookid',async(req , res)=>{
 
 router.post('/',async(req,res)=>{
     try{
-
         const review = await reviewModel.create(req.body);
         await bookModel.updateOne({_id:review.book},{$push:{'reviews':review._id}});
         return res.json(review);

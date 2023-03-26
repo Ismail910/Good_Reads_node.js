@@ -68,52 +68,14 @@ router.get('/:id/:userId',async(req,res)=>{
    ,populate:{path:'bookUser',model:'bookUser',
    select:{rating:1,status:1,user:1},match:{user:userId}}  
 })
-   // console.log(author[0].books[0]);
-   //  console.log(author[0].books[1]);
       let booksAuthor =[];
       for (i=0;i<author[0].books.length;i++){
          
          try {
-            // if(author[0].books[i].bookUser?.rating === undefined) {
-               
-            //    booksAuthor[i]={
-            //       rating:1,
-            //       status:"wantToRead",
-            //       book:{
-            //          author:{
-            //             firstName:author[0].firstName,
-            //             lastName:author[0].lastName
-            //          },
-            //          _id:author[0].books[i]._id,
-            //          name:author[0].books[i].name,
-            //          img:author[0].books[i].img,
-            //          avg_rate:author[0].books[i].avg_rate,
-            //          id:author[0].books[i].id
-            //       }
-                  
-            //    }
-            // }
-            // else{
-            //    booksAuthor[i]={
-            //       rating:author[0].books[i].bookUser.rating,
-            //       status:author[0].books[i].bookUser.status,
-            //       book:{
-            //          author:{
-            //             firstName:author[0].firstName,
-            //             lastName:author[0].lastName
-            //          },
-            //          _id:author[0].books[i]._id,
-            //          name:author[0].books[i].name,
-            //          img:author[0].books[i].img,
-            //          avg_rate:author[0].books[i].avg_rate,
-            //          id:author[0].books[i].id
-            //       }
-                  
-            //    } 
-            // }
+            
             
             let userRating = null;let userStatus=null;
-            if (author[0].books[i].bookUser?.length > 0) {
+            if (author[0].books[i].bookUser?.length > 0){
                
 
                for(j=0;j<author[0].books[i].bookUser?.length;j++){
@@ -122,9 +84,7 @@ router.get('/:id/:userId',async(req,res)=>{
                      userStatus = author[0].books[i].bookUser[j].status;
                   }
                }
-               
             }
-         
             const book = {
                author: {
                   firstName: author[0].firstName,
