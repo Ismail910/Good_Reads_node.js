@@ -62,7 +62,7 @@ router.put('/:id', async(req,res)=>{
          res.status(500).send(err);
       }
     })
-// router.delete('/',authUser,async(req,res)=>{
+// router.delete('/',async(req,res)=>{
 //     try{
      
 //       const rating= await bookUserModel.deleteMany({});
