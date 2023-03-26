@@ -1,14 +1,12 @@
 const express=require('express');
-const cors = require('cors');
+const path=require('path');
 const app = express();
 app.use(express.json());
 const mongoose = require('mongoose');
 
+var cors = require('cors');
+const PORT= process.env.Port || 5000 ;
 
-// const PORT= process.env.Port || 5002 ;
-
-
-const PORT= process.env.Port || 5000;
 
 
 const URL = process.env.url || "mongodb://127.0.0.1:27017" ;
@@ -33,13 +31,15 @@ const categoryRouter=require("./routes/Category");
 const homeUserRouter = require("./routes/homeUser");
 
 
-
-
-
-
-app.use(cors({origin: '*'}));
-
 app.use(cors());
+// =======
+app.use('/assets', express.static(path.join(__dirname, 'assets')));
+
+
+
+// app.use(cors({origin: '*'}));
+
+// app.use(cors());
 
 ////////////////Routers
 app.use(['/book' , '/books'], bookRouter);
@@ -52,11 +52,7 @@ app.use('/category' , categoryRouter);
 
 
 
-app.use('/bookUser' , bookUserRouter);
-app.use('/register' , userRegisterRouter);
-app.use('/login' , userLoginRouter);
-//app.use('/reviews' , reviewsRouter);
-app.use('/home',homeUserRouter);
+
 //middleware auth
 const auth = require("./middlewares/auth");
 

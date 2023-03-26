@@ -11,11 +11,11 @@ router.post("/", async (req, res) => {
     // Our register logic starts here
     try {
       // Get user input
+      const errResEmail={message:'User Already Exist. Please Login'}
       const { first_name, last_name, email, password,confirmPassword,img ,isAdmin} = req.body;
-  
       // Validate user input
       if (!(email && password && confirmPassword && first_name && last_name)) {
-        res.status(400).send("All input is required except image");
+        return res.status(400).send("All input is required except image");
       }
 
       // check if user already exist
@@ -23,9 +23,8 @@ router.post("/", async (req, res) => {
       const oldUser = await userModel.findOne({ email });
   
       if (oldUser) {
-        return res.status(409).send("User Already Exist. Please Login");
+        return res.status(409).send(errResEmail);
       }
-
       //Encrypt user password
       encryptedPassword = await bcrypt.hash(password, 10);
       encryptedConfirmPassword = await bcrypt.hash(confirmPassword,10)
@@ -39,10 +38,10 @@ router.post("/", async (req, res) => {
         password: encryptedPassword,
         confirmPassword: encryptedConfirmPassword,
         img,
-        isAdmin
+        isAdmin,
       });
       // Create token
-      const token = jwt.sign(
+      const token =jwt.sign(
         {user},
         TOKEN_KEY,
         {
@@ -51,12 +50,12 @@ router.post("/", async (req, res) => {
       );
       // save user token
       user.token = token;
-        
+      // const response={message:'success',token:user.token}
+
       // return new user
       res.status(201).json(user);
     } catch (err) {
-      res.status(500).send(err);
-      console.log(err);
+     return res.status(500).send(err);
     }
     // Our register logic ends here
   });

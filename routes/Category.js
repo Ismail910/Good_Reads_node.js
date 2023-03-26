@@ -1,13 +1,11 @@
 //framework to work with APIs 
 const express = require('express');
-const router = express.Router()
+const router = express.Router();
+require('dotenv').config();
 const CategoryModel = require('../model/Category/Category');
-
-
+const BookModel=require('../model/books/book');
 const bookModel = require('../model/books/book');
-
 const auth = require ('../middlewares/auth')
-
 const {authAdmin} = require ('../middlewares/auth');
 
 
@@ -17,7 +15,7 @@ router.get('/page/:page',async (req ,res)=>{
     
     try {
         const page=req.params.page;
-        const limit=5;
+        const limit=process.env.limit;
 
         //عدد الكاتيجوري اللي عاوزاه تظهر
         const countCategory=await CategoryModel.find({}).count();
@@ -47,23 +45,37 @@ router.get('/page/:page',async (req ,res)=>{
 
 
 
-router.get('/:id/page/:page',async (req ,res)=>{//get All book and all authror ref this category 
+router.get('/:id/page/:page/userId',async (req ,res)=>{//get All book and all authror ref this category 
    try {
-    //    const book = await bookModel.find({id: req.params.id});
-         
+   /* const page=req.params.page;
+    const limit=5;
+    const countCategory=await BookModel.find({'category':idCategory}).count();
+    const totalPages=Math.ceil(countCategory/limit);
+  */
 
-         // const book= await bookModel.find({}).populate({path:'category',model:'category', match:{_id:req.params.id} })
-         // return res.json(book)  
+    const idCategory=req.params.id;
+    const userId =req.params.userId; 
+    const books = await BookModel.find({'category':idCategory}).populate({path:'books',model:'book',select: {'name':1,img:1,'avg_rate':1,"_id":0},populate:{path:'bookUser',model:'bookUser',
+    select:{rating:1,status:1},match:{user:userId}}});
+    
+       /*.limit(limit)
+       .skip((page-1)*limit)
+       .exec();*/
 
-const idCategory=req.params.id;
-const categoryID=await CategoryModel.find({_id:idCategory});
-
-const catBooks=await bookModel.find({'category':idCategory});
-return res.json(catBooks);
+     /*const objBooks=
+     {
+        pages:
+        {
+           totalPages,
+           page
+        },
+        data:books
+     };*/
+      return res.json(books);
    } catch (err) {
-    res.status(500).send(err);
+    res.status(500).send(err)
    }
-})
+});
 
 //body is json(name=......?)
 router.post('/',authAdmin,async(req,res) =>{ 
@@ -91,6 +103,7 @@ router.put('/:id',authAdmin,async (req,res)=>{
      res.status(500).send(err);
   } 
 })
+
 router.delete('/:id',authAdmin,async(req,res)=>{
     const id=req.params.id;
     try{
@@ -102,4 +115,16 @@ router.delete('/:id',authAdmin,async(req,res)=>{
      res.status(500).send(err);
   }
 })
-module.exports = router ; 
+
+
+router.get('/',async (req ,res)=>{ 
+    try {
+        const category = await CategoryModel.find({});
+          return res.json(category)  
+    } catch (err) {
+     res.status(500).send(err)
+    }
+ });
+
+
+module.exports = router ;

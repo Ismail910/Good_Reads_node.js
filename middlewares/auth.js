@@ -31,12 +31,13 @@ const TOKEN_KEY = "ITI"
 
 exports.authAdmin = function (req,res,next){
      const token = req.headers["x-token"]; 
-
+    // console.log(token);
      if(!token) 
      {
         return res.status(403).send("A token is required for authentication");
      }
      try{
+   
           jwt.verify(token,TOKEN_KEY,(err,decoded)=>
          {
           if (decoded.user.isAdmin != true) 
@@ -65,7 +66,6 @@ exports.authAdmin = function (req,res,next){
 
 exports.authUser = function (req,res,next){
    const token = req.headers["x-token"]; 
-
    if(!token) 
    {
       return res.status(403).send("A token is required for authentication");
