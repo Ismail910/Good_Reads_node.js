@@ -72,7 +72,7 @@ router.get('/:id/:userId',async(req,res)=>{
             
             
             let userRating = null;let userStatus=null;
-            if (author[0].books[i].bookUser?.length > 0) {
+            if (author[0].books[i].bookUser?.length > 0){
                
 
                for(j=0;j<author[0].books[i].bookUser?.length;j++){
@@ -81,9 +81,7 @@ router.get('/:id/:userId',async(req,res)=>{
                      userStatus = author[0].books[i].bookUser[j].status;
                   }
                }
-               
             }
-         
             const book = {
                author: {
                   firstName: author[0].firstName,
