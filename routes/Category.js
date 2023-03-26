@@ -45,7 +45,7 @@ router.get('/page/:page',async (req ,res)=>{
 
 
 
-router.get('/:id/page/:page/userId',async (req ,res)=>{//get All book and all authror ref this category 
+router.get('/:id/userId',async (req ,res)=>{//get All book and all authror ref this category 
    try {
    /* const page=req.params.page;
     const limit=5;
