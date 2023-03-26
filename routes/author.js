@@ -8,7 +8,7 @@ const authorModel = require('../model/author/author');
 const bookModel = require('../model/books/book');
 const bookUserModel = require('../model/books/bookUser')
 
-
+const fs = require('fs');
 router.post('/',[authAdmin,storageAuthor],async(req,res) =>{ 
     try {
 
@@ -18,8 +18,6 @@ router.post('/',[authAdmin,storageAuthor],async(req,res) =>{
           dateOfBirth:req.body.dateOfBirth,
           photo: req.file.path
        };
-      
-       console.log(objAuthor);
 
        const author = await authorModel.create(objAuthor);
       return res.json(author);
@@ -32,7 +30,6 @@ router.get('/page/:page',async(req,res)=>{
     try{
       const page=req.params.page;
       const limit = process.env.limit;
-      console.log(limit);
       const countAuthors=await authorModel.find({}).count();
       const totalPages=Math.ceil(countAuthors/limit);
       const authors=  await authorModel.find({},
@@ -151,9 +148,14 @@ router.delete('/:id',authAdmin,async(req,res)=>{
    try{
       const idAuthor=req.params.id
        await bookModel.deleteMany({author:idAuthor});
-
-       //.populate({path:"author",match:{"ID":idAuthor}});
+       const authorPhoto = await authorModel.find({_id:idAuthor},{photo:1});
+        
+       fs.unlink(authorPhoto[0].photo, (err) => {
+         if (err) throw err;
+         console.log('File deleted!');
+       });
        await authorModel.deleteOne({_id:idAuthor}); 
+      
        return res.status(200).json("deleted");
  }
  catch(err){
@@ -176,7 +178,7 @@ router.put('/:id',[authAdmin,storageAuthor],async (req,res)=>{
 
       }
      
-      console.log(objAuthor);
+      
     const author= await authorModel.updateOne({ID:id},{$set:objAuthor},{ID:1,photo:1,firstName:1,lastName:1,
         dateOfBirth:1});
      return res.json(author);
@@ -199,6 +201,7 @@ router.get('/',async(req,res)=>{
        res.status(500).send(err);
    }
 });
+
 
 module.exports = router;
 
