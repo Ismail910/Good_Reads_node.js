@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 require('dotenv').config();
+const fs = require('fs');
 
 const bookModel = require('../model/books/book');
 const bookUserModel = require('../model/books/bookUser');
@@ -176,6 +177,13 @@ router.delete('/:id', authAdmin, async (req, res) => {
    try {
       await bookUserModel.deleteMany({ book: req.params.id });
       await reviewModel.deleteMany({ book: req.params.id });
+
+      const bookPhoto = await bookModel.find({_id:req.params.id},{img:1});
+      fs.unlink(bookPhoto[0].img, (err) => {
+        if (err) throw err;
+        console.log('File deleted!');
+      });
+
       const book = await bookModel.deleteOne({ _id: req.params.id });
       return res.json(book);
    }
