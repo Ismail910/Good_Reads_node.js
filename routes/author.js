@@ -55,8 +55,13 @@ router.get('/',async(req,res)=>{
    try{
      
      const authors=  await authorModel.find({},{firstName:1,lastName:1})
-     console.log(authors);
-      return res.json(authors);
+   //   console.log(authors);
+     let nameAuthors=[];
+     for(i =0;i<authors.length;i++){
+      nameAuthors[i]=authors[i].firstName+authors[i].lastName;
+     }
+     console.log(nameAuthors);
+      return res.json(nameAuthors);
    }
    catch(err){
        res.status(500).send(err);
