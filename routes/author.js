@@ -51,6 +51,23 @@ router.get('/page/:page',async(req,res)=>{
     }
 })//get
 
+router.get('/',async(req,res)=>{
+   try{
+     
+     const authors=  await authorModel.find({},{firstName:1,lastName:1})
+   //   console.log(authors);
+     let nameAuthors=[];
+     for(i =0;i<authors.length;i++){
+      nameAuthors[i]=authors[i].firstName+authors[i].lastName;
+     }
+     console.log(nameAuthors);
+      return res.json(nameAuthors);
+   }
+   catch(err){
+       res.status(500).send(err);
+   }
+})//get
+
 //get author by id
 router.get('/:id/:userId',async(req,res)=>{
 

@@ -78,7 +78,22 @@ router.get('/statusReading',async(req,res)=>
 router.get('/topAuthors',async(req,res)=>{
     try
     {
+       const topAuthors=await bookModel.aggregate(
+        [
+            {
+            $group:{
+              _id:"$author",
+              avg:{$avg:"$avg_rate"}
+             }
+            },
+            {
+                $sort: { avg:-1 , _id:1},
+            }
 
+        ]);
+
+
+        return res.json(topAuthors);
 
     }catch(error)
     {

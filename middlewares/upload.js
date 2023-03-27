@@ -23,5 +23,20 @@ const book=multer.diskStorage({
     }
  });
 
+
+
+ const category=multer.diskStorage({
+   destination:function(req,file,callbackFunc)
+   {
+      callbackFunc(null,'./assets/categories')
+   },filename:function(req,file,callbackFunc)
+   {
+      var nameImage=new Date().toISOString().replace(/:/g,'-') + file.originalname;
+      callbackFunc(null,nameImage)
+   }
+});
+
+
  exports.storageAuthor= multer({storage:author}).single('photo');
  exports.storageBook=multer({storage:book}).single('img');
+ exports.storageCategory=multer({storage:category}).single('img');
