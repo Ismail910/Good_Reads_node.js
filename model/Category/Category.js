@@ -4,6 +4,7 @@ const counterModel = require('../counter/count');
 const CategorySchema = new mongoose.Schema({
     id:{type:Number,unique:true,require:true},
     name: {type: String, require: true ,unique:true},
+    img: { type: String, required: true },
     
 });
 
