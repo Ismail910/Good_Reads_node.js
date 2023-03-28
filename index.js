@@ -26,7 +26,7 @@ const dashboardRouter=require("./routes/dashboard");
 //middleware auth
 const {authAdmin} = require("./middlewares/auth");
 app.use(cors());
-// =======
+
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
 
 
@@ -42,10 +42,8 @@ app.use(['/book'], bookRouter);
 app.use('/admin/author',authorRouter);
 
 
-// app.use('/rating' , ratingRouter);
 app.use('/category' , categoryRouter);
 app.use('/popular' , popularRouter);
-app.use('/category' , categoryRouter);
 app.use('/bookUser' , bookUserRouter);
 app.use('/register' , userRegisterRouter);
 app.use('/login' , userLoginRouter);

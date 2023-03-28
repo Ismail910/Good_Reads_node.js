@@ -5,9 +5,9 @@ const CategorySchema = new mongoose.Schema({
     id:{type:Number,unique:true,require:true},
     name: {type: String, require: true ,unique:true},
     img: { type: String, required: true },
+    books: [{ type: mongoose.Schema.Types.ObjectId,ref: "book" }] 
     
 });
-
 
 CategorySchema.pre('save', function (next){
     const  doc =this;
