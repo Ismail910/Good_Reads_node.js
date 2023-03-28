@@ -65,7 +65,7 @@ router.get("/all/page/:page/:userID",authUser,async(req,res)=>{
 router.get("/all/page/:page",async(req,res)=>{
     try {
         cal_avreg();
-
+        console.log("asd1");
       const page=req.params.page;
       const limit=process.env.limit;
       const bookCount=await bookModel.find({}).count();

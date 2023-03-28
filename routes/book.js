@@ -55,7 +55,7 @@ router.get('/:id/:userID', async (req, res) => {
             path: 'reviews',model:'reviews', select: { comment: 1, date: 1, changeLike: 1, user: 1 }, populate: {
                path: 'user',
                model: 'user',
-               select: {' first_name':1,'id':1,'img':1,'last_name':1}
+               select: {'first_name':1,'id':1,'img':1,'last_name':1}
             }
          })
          .populate({ path: 'author', select: { 'firstName': 1, 'lastName': 1 } })
