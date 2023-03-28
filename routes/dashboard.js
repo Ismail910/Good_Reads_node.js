@@ -80,15 +80,25 @@ router.get('/topAuthors',async(req,res)=>{
     {
        const topAuthors=await bookModel.aggregate(
         [
-            {
-            $group:{
-              _id:"$author",
-              avg:{$avg:"$avg_rate"}
+            { 
+               $lookup: {
+                from: "authors",
+                localField: "author",
+                foreignField: "_id",
+                 as: "author"
              }
-            },
-            {
-                $sort: { avg:-1 , _id:1},
-            }
+             },
+             {
+                $group:{
+                 _id:"$author",
+                 avg:{$avg:"$avg_rate"}
+                }
+               }
+               ,
+               {
+                   $sort: { avg:-1 , _id:1},
+               },
+            
 
         ]);
 
