@@ -4,8 +4,12 @@ const router = express.Router();
 require('dotenv').config();
 const CategoryModel = require('../model/Category/Category');
 const BookModel=require('../model/books/book');
+
 const bookModel = require('../model/books/book');
 const auth = require ('../middlewares/auth')
+
+const {storageCategory}=require("../middlewares/upload");
+
 const {authAdmin} = require ('../middlewares/auth');
 
 
@@ -78,10 +82,15 @@ router.get('/:id/userId',async (req ,res)=>{//get All book and all authror ref t
 });
 
 //body is json(name=......?)
-router.post('/',authAdmin,async(req,res) =>{ 
+router.post('/',[authAdmin,storageCategory],async(req,res) =>{ 
     
     try {
-       const category = await CategoryModel.create(req.body);
+      const objCategory = {
+         name: req.body.name,
+         img: req.file.path
+      };
+
+       const category = await CategoryModel.create(objCategory);
        console.log(category);
       //  await category.save();  
        return res.json(category);
@@ -92,11 +101,19 @@ router.post('/',authAdmin,async(req,res) =>{
 
 
 //params==>url(data)
-router.put('/:id',authAdmin,async (req,res)=>{
+router.put('/:id',[authAdmin,storageCategory],async (req,res)=>{
     const id=req.params.id;
 //{$set:req.body}
     try{
-        const category = await CategoryModel.findByIdAndUpdate(id, req.body);
+
+      const objCategory = {
+         name: req.body.name,
+      };
+      if(req.file)
+      {
+         objAuthor.img=req.file.path;
+      }
+        const category = await CategoryModel.findByIdAndUpdate(id, objCategory);
      return res.json(category);
   }
   catch(err){
@@ -105,10 +122,11 @@ router.put('/:id',authAdmin,async (req,res)=>{
 })
 
 router.delete('/:id',authAdmin,async(req,res)=>{
-    const id=req.params.id;
+  
     try{
-        await bookModel.deleteMany({category: req.params.id});
-    const category= await CategoryModel.findByIdAndDelete({_id:id});
+      const id=req.params.id;
+       await BookModel.deleteMany({category: req.params.id});
+       const category= await CategoryModel.findByIdAndDelete({_id:id});
      return res.json(category);
        }
   catch(err){
