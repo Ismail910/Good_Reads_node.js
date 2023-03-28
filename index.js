@@ -9,6 +9,7 @@ const PORT=  5000 ;
 
 
 
+
 const URL = process.env.url || "mongodb://127.0.0.1:27017" ;
 
 // router author
@@ -25,7 +26,7 @@ const dashboardRouter=require("./routes/dashboard");
 //middleware auth
 const {authAdmin} = require("./middlewares/auth");
 app.use(cors());
-// =======
+
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
 
 
@@ -37,14 +38,12 @@ app.use('/assets', express.static(path.join(__dirname, 'assets')));
 ////////////////Routers
 app.use('/dashboard',dashboardRouter);
 
-app.use(['/book' , '/books'], bookRouter);
+app.use(['/book'], bookRouter);
 app.use('/admin/author',authorRouter);
 
 
-// app.use('/rating' , ratingRouter);
 app.use('/category' , categoryRouter);
 app.use('/popular' , popularRouter);
-app.use('/category' , categoryRouter);
 app.use('/bookUser' , bookUserRouter);
 app.use('/register' , userRegisterRouter);
 app.use('/login' , userLoginRouter);
