@@ -5,7 +5,8 @@ app.use(express.json());
 const mongoose = require('mongoose');
 
 var cors = require('cors');
-const PORT= process.env.Port || 5000 ;
+const PORT=  5000 ;
+
 
 
 
@@ -37,7 +38,7 @@ app.use('/assets', express.static(path.join(__dirname, 'assets')));
 ////////////////Routers
 app.use('/dashboard',dashboardRouter);
 
-app.use(['/book' , '/books'], bookRouter);
+app.use(['/book'], bookRouter);
 app.use('/admin/author',authorRouter);
 
 
@@ -54,12 +55,6 @@ app.use('/home',homeUserRouter);
 
 
 
-
-//middleware auth
-// const auth = require("./middlewares/auth");
-// app.post("/welcome", auth, (req, res) => {
-//   res.status(200).send("Welcome 🙌 ");
-// });
 
 //end middleware auth
 

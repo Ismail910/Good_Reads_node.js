@@ -31,16 +31,17 @@ router.get("/all/page/:page/:userID",authUser,async(req,res)=>{
       const totalPages=Math.ceil(bookCount/limit);
      const books = await bookUserModel
      .find({user:req.params.userID},{status:1,rating:1,book:1})
-     .populate({path:'book',model:'book',select:{id:1,img: 1, name: 1,avg_rate:1,summary:1}
-         ,populate:{
-             path:'author',
-             model:'author',
-             select:{'firstName':1,'lastName':1,"_id":0}        
-    },populate:{
-        path:'category',
-        model:'category',
-        select:{name:1}
-    }})
+     .populate({path:'book',model:'book',select:{id:1,img: 1, name: 1,avg_rate:1,summary:1,author:1,category:1}
+         ,populate:[
+            {
+            path:'author',
+            select:{'firstName':1,'lastName':1,"_id":0}        
+            },
+            {
+                path:'category',
+                select:{'name':1}
+            }
+        ]})
      .limit(limit).skip((page-1)*limit).exec();
 
      const objBooks=
@@ -64,19 +65,22 @@ router.get("/all/page/:page/:userID",authUser,async(req,res)=>{
 router.get("/all/page/:page",async(req,res)=>{
     try {
         cal_avreg();
-
+        console.log("asd1");
       const page=req.params.page;
       const limit=process.env.limit;
       const bookCount=await bookModel.find({}).count();
       const totalPages=Math.ceil(bookCount/limit); 
       const books = await bookModel.find({},{img:1,name:1,avg_rate:1,summary:1,id:1,author:1,category:1})
-      .populate({
+      .populate([
+        {
         path:'author',
         select:{'firstName':1,'lastName':1,"_id":0}        
-        }).populate({
+        },
+        {
             path:'category',
             select:{'name':1}
-        })
+        }
+    ])
      .limit(limit).skip((page-1)*limit).exec();
 
      const objBooks=
@@ -104,15 +108,19 @@ router.get('/home/page/:page/:status/:userID',async (req,res)=>{
     const books = await bookUserModel 
     .find({status:req.params.status, user:req.params.userID},{status:1,rating:1,book:1})
     .populate({path:'book',model:'book',select:{img: 1, name: 1,avg_rate:1,id:1}
-        ,populate:{
-            path:'author',
-            model:'author',
-            select:{'firstName':1,'lastName':1,"_id":0}
-    },populate:{
-        path:'category',
-        model:'category',
-        select:{name:1}
-    }})
+        , populate: [
+            {
+                path:'author',
+                model:'author',
+                select:{'firstName':1,'lastName':1,"_id":0}
+            },
+            {
+                path:'category',
+                model:'category',
+                select:{name:1}
+            }
+        ]
+    })
  .limit(limit).skip((page-1)*limit).exec();
      const objBooks=
      {

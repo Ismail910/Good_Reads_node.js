@@ -5,11 +5,14 @@ require('dotenv').config();
 const CategoryModel = require('../model/Category/Category');
 const BookModel=require('../model/books/book');
 
+
 const bookModel = require('../model/books/book');
 const auth = require ('../middlewares/auth')
 
-const {storageCategory}=require("../middlewares/upload");
 
+
+
+const {storageCategory}=require("../middlewares/upload");
 const {authAdmin} = require ('../middlewares/auth');
 
 
@@ -56,7 +59,7 @@ router.get('/:id/userId',async (req ,res)=>{//get All book and all authror ref t
     const countCategory=await BookModel.find({'category':idCategory}).count();
     const totalPages=Math.ceil(countCategory/limit);
   */
-
+console.log("dnjkfdj");
     const idCategory=req.params.id;
     const userId =req.params.userId; 
     const books = await BookModel.find({'category':idCategory}).populate({path:'books',model:'book',select: {'name':1,img:1,'avg_rate':1,"_id":0},populate:{path:'bookUser',model:'bookUser',
