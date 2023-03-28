@@ -2,6 +2,7 @@
 const express = require('express');
 const router = express.Router();
 require('dotenv').config();
+const fs = require('fs');
 const CategoryModel = require('../model/Category/Category');
 const BookModel=require('../model/books/book');
 const {storageCategory}=require("../middlewares/upload");
@@ -150,6 +151,12 @@ router.delete('/:id',authAdmin,async(req,res)=>{
     try{
       const id=req.params.id;
        await BookModel.deleteMany({category: req.params.id});
+       const categoryPhoto = await CategoryModel.find({_id:id},{img:1});
+       fs.unlink(categoryPhoto[0].img, (err) => {
+         if (err) throw err;
+         console.log('File deleted!');
+       });
+      
        const category= await CategoryModel.findByIdAndDelete({_id:id});
      return res.json(category);
        }
