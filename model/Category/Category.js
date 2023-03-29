@@ -5,6 +5,7 @@ const CategorySchema = new mongoose.Schema({
     id:{type:Number,unique:true,require:true},
     name: {type: String, require: true ,unique:true,index: true},
     img: { type: String, required: true },
+    books: [{ type: mongoose.Schema.Types.ObjectId,ref: "book" }] 
     
 });
 
