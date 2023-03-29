@@ -66,7 +66,8 @@ router.get('/',async(req,res)=>{
    catch(err){
        res.status(500).send(err);
    }
-})//get
+})
+//get
 
 //get author by id
 router.get('/:id/:userId',async(req,res)=>{
@@ -137,7 +138,7 @@ router.get('/:id/:userId',async(req,res)=>{
     try{
     const author= await authorModel.deleteMany({},{ID:1,photo:1,firstName:1,lastName:1,
         dateOfBirth:1});
-   const book= await bookModel.deleteMany({},{});
+       bookModel.deleteMany({},{});
         
      return res.json(author);
   }
@@ -208,10 +209,9 @@ router.put('/:id',[authAdmin,storageAuthor],async (req,res)=>{
 
 
 
-router.get('/',async(req,res)=>{
+router.get('/all',async(req,res)=>{
    try{
-     const authors=  await authorModel.find({},
-       {ID:1,firstName:1,lastName:1});
+     const authors=  await authorModel.find({},{firstName:1,lastName:1});
       return res.json(authors);
    }
    catch(err){
