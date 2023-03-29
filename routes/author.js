@@ -81,7 +81,8 @@ router.get('/:search',async(req,res)=>{
    catch(err){
        res.status(500).send(err);
    }
-})//get
+})
+//get
 
 //get author by id
 router.get('/:id/:userId',async(req,res)=>{
@@ -104,7 +105,7 @@ router.get('/:id/:userId',async(req,res)=>{
             
             
             let userRating = null;let userStatus=null;
-            if (author[0].books[i].bookUser?.length > 0){
+            if (author[0].books[i].bookUser?.length > 0) {
                
 
                for(j=0;j<author[0].books[i].bookUser?.length;j++){
@@ -152,7 +153,7 @@ router.get('/:id/:userId',async(req,res)=>{
     try{
     const author= await authorModel.deleteMany({},{ID:1,photo:1,firstName:1,lastName:1,
         dateOfBirth:1});
-   const book= await bookModel.deleteMany({},{});
+       bookModel.deleteMany({},{});
         
      return res.json(author);
   }
@@ -203,16 +204,15 @@ router.put('/:id',[authAdmin,storageAuthor],async (req,res)=>{
          firstName: req.body.firstName,
          lastName: req.body.lastName,
          dateOfBirth:req.body.dateOfBirth,
+         book : req.body.book
       };
       if(req.file)
       {
          objAuthor.photo=req.file.path;
-
       }
-     
       
-    const author= await authorModel.updateOne({ID:id},{$set:objAuthor},{ID:1,photo:1,firstName:1,lastName:1,
-        dateOfBirth:1});
+    const author= await authorModel.updateOne({ID:id},{$set:objAuthor},
+      {ID:1,photo:1,firstName:1,lastName:1,dateOfBirth:1});
      return res.json(author);
   }
   catch(err){
@@ -223,10 +223,9 @@ router.put('/:id',[authAdmin,storageAuthor],async (req,res)=>{
 
 
 
-router.get('/',async(req,res)=>{
+router.get('/all',async(req,res)=>{
    try{
-     const authors=  await authorModel.find({},
-       {ID:1,firstName:1,lastName:1});
+     const authors=  await authorModel.find({},{firstName:1,lastName:1});
       return res.json(authors);
    }
    catch(err){

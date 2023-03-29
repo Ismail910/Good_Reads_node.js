@@ -2,6 +2,7 @@
 const express = require('express');
 const router = express.Router();
 require('dotenv').config();
+const fs = require('fs');
 const CategoryModel = require('../model/Category/Category');
 const BookModel=require('../model/books/book');
 const {storageCategory}=require("../middlewares/upload");
@@ -44,39 +45,67 @@ router.get('/page/:page',async (req ,res)=>{
 
 
 
-router.get('/:id/page/:page/userId',async (req ,res)=>{//get All book and all authror ref this category 
-   try {
-   /* const page=req.params.page;
-    const limit=5;
-    const countCategory=await BookModel.find({'category':idCategory}).count();
-    const totalPages=Math.ceil(countCategory/limit);
-  */
+router.get('/:id/:userId',async(req,res)=>{
 
-    const idCategory=req.params.id;
-    const userId =req.params.userId; 
-    const books = await BookModel.find({'category':idCategory}).populate({path:'books',model:'book',select: {'name':1,img:1,'avg_rate':1,"_id":0},populate:{path:'bookUser',model:'bookUser',
-    select:{rating:1,status:1},match:{user:userId}}});
-    
-       /*.limit(limit)
-       .skip((page-1)*limit)
-       .exec();*/
+ 
+   const id=req.params.id;
+   const userId=req.params.userId;  
 
-     /*const objBooks=
-     {
-        pages:
-        {
-           totalPages,
-           page
-        },
-        data:books
-     };*/
-      return res.json(books);
-   } catch (err) {
-    res.status(500).send(err)
-   }
-});
+   try{
+  const category = await CategoryModel.find({_id:id},{}) 
+  .populate({path:'books',model:'book',select: {'name':1,'avg_rate':1,'img':1,"_id":1,'bookUser':1,'category':1}
 
-//body is json(name=......?)
+  ,populate:{path:'bookUser',model:'bookUser',
+  select:{rating:1,status:1,user:1},match:{user:userId}}   
+
+})
+ 
+     let bookCategory =[];
+     for (i=0;i<category[0].books.length;i++){
+        try {
+           let userRating = null;let userStatus=null;
+
+           if (category[0].books[i].bookUser?.length > 0) {
+              for(j=0;j<category[0].books[i].bookUser?.length;j++){
+                 if(userId==category[0].books[i].bookUser[j].user){
+                    userRating = category[0].books[i].bookUser[j].rating;
+                    userStatus = category[0].books[i].bookUser[j].status;
+                 }
+              }
+           }  
+          
+           const book = {                 
+            category: {
+               name: category[0].name,
+            },
+             
+              name: category[0].books[i].name,
+              img: category[0].books[i].img,
+              avg_rate: category[0].books[i].avg_rate,
+              
+           };
+
+           bookCategory[i] = {
+              rating: userRating || 1,
+              status: userStatus || 'wantToRead',
+              book: book
+           }; 
+           
+        } catch (error) {
+           console.log(error);
+        }
+     }
+      
+  const result = {_id:category[0]._id, name:category[0].name, img:category[0].img
+                 ,books:bookCategory}
+  return res.send(result);
+
+  }
+  catch(err){
+     res.status(500).send(err);
+  } 
+})  
+
 router.post('/',[authAdmin,storageCategory],async(req,res) =>{ 
     
     try {
@@ -84,7 +113,7 @@ router.post('/',[authAdmin,storageCategory],async(req,res) =>{
          name: req.body.name,
          img: req.file.path
       };
-
+ 
        const category = await CategoryModel.create(objCategory);
        console.log(category);
       //  await category.save();  
@@ -93,8 +122,7 @@ router.post('/',[authAdmin,storageCategory],async(req,res) =>{
         return res.status(500).send(error);
 }
 })
-
-
+ 
 //params==>url(data)
 router.put('/:id',[authAdmin,storageCategory],async (req,res)=>{
     const id=req.params.id;
@@ -121,6 +149,12 @@ router.delete('/:id',authAdmin,async(req,res)=>{
     try{
       const id=req.params.id;
        await BookModel.deleteMany({category: req.params.id});
+       const categoryPhoto = await CategoryModel.find({_id:id},{img:1});
+       fs.unlink(categoryPhoto[0].img, (err) => {
+         if (err) throw err;
+         console.log('File deleted!');
+       });
+      
        const category= await CategoryModel.findByIdAndDelete({_id:id});
      return res.json(category);
        }

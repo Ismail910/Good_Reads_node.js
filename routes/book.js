@@ -48,27 +48,28 @@ router.get('/:id/:userID', async (req, res) => {
       book_id = req.params.id
       const book = await bookModel.find({ _id: book_id })
          .populate({
-            path: 'bookUser', select: { 'rating': 1, 'status': 1, 'user': 1 },
+            path: 'bookUser', select: { 'rating': 1, 'status': 1, 'user': 1 ,'_id':1},
             match: { 'user': userID }
          })
          .populate({
             path: 'reviews',model:'reviews', select: { comment: 1, date: 1, changeLike: 1, user: 1 }, populate: {
                path: 'user',
                model: 'user',
-               select: {' first_name':1,'id':1,'img':1,'last_name':1}
+               select: {'first_name':1,'id':1,'img':1,'last_name':1}
             }
          })
          .populate({ path: 'author', select: { 'firstName': 1, 'lastName': 1 } })
          .populate({ path: 'category', select: { 'name': 1 } })
       console.log("asd");
       try {
-         let userRating = null; let userStatus = null;
+         let userRating = null; let userStatus = null;let userStatusId = null;
          if (book[0].bookUser?.length > 0) {
 
             for (j = 0; j < book[0].bookUser?.length; j++) {
                if (userID == book[0].bookUser[j].user) {
                   userRating = book[0].bookUser[j].rating;
                   userStatus = book[0].bookUser[j].status;
+                  userStatusId = book[0].bookUser[j]._id
                }
             }
          }
@@ -83,6 +84,8 @@ router.get('/:id/:userID', async (req, res) => {
          const bookDitils = {
             rating: userRating || 1,
             status: userStatus || 'wantToRead',
+            user: userID,
+            _id: userStatusId
          }
 
          const newBook = {
@@ -98,6 +101,7 @@ router.get('/:id/:userID', async (req, res) => {
             img: book[0].img,
             avg_rate: book[0].avg_rate,
             id: book[0].id,
+            summary:book[0].summary,
             bookUser: bookDitils,
             reviews: book[0].reviews
          }
@@ -137,11 +141,15 @@ router.post('/', [authAdmin, storageBook], async (req, res) => {
 
 
 router.put('/:id', [authAdmin, storageBook], async (req, res) => {
-
+   // :authorID/:categoryID/:oldauthorID/:oldcategoryID
    try {
       const id = req.params.id;
-
+      // const categoryID = req.params.categoryID
+      // const authorID = req.params.authorID
+      // const oldauthorID=req.params.oldauthorID
+      // const oldcategoryID = req.params.oldcategoryID
       const objBook = {
+         
          name: req.body.name,
          summary: req.body.summary,
          category: req.body.category,
@@ -149,19 +157,34 @@ router.put('/:id', [authAdmin, storageBook], async (req, res) => {
       };
       if (req.file) {
          objBook.img = req.file.path;
-
       }
-      const book = await bookModel.updateOne({ _id: id }, { $set: objBook });
-      //await bookModel.updateOne({_id:id},{$push:{'bookUser':book.bookUser} });
-      console.log("1asd1");
+      // const book = await bookModel.updateOne({ _id: id }, { $set: objBook });
+      // await authorModel.updateOne({_id:oldauthorID},{
+      //    "$pull":{"books":{"_id":oldauthorID}}
+      // })
+      // await authorModel.updateOne({_id:authorID},{$push:{'books':book._id}})
+
+      // await CategoryModel.updateOne({_id:oldcategoryID},{
+      //    "$pull":{"books":{"_id":oldcategoryID}}
+      // })
+      // await CategoryModel.updateOne({_id:categoryID},{$push:{'books':book._id}})
+
+   //    Favorite.update({ cn: req.params.name }, 
+   //       { "$pull": { "favorites": { "_id": favoriteId } }}, 
+   //       { safe: true, multi:true }, function(err, obj) {
+   //       //do something smart
+   //   }) 
+   
+   // doc.subdocs.pull({ _id: 4815162342 })
+      console.log('asd')
       return res.json(book);
    }
    catch (err) {
+
       res.status(500).send(err);
+
    }
 })
-
-//////   (this mathod just used for test)
 
 // router.delete('/',async(req,res)=>{
 //    try{
@@ -173,7 +196,7 @@ router.put('/:id', [authAdmin, storageBook], async (req, res) => {
 //  }
 // })
 
-router.delete('/:id', authAdmin, async (req, res) => {
+router.delete('/:id', async (req, res) => {
    try {
       await bookUserModel.deleteMany({ book: req.params.id });
       await reviewModel.deleteMany({ book: req.params.id });
