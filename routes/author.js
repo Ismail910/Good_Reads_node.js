@@ -51,18 +51,33 @@ router.get('/page/:page',async(req,res)=>{
     }
 })//get
 
-router.get('/',async(req,res)=>{
+router.get('/:search',async(req,res)=>{
    try{
-     
-     const authors=  await authorModel.find({},{firstName:1,lastName:1})
-   //   console.log(authors);
-     let nameAuthors=[];
-     for(i =0;i<authors.length;i++){
-      nameAuthors[i]=authors[i].firstName+authors[i].lastName;
-     }
-     console.log(nameAuthors);
-      return res.json(nameAuthors);
-   }
+      
+   //   const authors=  await authorModel.find({},{firstName:1,lastName:1})
+   // //   console.log(authors);
+   //   let nameAuthors=[];
+   //   for(i =0;i<authors.length;i++){
+   //    nameAuthors[i]=authors[i].firstName+authors[i].lastName;
+   //   }
+   //   console.log(nameAuthors);
+   //    return res.json(nameAuthors);
+   const query = req.params.search;
+   
+   const authors = await authorModel.find({
+      $or: [
+        { firstName: { $regex: query, $options: 'i' } },
+        { lastName: { $regex: query, $options: 'i' } },
+      ]
+    })
+      .sort({ lastName: 1, firstName: 1 }) // sort by last name and then first name
+      .limit(10); // limit to 10 results
+//   let nameAuthors=[];
+//      for(i =0;i<authors.length;i++){
+//       nameAuthors[i]=authors[i].firstName+authors[i].lastName;
+//      }
+      return res.json(authors);
+   }  
    catch(err){
        res.status(500).send(err);
    }

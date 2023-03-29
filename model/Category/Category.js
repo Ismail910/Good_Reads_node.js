@@ -3,11 +3,12 @@ const counterModel = require('../counter/count');
 //this schema for structure of my data
 const CategorySchema = new mongoose.Schema({
     id:{type:Number,unique:true,require:true},
-    name: {type: String, require: true ,unique:true},
+    name: {type: String, require: true ,unique:true,index: true},
     img: { type: String, required: true },
     
 });
 
+CategorySchema.index({ name: 'text' });
 
 CategorySchema.pre('save', function (next){
     const  doc =this;
