@@ -141,10 +141,13 @@ router.post('/', [authAdmin, storageBook], async (req, res) => {
 
 
 router.put('/:id', [authAdmin, storageBook], async (req, res) => {
-
+   // :authorID/:categoryID/:oldauthorID/:oldcategoryID
    try {
       const id = req.params.id;
-
+      // const categoryID = req.params.categoryID
+      // const authorID = req.params.authorID
+      // const oldauthorID=req.params.oldauthorID
+      // const oldcategoryID = req.params.oldcategoryID
       const objBook = {
          
          name: req.body.name,
@@ -155,9 +158,25 @@ router.put('/:id', [authAdmin, storageBook], async (req, res) => {
       if (req.file) {
          objBook.img = req.file.path;
       }
-      const book = await bookModel.updateOne({ _id: id }, { $set: objBook });
-      //await bookModel.updateOne({_id:id},{$push:{'bookUser':book.bookUser} });
-      console.log("1asd1");
+      // const book = await bookModel.updateOne({ _id: id }, { $set: objBook });
+      // await authorModel.updateOne({_id:oldauthorID},{
+      //    "$pull":{"books":{"_id":oldauthorID}}
+      // })
+      // await authorModel.updateOne({_id:authorID},{$push:{'books':book._id}})
+
+      // await CategoryModel.updateOne({_id:oldcategoryID},{
+      //    "$pull":{"books":{"_id":oldcategoryID}}
+      // })
+      // await CategoryModel.updateOne({_id:categoryID},{$push:{'books':book._id}})
+
+   //    Favorite.update({ cn: req.params.name }, 
+   //       { "$pull": { "favorites": { "_id": favoriteId } }}, 
+   //       { safe: true, multi:true }, function(err, obj) {
+   //       //do something smart
+   //   }) 
+   
+   // doc.subdocs.pull({ _id: 4815162342 })
+      console.log('asd')
       return res.json(book);
    }
    catch (err) {
