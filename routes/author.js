@@ -189,16 +189,15 @@ router.put('/:id',[authAdmin,storageAuthor],async (req,res)=>{
          firstName: req.body.firstName,
          lastName: req.body.lastName,
          dateOfBirth:req.body.dateOfBirth,
+         book : req.body.book
       };
       if(req.file)
       {
          objAuthor.photo=req.file.path;
-
       }
-     
       
-    const author= await authorModel.updateOne({ID:id},{$set:objAuthor},{ID:1,photo:1,firstName:1,lastName:1,
-        dateOfBirth:1});
+    const author= await authorModel.updateOne({ID:id},{$set:objAuthor},
+      {ID:1,photo:1,firstName:1,lastName:1,dateOfBirth:1});
      return res.json(author);
   }
   catch(err){
