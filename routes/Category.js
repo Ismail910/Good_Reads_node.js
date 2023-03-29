@@ -48,6 +48,7 @@ router.get('/page/:page',async (req ,res)=>{
 router.get('/:id/:userId',async(req,res)=>{
 
 
+
  
 //    const id=req.params.id;
 //    const userId=req.params.userId;  
@@ -168,7 +169,7 @@ router.get('/:id/:userId',async(req,res)=>{
   } 
 })  
 
-// >>>>>>> 699dad18b816d4fac0353d8aaada10fd863c83e5
+
 router.post('/',[authAdmin,storageCategory],async(req,res) =>{ 
     
     try {
