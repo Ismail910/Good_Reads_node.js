@@ -146,6 +146,7 @@ router.put('/:id', [authAdmin, storageBook], async (req, res) => {
       const id = req.params.id;
 
       const objBook = {
+         
          name: req.body.name,
          summary: req.body.summary,
          category: req.body.category,
@@ -153,7 +154,6 @@ router.put('/:id', [authAdmin, storageBook], async (req, res) => {
       };
       if (req.file) {
          objBook.img = req.file.path;
-
       }
       const book = await bookModel.updateOne({ _id: id }, { $set: objBook });
       //await bookModel.updateOne({_id:id},{$push:{'bookUser':book.bookUser} });
@@ -161,7 +161,9 @@ router.put('/:id', [authAdmin, storageBook], async (req, res) => {
       return res.json(book);
    }
    catch (err) {
+
       res.status(500).send(err);
+
    }
 })
 
