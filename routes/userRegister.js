@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router()
 const userModel = require ('../model/auth/user/user')
 const bcrypt = require("bcrypt")
+const { storageUser } = require('../middlewares/upload');
 const jwt = require('jsonwebtoken');
 const TOKEN_KEY=process.env.TOKEN_KEY || "ITI"
 // const  emailFormat = /^[a-zA-Z0-9_.+]+(?<!^[0-9]*)@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
