@@ -49,12 +49,12 @@ router.get('/:id/:userId',async(req,res)=>{
 
  
    const id=req.params.id;
-   const userId=req.params.userId;
+   const userId=req.params.userId;  
 
    try{
   const category = await CategoryModel.find({_id:id},{}) 
-  .populate({path:'books',model:'book',select: {'name':1,avg_rate:1,img:1,"_id":1,bookUser:1,category:1}
-  ,populate:{path:'author',model:'author',select:{'firstName':1,'lastName':1,"_id":0}}
+  .populate({path:'books',model:'book',select: {'name':1,'avg_rate':1,'img':1,"_id":1,'bookUser':1,'category':1}
+
   ,populate:{path:'bookUser',model:'bookUser',
   select:{rating:1,status:1,user:1},match:{user:userId}}   
 
@@ -62,10 +62,9 @@ router.get('/:id/:userId',async(req,res)=>{
  
      let bookCategory =[];
      for (i=0;i<category[0].books.length;i++){
-        
         try {
-
            let userRating = null;let userStatus=null;
+
            if (category[0].books[i].bookUser?.length > 0) {
               for(j=0;j<category[0].books[i].bookUser?.length;j++){
                  if(userId==category[0].books[i].bookUser[j].user){
@@ -75,16 +74,15 @@ router.get('/:id/:userId',async(req,res)=>{
               }
            }  
           
-           const book = {
-            author: {
-               firstName: author[0].firstName,
-               lastName: author[0].lastName
+           const book = {                 
+            category: {
+               name: category[0].name,
             },
-              _id: category[0].books[i]._id,
+             
               name: category[0].books[i].name,
               img: category[0].books[i].img,
               avg_rate: category[0].books[i].avg_rate,
-              id: category[0].books[i].id
+              
            };
 
            bookCategory[i] = {

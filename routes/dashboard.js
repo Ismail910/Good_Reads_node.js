@@ -15,14 +15,12 @@ router.get('/authors',async(req,res)=>
     }catch(error)
     {
         return res.status(500).send(error);
-
     }
 
 });
 
 router.get('/books',async(req,res)=>
 {
-
     try
     {
     const total=await bookModel.find({}).count();
@@ -87,23 +85,29 @@ router.get('/topAuthors',async(req,res)=>{
                 foreignField: "_id",
                  as: "author"
              }
-             },
-             {
-                $group:{
-                 _id:"$author",
-                 avg:{$avg:"$avg_rate"}
-                }
+            },
+            {
+               $group:{
+                _id:"$author",
+                avg:{$avg:"$avg_rate"}
                }
-               ,
-               {
-                   $sort: { avg:-1 , _id:1},
+              },
+              { 
+               $match: 
+               {avg: {$gt: 0}}
                },
+              {
+                  $sort: { avg:-1 , _id:1},
+              },
+              {
+                $limit:4
+              }
             
 
         ]);
 
 
-        return res.json(topAuthors);
+        return res.json({topAuthors});
 
     }catch(error)
     {
