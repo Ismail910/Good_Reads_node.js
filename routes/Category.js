@@ -56,6 +56,20 @@ router.get('/search/:search',async(req,res)=>{
    }
 })//get
 
+router.get('/search/:search',async(req,res)=>{
+   try{
+   const query = req.params.search;
+   
+   const category = await CategoryModel.find({ name: { $regex: query, $options: 'i' }})
+      .sort({ name:1 }) // sort by last name and then first name
+      .limit(10); // limit to 10 results
+      return res.json(category);
+   }  
+   catch(err){
+       res.status(500).send(err);
+   }
+})//get
+
 
 
 router.get('/:id/:userId',async(req,res)=>{
@@ -121,7 +135,7 @@ router.get('/:id/:userId',async(req,res)=>{
 //   } 
 // })  
 
- 
+
    const id=req.params.id;
    const userId=req.params.userId;  
 
@@ -179,6 +193,7 @@ router.get('/:id/:userId',async(req,res)=>{
      res.status(500).send(err);
   } 
 })  
+
 
 router.get('/:id/:userId',async(req,res)=>{
 
@@ -259,9 +274,12 @@ router.post('/',[authAdmin,storageCategory],async(req,res) =>{
  
 //params==>url(data)
 router.put('/:id',[authAdmin,storageCategory],async (req,res)=>{
+
     const id=req.params.id;
+
     try{
 
+      const id=req.params.id;
       const objCategory = {
          name: req.body.name,
       };
@@ -297,14 +315,7 @@ router.delete('/:id',async(req,res)=>{
 })
 
 
-router.get('/',async (req ,res)=>{ 
-    try {
-        const category = await CategoryModel.find({});
-          return res.json(category)  
-    } catch (err) {
-     res.status(500).send(err)
-    }
- });
+
 
 
 
@@ -319,6 +330,19 @@ router.get('/',async (req ,res)=>{
     res.status(500).send(err);
  }
 })//delete all 
+
+ 
+
+
+router.get('/',async (req ,res)=>{ 
+   try {
+       const category = await CategoryModel.find({});
+         return res.json(category)  
+   } catch (err) {
+    res.status(500).send(err)
+   }
+});
+
 
 
 module.exports = router ; 

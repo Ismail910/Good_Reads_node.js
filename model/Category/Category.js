@@ -10,10 +10,15 @@ const CategorySchema = new mongoose.Schema({
 });
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 CategorySchema.index({ name: 'text' });
 
 >>>>>>> 768964a8d7d3e92b4efca578900257e8fff164dc
+=======
+CategorySchema.index({ name: 'text' });
+
+>>>>>>> 33ba2ec417452efe3162a55b09fab678cd95c2ef
 CategorySchema.pre('save', function (next){
     const  doc =this;
    counterModel.findByIdAndUpdate({_id:'categoryID'},{$inc:{sequence_value:1}},{new: true, upsert: true})
