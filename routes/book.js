@@ -195,7 +195,6 @@ router.put('/:id/:oldcategoryID/:categoryID/:oldauthorID/:authorID', [authAdmin,
       ////// loop for new array in category
       let i = 0;
       let newArrBooksCatgory = [];
-
          do{
             if (newcategory[0].books[i]?.valueOf() != id )
                {
@@ -205,7 +204,6 @@ router.put('/:id/:oldcategoryID/:categoryID/:oldauthorID/:authorID', [authAdmin,
                }
                i++;
          }while(i < newcategory[0].books.length)
-
            
          await CategoryModel.updateOne({ _id: newcategoryID }, { 'books': newArrBooksCatgory })
 
@@ -222,6 +220,7 @@ router.put('/:id/:oldcategoryID/:categoryID/:oldauthorID/:authorID', [authAdmin,
          }
          await CategoryModel.updateOne({ _id: oldauthorID },{'books': oldArrBooksAuthor })
       }
+
        ///////////////////// 
 
        let newArrBooksAuthor = [];
