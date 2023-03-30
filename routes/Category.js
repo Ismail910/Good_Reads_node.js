@@ -126,7 +126,6 @@ router.post('/',[authAdmin,storageCategory],async(req,res) =>{
 //params==>url(data)
 router.put('/:id',[authAdmin,storageCategory],async (req,res)=>{
     const id=req.params.id;
-//{$set:req.body}
     try{
 
       const objCategory = {
@@ -144,7 +143,7 @@ router.put('/:id',[authAdmin,storageCategory],async (req,res)=>{
   } 
 })
 
-router.delete('/:id',authAdmin,async(req,res)=>{
+router.delete('/:id',async(req,res)=>{
   
     try{
       const id=req.params.id;
@@ -172,6 +171,19 @@ router.get('/',async (req ,res)=>{
      res.status(500).send(err)
     }
  });
+
+
+ router.delete('/',async(req,res)=>{
+   try{
+   const category= await CategoryModel.deleteMany({});
+      BookModel.deleteMany({},{});
+       
+    return res.json(author);
+ }
+ catch(err){
+    res.status(500).send(err);
+ }
+})//delete all 
 
 
 module.exports = router ; 

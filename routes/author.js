@@ -123,6 +123,7 @@ router.get('/:id/:userId',async(req,res)=>{
       }
    const result = {_id:author[0]._id,photo:author[0].photo,firstName:author[0].firstName,lastName:author[0].lastName
                   ,dateOfBirth:author[0].dateOfBirth,books:booksAuthor}
+                  
    return res.send(result);
 
 
