@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const counterModel = require('../counter/count');
 const bookchema = new mongoose.Schema({
     id:{type:Number,unique:true,require:true},
-    name: { type: String, required: true },
+    name: { type: String, required: true ,index: true},
     img: { type: String, required: true },
     summary: { type: String, required: true },
     avg_rate:{type:Number,default:0},
@@ -15,7 +15,7 @@ const bookchema = new mongoose.Schema({
     author:  {type: mongoose.Schema.Types.ObjectId,required:true, ref: "author" },
 
 });
-
+bookchema.index({ name: 'text' });
 
 bookchema.pre('save', function (next){
     const  doc =this;

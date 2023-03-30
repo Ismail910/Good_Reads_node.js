@@ -5,15 +5,18 @@ const authorSchema = new mongoose.Schema({
     ID:{type:Number,unique:true,require:true},
     photo:{type:String },
           // match:/^\(?(\d{3})\)?[-]?(\d{3})[-]?(\d{5})$/ },//match [(code area)(xxx-xxxxx)
-    firstName:{type:String,require:true,maxLength:10,minLength:3},
-    lastName:{type:String,require:true,maxLength:10,minLength:3},
+    firstName:{type:String,require:true,maxLength:10,minLength:3, index: true},
+    lastName:{type:String,require:true,maxLength:10,minLength:3, index: true},
     dateOfBirth:{type:String,require:true,
       match:/^[0-9]{4}[-]{1}[0-9]{2}[-]{1}[0-9]{2}$/
      //match:/^[0-9]{2}[\/]{1}[0-9]{2}[\/]{1}[0-9]{4}$/
     },//match DD/MM/YYYY
-    
     books: [{ type: mongoose.Schema.Types.ObjectId,ref: "book" }]  
-})//schema
+});//schema
+
+// Create an index on the firstName and lastName fields
+authorSchema.index({ firstName: 'text', lastName: 'text' });
+
 
 // to make ID auto increment should make model counter and befor save data 
 // increment counter and assign it to ID 
