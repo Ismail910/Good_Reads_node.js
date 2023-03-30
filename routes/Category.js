@@ -125,10 +125,11 @@ router.post('/',[authAdmin,storageCategory],async(req,res) =>{
  
 //params==>url(data)
 router.put('/:id',[authAdmin,storageCategory],async (req,res)=>{
-    const id=req.params.id;
+   
 //{$set:req.body}
     try{
 
+      const id=req.params.id;
       const objCategory = {
          name: req.body.name,
       };
