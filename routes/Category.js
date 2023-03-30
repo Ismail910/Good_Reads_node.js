@@ -42,6 +42,19 @@ router.get('/page/:page',async (req ,res)=>{
         res.status(500).send(err)
     }
 })
+router.get('/search/:search',async(req,res)=>{
+   try{
+   const query = req.params.search;
+   
+   const category = await CategoryModel.find({ name: { $regex: query, $options: 'i' }})
+      .sort({ name:1 }) // sort by last name and then first name
+      .limit(10); // limit to 10 results
+      return res.json(category);
+   }  
+   catch(err){
+       res.status(500).send(err);
+   }
+})//get
 
 
 
@@ -237,19 +250,6 @@ router.get('/',async (req ,res)=>{
     }
  });
 
- router.get('/search/:search',async(req,res)=>{
-   try{
-   const query = req.params.search;
-   
-   const category = await CategoryModel.find({ name: { $regex: query, $options: 'i' }})
-      .sort({ name:1 }) // sort by last name and then first name
-      .limit(10); // limit to 10 results
-      return res.json(category);
-   }  
-   catch(err){
-       res.status(500).send(err);
-   }
-})//get
 
 
 module.exports = router ; 

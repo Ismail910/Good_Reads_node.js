@@ -50,8 +50,7 @@ router.get('/page/:page',async(req,res)=>{
         res.status(500).send(err);
     }
 })//get
-
-router.get('/:search',async(req,res)=>{
+router.get('/search/:search',async(req,res)=>{
    try{
       
    //   const authors=  await authorModel.find({},{firstName:1,lastName:1})
@@ -83,6 +82,7 @@ router.get('/:search',async(req,res)=>{
    }
 })
 //get
+
 
 //get author by id
 router.get('/:id/:userId',async(req,res)=>{
@@ -232,6 +232,7 @@ router.get('/all',async(req,res)=>{
        res.status(500).send(err);
    }
 });
+
 
 
 module.exports = router;
