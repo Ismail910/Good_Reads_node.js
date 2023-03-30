@@ -23,7 +23,7 @@ router.get('/popularBook', async (req, res)=>{
 
 router.get('/popularAuthor', async (req,res)=>{
     try{
-        const popularAuthors = await bookModel.aggregate([
+        /*const popularAuthors = await bookModel.aggregate([
             {
               $sort: { avg_rate: -1 }
             },
@@ -45,7 +45,7 @@ router.get('/popularAuthor', async (req,res)=>{
             popularAuthors.map(async (element) => {
               return authorModel.find({_id: element._id}, {firstName: 1, lastName: 1, photo: 1});
             })
-          );
+          );*/
           
           
  /////////////////////////////////////////////////////////////////
@@ -68,7 +68,40 @@ router.get('/popularAuthor', async (req,res)=>{
         //   console.log(popularBook);
 
 
-        return res.json(respopularAuthors);
+
+        const respopularAuthors=await bookModel.aggregate(
+          [
+              { 
+                 $lookup: {
+                  from: "authors",
+                  localField: "author",
+                  foreignField: "_id",
+                   as: "author"
+               }
+              },
+              {
+                 $group:{
+                  _id:"$author",
+                  avg:{$avg:"$avg_rate"}
+                 }
+                },
+                { 
+                 $match: 
+                 {avg: {$gt: 0}}
+                 },
+                {
+                    $sort: { avg:-1 , _id:1},
+                },
+                {
+                  $limit:6
+                }
+              
+  
+          ]);
+  
+  
+          return res.json({respopularAuthors});
+
     }catch(err){
         res.status(500).send(err);
        }
@@ -78,7 +111,6 @@ router.get('/popularAuthor', async (req,res)=>{
 
 router.get('/popularCategory', async (req,res)=>{
     try{
-       
         // const popularBook = await bookModel.find({},{'avg_rate':1,"category":1})
         // .sort({avg_rate: -1}).limit(5)
         // // .populate({path:'category', select: {'name':1, _id:0}})
@@ -105,21 +137,22 @@ router.get('/popularCategory', async (req,res)=>{
             $limit: 5
           }
         ]);
+       
         let respopularCategories = await Promise.all(  //wait to store data in array 
           popularCategories.map(async (element) => {
           let res={};
           res.rate = element.rate;
-          res.category=await CategoryModel.find({_id: element._id}, {name: 1});
+          res.category=await CategoryModel.find({_id: element._id}, {name: 1, img:1});
           return res;
         })
         );
-        
+
       return res.json(respopularCategories);
     }catch(err){
         res.status(500).send(err);
        }
     }
 )
-    
+
 module.exports = router; 
 
