@@ -30,8 +30,8 @@ router.get("/all/page/:page/:userID",async(req,res)=>{
       const bookCount=await bookModel.find({}).count();
       const totalPages=Math.ceil(bookCount/limit);
      const books = await bookUserModel
-     .find({user:req.params.userID},{status:1,rating:1,book:1})
-     .populate({path:'book',model:'book',select:{id:1,img: 1, name: 1,avg_rate:1,summary:1,author:1,category:1}
+     .find({'user':req.params.userID},{'status':1,'rating':1,'book':1})
+     .populate({path:'book',model:'book',select:{'id':1,'img': 1, 'name': 1,'avg_rate':1,'summary':1,'author':1,'category':1}
          ,populate:[
             {
             path:'author',
@@ -141,3 +141,4 @@ router.get('/home/page/:page/:status/:userID',async (req,res)=>{
 
 
 module.exports=router;
+

@@ -62,15 +62,15 @@ router.put('/:id', async(req,res)=>{
          res.status(500).send(err);
       }
     })
-// router.delete('/',async(req,res)=>{
-//     try{
+router.delete('/',async(req,res)=>{
+    try{
      
-//       const rating= await bookUserModel.deleteMany({});
-//      return res.json(rating);
-//   }
-//   catch(err){
-//      res.status(500).send(err);
-//   }
-//  })
+      const rating= await bookUserModel.deleteMany({});
+     return res.json(rating);
+  }
+  catch(err){
+     res.status(500).send(err);
+  }
+ })
 
 module.exports = router;

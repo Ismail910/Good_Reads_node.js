@@ -151,7 +151,7 @@ router.post('/', [authAdmin, storageBook], async (req, res) => {
 
 
 router.put('/:id/:oldcategoryID/:categoryID/:oldauthorID/:authorID', [authAdmin, storageBook], async (req, res) => {
-   // :authorID/:categoryID/:oldauthorID/:oldcategoryID  , [authAdmin, storageBook],
+   
    try {
       const id = req.params.id;
       const newcategoryID = req.params.categoryID;
