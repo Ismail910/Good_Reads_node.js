@@ -42,19 +42,7 @@ router.get('/page/:page',async (req ,res)=>{
         res.status(500).send(err)
     }
 })
-router.get('/search/:search',async(req,res)=>{
-   try{
-   const query = req.params.search;
-   
-   const category = await CategoryModel.find({ name: { $regex: query, $options: 'i' }})
-      .sort({ name:1 }) // sort by last name and then first name
-      .limit(10); // limit to 10 results
-      return res.json(category);
-   }  
-   catch(err){
-       res.status(500).send(err);
-   }
-})//get
+
 
 router.get('/search/:search',async(req,res)=>{
    try{
@@ -264,7 +252,6 @@ router.post('/',[authAdmin,storageCategory],async(req,res) =>{
       };
  
        const category = await CategoryModel.create(objCategory);
-       console.log(category);
       //  await category.save();  
        return res.json(category);
     } catch (error) {
@@ -274,20 +261,25 @@ router.post('/',[authAdmin,storageCategory],async(req,res) =>{
  
 //params==>url(data)
 router.put('/:id',[authAdmin,storageCategory],async (req,res)=>{
-
-    const id=req.params.id;
-
     try{
 
       const id=req.params.id;
-      const objCategory = {
-         name: req.body.name,
-      };
-      if(req.file)
-      {
-         objAuthor.img=req.file.path;
+      const oldCategory = await CategoryModel.findOne({_id:id},{img:1,name:1});
+      
+      const objCategory = {};
+      if(oldCategory.name!=req.body.name){
+         objCategory.name= req.body.name;
       }
-        const category = await CategoryModel.findByIdAndUpdate(id, objCategory);
+      
+        if(req.file)
+        {
+         fs.unlink(oldCategory.img, (err) => {
+           if (err) throw err;
+           console.log('File deleted!');
+         });
+         objCategory.img=req.file.path;
+      }
+      const category = await CategoryModel.updateOne({_id:id},objCategory);
      return res.json(category);
   }
   catch(err){
