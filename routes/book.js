@@ -150,8 +150,8 @@ router.post('/', [authAdmin, storageBook], async (req, res) => {
 })
 
 
-router.put('/:id/:oldcategoryID/:categoryID/:oldauthorID/:authorID', [authAdmin, storageBook], async (req, res) => {
-   
+router.put('/:id/:oldcategoryID/:categoryID/:oldauthorID/:authorID', async (req, res) => {
+   // :oldcategoryID/:categoryID/:oldauthorID/:authorID', [authAdmin, storageBook],
    try {
       const id = req.params.id;
       const newcategoryID = req.params.categoryID;
@@ -159,9 +159,7 @@ router.put('/:id/:oldcategoryID/:categoryID/:oldauthorID/:authorID', [authAdmin,
       const oldauthorID = req.params.oldauthorID;
       const oldcategoryID = req.params.oldcategoryID;
 
-
       const objBook = {
-         
          name: req.body.name,
          summary: req.body.summary,
          category: req.body.category,
@@ -170,7 +168,6 @@ router.put('/:id/:oldcategoryID/:categoryID/:oldauthorID/:authorID', [authAdmin,
       if (req.file) {
          objBook.img = req.file.path;
       }
-
       const book = await bookModel.updateOne({ _id: id }, { $set: objBook });
       const oldcategory = await CategoryModel.find({ _id: oldcategoryID }, { 'books': 1 });
       const newcategory = await CategoryModel.find({ _id: newcategoryID }, { 'books': 1 });
@@ -178,62 +175,76 @@ router.put('/:id/:oldcategoryID/:categoryID/:oldauthorID/:authorID', [authAdmin,
       const newauthor = await authorModel.find({ _id: newauthorID }, { 'books': 1 });
      
       try {
-
           ////// loop for old array in category
-
          let oldArrBooksCatgory = [];
-         if(oldcategory[0].books.length != 0)
-         {
+         if(oldcategory[0].books.length > '0')
+         {  
             for (let i = 0; i < oldcategory[0].books.length; i++){
                if (oldcategory[0].books[i]?.valueOf() == id)
-                                 continue;
+               {
+                  continue;
+               }
                oldArrBooksCatgory.push(oldcategory[0].books[i])
             }
             await CategoryModel.updateOne({ _id: oldcategoryID },{'books': oldArrBooksCatgory })
          }
-
-      ////// loop for new array in category
+      ////// loop for new array in category 
+      let newArrBooksCatgory =[];
+      newArrBooksCatgory = newcategory[0].books
+      let flag = 0;
       let i = 0;
-      let newArrBooksCatgory = [];
-
          do{
-            if (newcategory[0].books[i]?.valueOf() != id )
-               {
-                  console.log(newcategory[0].books[i]?.valueOf());
-                  console.log(id);
-                  newArrBooksCatgory.push(id); 
-               }
-               i++;
-         }while(i < newcategory[0].books.length)
-
+            if (newcategory[0].books[i]?.valueOf() == id )
+            {
+               flag = 1;
+               break;
+            }else{
+               flag = 0;
+            }
+               i++;  
+         }while( i < newcategory[0].books.length);
+         if(flag == 0)
+         newArrBooksCatgory.push(id); 
          await CategoryModel.updateOne({ _id: newcategoryID }, { 'books': newArrBooksCatgory })
-
-      
          
-      ////////////////// 
+      ////////////////// /////////////////////
+
       let oldArrBooksAuthor = [];
-      if(oldauthor[0].books.length != 0)
+      if(oldauthor[0].books.length > 0)
       {
          for (let i = 0; i < oldauthor[0].books.length; i++){
             if (oldauthor[0].books[i]?.valueOf() == id)
+            {
                continue;
+            }
             oldArrBooksAuthor.push(oldauthor[0].books[i])
          }
-         await CategoryModel.updateOne({ _id: oldauthorID },{'books': oldArrBooksAuthor })
+         console.log("---- old array ----",oldArrBooksAuthor);
+         await authorModel.updateOne({ _id: oldauthorID },{'books': oldArrBooksAuthor })
       }
              ///////////////////// 
+             let newArrBooksAuthor =[];
+             newArrBooksAuthor = newauthor[0].books
+            
+             let fla = 0;
+            //  let i = 0;
+                do{
+                   if (newauthor[0].books[i]?.valueOf() == id )
+                   {
+                      fla = 1;
+                      break;
+                   }else{
+                      fla = 0;
+                   }
+                      i++;  
+                }while( i < newauthor[0].books.length);
+               //  console.log("---------length new author-----",newauthor[0].books.length);
 
-       let newArrBooksAuthor = [];
-
-       do{
-          if (newauthor[0].books[i]?.valueOf() != id )
-             { 
+                if(fla == 0)
                 newArrBooksAuthor.push(id); 
-             }
-             i++;
-       }while(i < newauthor[0].books.length)
-       await CategoryModel.updateOne({ _id: newauthorID }, { 'books': newArrBooksAuthor })
-
+                console.log(newArrBooksAuthor ,"========new array======");
+                await authorModel.updateOne({ _id: newauthorID }, {'books': newArrBooksAuthor })
+                //////////////////////////////
       }catch(err) {
          console.log(err);
       }
