@@ -26,6 +26,7 @@ router.post('/',[authAdmin,storageAuthor],async(req,res) =>{
        }
 })
 
+
 router.get('/page/:page',async(req,res)=>{
     try{
       const page=req.params.page;
@@ -51,26 +52,9 @@ router.get('/page/:page',async(req,res)=>{
     }
 })//get
 
-router.get('/',async(req,res)=>{
-   try{
-     
-     const authors=  await authorModel.find({},{firstName:1,lastName:1})
-   //   console.log(authors);
-     let nameAuthors=[];
-     for(i =0;i<authors.length;i++){
-      nameAuthors[i]=authors[i].firstName+authors[i].lastName;
-     }
-     console.log(nameAuthors);
-      return res.json(nameAuthors);
-   }
-   catch(err){
-       res.status(500).send(err);
-   }
-})
-//get
 
 //get author by id
-router.get('/:id/:userId',async(req,res)=>{
+router.get('/authorID/:id/:userId',async(req,res)=>{
 
 
     const id=req.params.id;
@@ -131,6 +115,27 @@ router.get('/:id/:userId',async(req,res)=>{
       res.status(500).send(err);
    } 
  })//get author by id
+
+
+ router.get('/search/:search',async(req,res)=>{
+   try{
+   const query = req.params.search;
+   
+   const category = await authorModel.find({
+      $or: [
+      { firstName: { $regex: query, $options: 'i' } },
+      { lastName: { $regex: query, $options: 'i' } },
+    ]
+   })
+   .sort({ lastName: 1, firstName: 1 })  // sort by last name and then first name
+      .limit(10); // limit to 10 results
+      return res.json(category);
+   }  
+   catch(err){
+       res.status(500).send(err);
+   }
+})//get
+
 
  //delete all author 
 
