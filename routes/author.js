@@ -63,9 +63,8 @@ router.get('/authorID/:id/:userId',async(req,res)=>{
 
    const author = await authorModel.find({ID:id},{photo:1,firstName:1,lastName:1,_id:1,dateOfBirth:1,books:1})
    .populate({path:'books',model:'book',select: {'name':1,avg_rate:1,img:1,"_id":1,bookUser:1,category:1}
-   // ,populate:{path:'category',model:'category',select:{name:1}}
-   ,populate:{path:'bookUser',model:'bookUser',
-   select:{rating:1,status:1,user:1},match:{user:userId}}  
+    ,populate:[{path:'category',model:'category',select:{name:1}},
+    {path:'bookUser',model:'bookUser',select:{rating:1,status:1,user:1},match:{user:userId}} ] 
 })
       let booksAuthor =[];
       for (i=0;i<author[0].books.length;i++){
@@ -89,6 +88,10 @@ router.get('/authorID/:id/:userId',async(req,res)=>{
                   firstName: author[0].firstName,
                   lastName: author[0].lastName
                },
+               category: {
+                  id: author[0].books[i].category._id,
+                  name: author[0].books[i].category.name
+               },
                _id: author[0].books[i]._id,
                name: author[0].books[i].name,
                img: author[0].books[i].img,
@@ -106,7 +109,7 @@ router.get('/authorID/:id/:userId',async(req,res)=>{
          }
       }
    const result = {_id:author[0]._id,photo:author[0].photo,firstName:author[0].firstName,lastName:author[0].lastName
-                  ,dateOfBirth:author[0].dateOfBirth,books:booksAuthor}
+                  ,dateOfBirth:author[0].dateOfBirth,books:booksAuthor};
    return res.send(result);
 
 

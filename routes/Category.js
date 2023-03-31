@@ -252,7 +252,6 @@ router.post('/',[authAdmin,storageCategory],async(req,res) =>{
       };
  
        const category = await CategoryModel.create(objCategory);
-       console.log(category);
       //  await category.save();  
        return res.json(category);
     } catch (error) {
