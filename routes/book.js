@@ -41,7 +41,19 @@ router.get('/page/:page', async (req, res) => {
       return res.status(500).send(err)
    }
 })
+router.get('/search/:search', async (req, res) => {
+   try {
+      const query = req.params.search;
 
+      const book = await bookModel.find({ name: { $regex: query, $options: 'i' } })
+         .sort({ name: 1 }) // sort by last name and then first name
+         .limit(10); // limit to 10 results
+      return res.json(book);
+   }
+   catch (err) {
+      res.status(500).send(err);
+   }
+})//get
 router.get('/:id/:userID', async (req, res) => {
    try {
 
@@ -284,19 +296,7 @@ router.delete('/:id', async (req, res) => {
    }
 })
 
-router.get('/search/:search', async (req, res) => {
-   try {
-      const query = req.params.search;
 
-      const book = await bookModel.find({ name: { $regex: query, $options: 'i' } })
-         .sort({ name: 1 }) // sort by last name and then first name
-         .limit(10); // limit to 10 results
-      return res.json(book);
-   }
-   catch (err) {
-      res.status(500).send(err);
-   }
-})//get
 
 
 module.exports = router;
