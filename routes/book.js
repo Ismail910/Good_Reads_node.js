@@ -180,9 +180,7 @@ router.put('/:id', [authAdmin, storageBook], async (req, res) => {
       return res.json(book);
    }
    catch (err) {
-
       res.status(500).send(err);
-
    }
 })
 
