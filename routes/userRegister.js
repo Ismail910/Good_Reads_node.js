@@ -7,13 +7,14 @@ const jwt = require('jsonwebtoken');
 const TOKEN_KEY=process.env.TOKEN_KEY || "ITI"
 // const  emailFormat = /^[a-zA-Z0-9_.+]+(?<!^[0-9]*)@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
 
-router.post("/",storageUser,async (req, res) => {
 
+router.post("/",async (req, res) => {
+  // [storageUser],
     // Our register logic starts here
     try {
       // Get user input
       const errResEmail={message:'User Already Exist. Please Login'}
-      const { first_name, last_name, email, password,confirmPassword,img ,isAdmin} = req.body;
+      const { first_name, last_name, email, password,confirmPassword,img,isAdmin} = req.body;
       // Validate user input
       if (!(email && password && confirmPassword && first_name && last_name)) {
         return res.status(400).send("All input is required except image");
@@ -38,7 +39,7 @@ router.post("/",storageUser,async (req, res) => {
         email: email.toLowerCase(), // sanitize: convert email to lowercase
         password: encryptedPassword,
         confirmPassword: encryptedConfirmPassword,
-        img,
+        img:req.file.path,
         isAdmin,
       });
       // Create token

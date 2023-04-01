@@ -47,7 +47,7 @@ router.get('/search/:search', async (req, res) => {
 
       const book = await bookModel.find({ name: { $regex: query, $options: 'i' } })
          .sort({ name: 1 }) // sort by last name and then first name
-         .limit(10); // limit to 10 results
+         .limit(10).populate("author").populate("category");  // limit to 10 results
       return res.json(book);
    }
    catch (err) {
@@ -165,6 +165,8 @@ router.put('/:id/:oldcategoryID/:categoryID/:oldauthorID/:authorID', [authAdmin,
       const newauthorID = req.params.authorID;
       const oldauthorID = req.params.oldauthorID;
       const oldcategoryID = req.params.oldcategoryID;
+
+      
 
       const objBook = {
          name: req.body.name,
