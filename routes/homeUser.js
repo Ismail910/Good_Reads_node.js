@@ -27,7 +27,7 @@ router.get("/all/page/:page/:userID",async(req,res)=>{
         cal_avreg();
       const page=req.params.page;
       const limit=process.env.limit;
-      const bookCount=await bookModel.find({}).count();
+      const bookCount=await bookUserModel.find({'user':req.params.userID}).count();
       const totalPages=Math.ceil(bookCount/limit);
      const books = await bookUserModel
      .find({'user':req.params.userID},{'status':1,'rating':1,'book':1})
@@ -102,7 +102,7 @@ router.get('/home/page/:page/:status/:userID',async (req,res)=>{
     try{
     const page=req.params.page;
     const limit=process.env.limit;
-    const bookCount=await bookModel.find({}).count();
+    const bookCount=await bookUserModel.find({status:req.params.status, user:req.params.userID}).count();
     const totalPages=Math.ceil(bookCount/limit);
     const books = await bookUserModel 
     .find({status:req.params.status, user:req.params.userID},{status:1,rating:1,book:1})
