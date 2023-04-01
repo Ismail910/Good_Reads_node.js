@@ -226,8 +226,9 @@ router.get('/:id/:userId',async(req,res)=>{
            const book = {                 
             category: {
                name: category[0].name,
+
             },
-             
+             _id: category[0].book[i]._id,
               name: category[0].books[i].name,
               img: category[0].books[i].img,
               avg_rate: category[0].books[i].avg_rate,
