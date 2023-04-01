@@ -12,32 +12,33 @@ const bookUserModel = require('../model/books/bookUser');
 
 
 async function cal_avreg(){
-       // calculate average for all books
+       //calculate average for all books
        const avrgrating = await bookUserModel
        .aggregate([{$group: {_id:"$book", avg_val:{$avg:"$rating"}}}]);
-    //   console.log(avrgrating);
+       //console.log(avrgrating);
        //assign average to book
        avrgrating.forEach( async(element) => {
            await bookModel.updateOne({_id:element._id},{$set:{avg_rate:element.avg_val}})
        });
 }
+
 //display all books with details
+
 router.get("/all/page/:page/:userID",async(req,res)=>{
     try {
-        cal_avreg();
-      const page=req.params.page;
-      const limit=process.env.limit;
-      const bookCount=await bookModel.find({}).count();
-      const totalPages=Math.ceil(bookCount/limit);
-     const books = await bookUserModel
-     .find({'user':req.params.userID},{'status':1,'rating':1,'book':1})
-     .populate({path:'book',model:'book',select:{'id':1,'img': 1, 'name': 1,'avg_rate':1,'summary':1,'author':1,'category':1}
+    cal_avreg();
+    const page=req.params.page;
+    const limit=process.env.limit;
+    const bookCount=await bookModel.find({}).count();
+    const totalPages=Math.ceil(bookCount/limit);
+    const books = await bookUserModel
+    .find({'user':req.params.userID},{'status':1,'rating':1,'book':1})
+    .populate({path:'book',model:'book',select:{'id':1,'img': 1, 'name': 1,'avg_rate':1,'summary':1,'author':1,'category':1}
          ,populate:[
             {
             path:'author',
             select:{'firstName':1,'lastName':1,"_id":0}        
-            },
-            {
+            },{
                 path:'category',
                 select:{'name':1}
             }
@@ -60,8 +61,8 @@ router.get("/all/page/:page/:userID",async(req,res)=>{
     }
 })//get
 
-
 //display all books 
+
 router.get("/all/page/:page",async(req,res)=>{
     try {
         cal_avreg();

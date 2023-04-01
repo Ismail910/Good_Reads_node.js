@@ -183,7 +183,7 @@ router.get('/:id/:userId',async(req,res)=>{
      }
       
   const result = {_id:category[0]._id, name:category[0].name, img:category[0].img
-                 ,books:bookCategory}
+                 , books:bookCategory }
   return res.send(result);
 
   }
@@ -206,7 +206,7 @@ router.get('/:id/:userId',async(req,res)=>{
   select:{rating:1,status:1,user:1},match:{user:userId}}   
 
 })
- 
+
      let bookCategory =[];
      for (i=0;i<category[0].books.length;i++){
         try {
