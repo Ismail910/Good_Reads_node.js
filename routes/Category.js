@@ -5,6 +5,14 @@ require('dotenv').config();
 const fs = require('fs');
 const CategoryModel = require('../model/Category/Category');
 const BookModel=require('../model/books/book');
+
+
+const bookModel = require('../model/books/book');
+const auth = require ('../middlewares/auth')
+
+
+
+
 const {storageCategory}=require("../middlewares/upload");
 const {authAdmin} = require ('../middlewares/auth');
 const authorModel = require('../model/author/author');
@@ -58,6 +66,7 @@ router.get('/search/:search',async(req,res)=>{
        res.status(500).send(err);
    }
 })//get
+
 
 
 
@@ -155,7 +164,7 @@ router.get('/:id/:userId',async(req,res)=>{
             category: {
                name: category[0].name,
             },
-             
+             _id:category[0].books[i]._id,
               name: category[0].books[i].name,
               img: category[0].books[i].img,
               avg_rate: category[0].books[i].avg_rate,
@@ -350,4 +359,4 @@ router.get('/',async (req ,res)=>{
 
 
 
-module.exports = router ; 
+module.exports = router ;
