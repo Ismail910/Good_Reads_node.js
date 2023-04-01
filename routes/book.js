@@ -41,7 +41,19 @@ router.get('/page/:page', async (req, res) => {
       return res.status(500).send(err)
    }
 })
+router.get('/search/:search', async (req, res) => {
+   try {
+      const query = req.params.search;
 
+      const book = await bookModel.find({ name: { $regex: query, $options: 'i' } })
+         .sort({ name: 1 }) // sort by last name and then first name
+         .limit(10).populate("author").populate("category");  // limit to 10 results
+      return res.json(book);
+   }
+   catch (err) {
+      res.status(500).send(err);
+   }
+})//get
 router.get('/:id/:userID', async (req, res) => {
    try {
 
@@ -66,7 +78,6 @@ router.get('/:id/:userID', async (req, res) => {
          })
          .populate({ path: 'author', select: { 'firstName': 1, 'lastName': 1 } })
          .populate({ path: 'category', select: { 'name': 1 } })
-      console.log("asd");
       try {
 
          let userRating = null; let userStatus = null; let userStatusId = null;
@@ -115,14 +126,10 @@ router.get('/:id/:userID', async (req, res) => {
             bookUser: bookDitils,
             reviews: book[0].reviews
          }
-
-         console.log("bookDitils", newBook);
          return res.json(newBook)
       } catch (err) {
          console.log(err);
       }
-
-      console.log(bookDitils);
       return res.json(bookDitils)
    } catch (err) {
       console.log(err);
@@ -158,6 +165,8 @@ router.put('/:id/:oldcategoryID/:categoryID/:oldauthorID/:authorID', [authAdmin,
       const newauthorID = req.params.authorID;
       const oldauthorID = req.params.oldauthorID;
       const oldcategoryID = req.params.oldcategoryID;
+
+      
 
       const objBook = {
          name: req.body.name,
@@ -216,7 +225,6 @@ router.put('/:id/:oldcategoryID/:categoryID/:oldauthorID/:authorID', [authAdmin,
                   }
                   oldArrBooksAuthor.push(oldauthor[0].books[i])
                }
-               console.log("---- old array ----", oldArrBooksAuthor);
                await authorModel.updateOne({ _id: oldauthorID }, { 'books': oldArrBooksAuthor })
             }
             ///////////////////// ///////////////////////////
@@ -237,7 +245,6 @@ router.put('/:id/:oldcategoryID/:categoryID/:oldauthorID/:authorID', [authAdmin,
    
             if (fla == 0)
                newArrBooksAuthor.push(id);
-            console.log(newArrBooksAuthor, "========new array======");
             await authorModel.updateOne({ _id: newauthorID }, { 'books': newArrBooksAuthor })
          }
         
@@ -249,9 +256,7 @@ router.put('/:id/:oldcategoryID/:categoryID/:oldauthorID/:authorID', [authAdmin,
    }
 
    catch (err) {
-
       res.status(500).send(err);
-
    }
 })
 
@@ -284,19 +289,7 @@ router.delete('/:id', async (req, res) => {
    }
 })
 
-router.get('/search/:search', async (req, res) => {
-   try {
-      const query = req.params.search;
 
-      const book = await bookModel.find({ name: { $regex: query, $options: 'i' } })
-         .sort({ name: 1 }) // sort by last name and then first name
-         .limit(10); // limit to 10 results
-      return res.json(book);
-   }
-   catch (err) {
-      res.status(500).send(err);
-   }
-})//get
 
 
 module.exports = router;

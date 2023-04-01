@@ -5,8 +5,17 @@ require('dotenv').config();
 const fs = require('fs');
 const CategoryModel = require('../model/Category/Category');
 const BookModel=require('../model/books/book');
+
+
+const bookModel = require('../model/books/book');
+const auth = require ('../middlewares/auth')
+
+
+
+
 const {storageCategory}=require("../middlewares/upload");
 const {authAdmin} = require ('../middlewares/auth');
+const authorModel = require('../model/author/author');
 
 
 
@@ -42,19 +51,7 @@ router.get('/page/:page',async (req ,res)=>{
         res.status(500).send(err)
     }
 })
-router.get('/search/:search',async(req,res)=>{
-   try{
-   const query = req.params.search;
-   
-   const category = await CategoryModel.find({ name: { $regex: query, $options: 'i' }})
-      .sort({ name:1 }) // sort by last name and then first name
-      .limit(10); // limit to 10 results
-      return res.json(category);
-   }  
-   catch(err){
-       res.status(500).send(err);
-   }
-})//get
+
 
 router.get('/search/:search',async(req,res)=>{
    try{
@@ -69,6 +66,7 @@ router.get('/search/:search',async(req,res)=>{
        res.status(500).send(err);
    }
 })//get
+
 
 
 
@@ -166,7 +164,7 @@ router.get('/:id/:userId',async(req,res)=>{
             category: {
                name: category[0].name,
             },
-             
+             _id:category[0].books[i]._id,
               name: category[0].books[i].name,
               img: category[0].books[i].img,
               avg_rate: category[0].books[i].avg_rate,
@@ -265,7 +263,6 @@ router.post('/',[authAdmin,storageCategory],async(req,res) =>{
       };
  
        const category = await CategoryModel.create(objCategory);
-       console.log(category);
       //  await category.save();  
        return res.json(category);
     } catch (error) {
@@ -275,20 +272,29 @@ router.post('/',[authAdmin,storageCategory],async(req,res) =>{
  
 //params==>url(data)
 router.put('/:id',[authAdmin,storageCategory],async (req,res)=>{
-
-    const id=req.params.id;
-
     try{
 
       const id=req.params.id;
-      const objCategory = {
-         name: req.body.name,
-      };
-      if(req.file)
-      {
-         objAuthor.img=req.file.path;
+      const oldCategory = await CategoryModel.findOne({_id:id},{img:1,name:1});
+      
+      //console.log(oldCategory);
+      const objCategory = {};
+      if(oldCategory.name!=req.body.name){
+         objCategory.name= req.body.name;
       }
-        const category = await CategoryModel.findByIdAndUpdate(id, objCategory);
+      
+        if(req.file)
+        {
+         
+         fs.unlink(oldCategory.img, (err) => {
+           if (err) throw err;
+           console.log('File deleted!');
+         });
+
+         objCategory.img=req.file.path;
+        }
+       console.log(objCategory);
+      const category = await CategoryModel.updateOne({_id:id},{$set: objCategory });
      return res.json(category);
   }
   catch(err){
@@ -300,6 +306,13 @@ router.delete('/:id',async(req,res)=>{
   
     try{
       const id=req.params.id;
+      const bookIds = await BookModel.distinct('_id', { category: id });
+      
+       const result = await authorModel.updateMany(
+         { books: { $in: bookIds } },
+         { $pull: { books: { $in: bookIds } } }
+       );
+
        await BookModel.deleteMany({category: req.params.id});
        const categoryPhoto = await CategoryModel.find({_id:id},{img:1});
        fs.unlink(categoryPhoto[0].img, (err) => {
@@ -311,6 +324,7 @@ router.delete('/:id',async(req,res)=>{
      return res.json(category);
        }
   catch(err){
+   console.log(err);
      res.status(500).send(err);
   }
 })
@@ -346,4 +360,4 @@ router.get('/',async (req ,res)=>{
 
 
 
-module.exports = router ; 
+module.exports = router ;

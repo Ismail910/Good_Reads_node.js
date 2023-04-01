@@ -39,7 +39,7 @@ const book=multer.diskStorage({
 const user=multer.diskStorage({
    destination:function(req,file,callbackFunc)
    {
-      callbackFunc(null,'./assets/user')
+      callbackFunc(null,'./assets/users')
    },filename:function(req,file,callbackFunc)
    {
       var nameImage=new Date().toISOString().replace(/:/g,'-') + file.originalname;

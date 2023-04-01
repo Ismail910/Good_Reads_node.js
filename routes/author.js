@@ -9,6 +9,7 @@ const bookModel = require('../model/books/book');
 const bookUserModel = require('../model/books/bookUser')
 
 const fs = require('fs');
+const CategoryModel = require('../model/Category/Category');
 router.post('/',[authAdmin,storageAuthor],async(req,res) =>{ 
     try {
 
@@ -25,6 +26,7 @@ router.post('/',[authAdmin,storageAuthor],async(req,res) =>{
         return res.send(error);
        }
 })
+
 
 router.get('/page/:page',async(req,res)=>{
     try{
@@ -51,26 +53,9 @@ router.get('/page/:page',async(req,res)=>{
     }
 })//get
 
-router.get('/',async(req,res)=>{
-   try{
-     
-     const authors=  await authorModel.find({},{firstName:1,lastName:1})
-   //   console.log(authors);
-     let nameAuthors=[];
-     for(i =0;i<authors.length;i++){
-      nameAuthors[i]=authors[i].firstName+authors[i].lastName;
-     }
-     console.log(nameAuthors);
-      return res.json(nameAuthors);
-   }
-   catch(err){
-       res.status(500).send(err);
-   }
-})
-//get
 
 //get author by id
-router.get('/:id/:userId',async(req,res)=>{
+router.get('/authorID/:id/:userId',async(req,res)=>{
 
 
     const id=req.params.id;
@@ -79,9 +64,8 @@ router.get('/:id/:userId',async(req,res)=>{
 
    const author = await authorModel.find({ID:id},{photo:1,firstName:1,lastName:1,_id:1,dateOfBirth:1,books:1})
    .populate({path:'books',model:'book',select: {'name':1,avg_rate:1,img:1,"_id":1,bookUser:1,category:1}
-   // ,populate:{path:'category',model:'category',select:{name:1}}
-   ,populate:{path:'bookUser',model:'bookUser',
-   select:{rating:1,status:1,user:1},match:{user:userId}}  
+    ,populate:[{path:'category',model:'category',select:{name:1}},
+    {path:'bookUser',model:'bookUser',select:{rating:1,status:1,user:1},match:{user:userId}} ] 
 })
       let booksAuthor =[];
       for (i=0;i<author[0].books.length;i++){
@@ -105,6 +89,10 @@ router.get('/:id/:userId',async(req,res)=>{
                   firstName: author[0].firstName,
                   lastName: author[0].lastName
                },
+               category: {
+                  id: author[0].books[i].category._id,
+                  name: author[0].books[i].category.name
+               },
                _id: author[0].books[i]._id,
                name: author[0].books[i].name,
                img: author[0].books[i].img,
@@ -122,7 +110,7 @@ router.get('/:id/:userId',async(req,res)=>{
          }
       }
    const result = {_id:author[0]._id,photo:author[0].photo,firstName:author[0].firstName,lastName:author[0].lastName
-                  ,dateOfBirth:author[0].dateOfBirth,books:booksAuthor}
+                  ,dateOfBirth:author[0].dateOfBirth,books:booksAuthor};
    return res.send(result);
 
 
@@ -131,6 +119,27 @@ router.get('/:id/:userId',async(req,res)=>{
       res.status(500).send(err);
    } 
  })//get author by id
+
+
+ router.get('/search/:search',async(req,res)=>{
+   try{
+   const query = req.params.search;
+   
+   const category = await authorModel.find({
+      $or: [
+      { firstName: { $regex: query, $options: 'i' } },
+      { lastName: { $regex: query, $options: 'i' } },
+    ]
+   })
+   .sort({ lastName: 1, firstName: 1 })  // sort by last name and then first name
+      .limit(10); // limit to 10 results
+      return res.json(category);
+   }  
+   catch(err){
+       res.status(500).send(err);
+   }
+})//get
+
 
  //delete all author 
 
@@ -162,12 +171,19 @@ router.get('/:id/:userId',async(req,res)=>{
 // })//delete author by id
 
 //delete author and delete his all books 
-router.delete('/:id',authAdmin,async(req,res)=>{
+router.delete('/:id',async(req,res)=>{
    try{
       const idAuthor=req.params.id
+
+      const bookIds = await bookModel.distinct('_id', { author: idAuthor });
+      
+       const result = await CategoryModel.updateMany(
+         { books: { $in: bookIds } },
+         { $pull: { books: { $in: bookIds } } }
+       );
+
        await bookModel.deleteMany({author:idAuthor});
        const authorPhoto = await authorModel.find({_id:idAuthor},{photo:1});
-        
        fs.unlink(authorPhoto[0].photo, (err) => {
          if (err) throw err;
          console.log('File deleted!');
@@ -177,6 +193,7 @@ router.delete('/:id',authAdmin,async(req,res)=>{
        return res.status(200).json("deleted");
  }
  catch(err){
+   console.log(err);
     res.status(500).send(err);
  }
 });

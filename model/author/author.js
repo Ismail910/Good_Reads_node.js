@@ -5,8 +5,8 @@ const authorSchema = new mongoose.Schema({
     ID:{type:Number,unique:true,require:true},
     photo:{type:String },
           // match:/^\(?(\d{3})\)?[-]?(\d{3})[-]?(\d{5})$/ },//match [(code area)(xxx-xxxxx)
-    firstName:{type:String,require:true,maxLength:10,minLength:3, index: true},
-    lastName:{type:String,require:true,maxLength:10,minLength:3, index: true},
+    firstName:{type:String,require:true,maxLength:10,minLength:2, index: true},
+    lastName:{type:String,require:true,maxLength:10,minLength:2,index: true},
     dateOfBirth:{type:String,require:true,
       match:/^[0-9]{4}[-]{1}[0-9]{2}[-]{1}[0-9]{2}$/
      //match:/^[0-9]{2}[\/]{1}[0-9]{2}[\/]{1}[0-9]{4}$/
