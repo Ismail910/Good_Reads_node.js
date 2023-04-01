@@ -7,6 +7,7 @@ const CategoryModel = require('../model/Category/Category');
 const BookModel=require('../model/books/book');
 const {storageCategory}=require("../middlewares/upload");
 const {authAdmin} = require ('../middlewares/auth');
+const authorModel = require('../model/author/author');
 
 
 
@@ -286,6 +287,13 @@ router.delete('/:id',async(req,res)=>{
   
     try{
       const id=req.params.id;
+      const bookIds = await BookModel.distinct('_id', { category: id });
+      
+       const result = await authorModel.updateMany(
+         { books: { $in: bookIds } },
+         { $pull: { books: { $in: bookIds } } }
+       );
+
        await BookModel.deleteMany({category: req.params.id});
        const categoryPhoto = await CategoryModel.find({_id:id},{img:1});
        fs.unlink(categoryPhoto[0].img, (err) => {
@@ -297,6 +305,7 @@ router.delete('/:id',async(req,res)=>{
      return res.json(category);
        }
   catch(err){
+   console.log(err);
      res.status(500).send(err);
   }
 })
