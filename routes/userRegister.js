@@ -30,17 +30,23 @@ router.post("/",storageUser,async (req, res) => {
       encryptedPassword = await bcrypt.hash(password, 10);
       encryptedConfirmPassword = await bcrypt.hash(confirmPassword,10)
 
-
+    
       // Create user in our database
-      const user = await userModel.create({
+      const objUser=
+      {
         first_name,
         last_name,
-        email: email.toLowerCase(), // sanitize: convert email to lowercase
+        email:email.toLowerCase(), // sanitize: convert email to lowercase
         password: encryptedPassword,
         confirmPassword: encryptedConfirmPassword,
-        img,
         isAdmin,
-      });
+      };
+
+      if(req.file)
+      {
+        objUser.img=req.file.path;
+      }
+      const user = await userModel.create(objUser);
       // Create token
       const token =jwt.sign(
         {user},
