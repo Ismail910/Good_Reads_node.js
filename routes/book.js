@@ -256,9 +256,7 @@ router.put('/:id/:oldcategoryID/:categoryID/:oldauthorID/:authorID', [authAdmin,
    }
 
    catch (err) {
-
       res.status(500).send(err);
-
    }
 })
 

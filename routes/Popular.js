@@ -136,6 +136,8 @@ router.get('/popularCategory', async (req,res)=>{
             $limit: 5
           }
         ]);
+        console.log(popularCategories) 
+
         let respopularCategories = await Promise.all(  //wait to store data in array 
           popularCategories.map(async (element) => {
           let res={};

@@ -11,7 +11,7 @@ const userSchema = new mongoose.Schema({
   password: { type: String ,required: true,
     match: /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/}, // match Minimum eight characters, at least one letter and one number:
   confirmPassword: { type: String, required: true},  // check the same password
-  img: { type: String,default:" "},
+  img: { type: String},
   isAdmin: { type: Boolean ,default: false},
   token: { type: String }
 

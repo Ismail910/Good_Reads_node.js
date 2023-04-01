@@ -9,6 +9,7 @@ const bookModel = require('../model/books/book');
 const bookUserModel = require('../model/books/bookUser')
 
 const fs = require('fs');
+const CategoryModel = require('../model/Category/Category');
 router.post('/',[authAdmin,storageAuthor],async(req,res) =>{ 
     try {
 
@@ -170,12 +171,19 @@ router.get('/authorID/:id/:userId',async(req,res)=>{
 // })//delete author by id
 
 //delete author and delete his all books 
-router.delete('/:id',authAdmin,async(req,res)=>{
+router.delete('/:id',async(req,res)=>{
    try{
       const idAuthor=req.params.id
+
+      const bookIds = await bookModel.distinct('_id', { author: idAuthor });
+      
+       const result = await CategoryModel.updateMany(
+         { books: { $in: bookIds } },
+         { $pull: { books: { $in: bookIds } } }
+       );
+
        await bookModel.deleteMany({author:idAuthor});
        const authorPhoto = await authorModel.find({_id:idAuthor},{photo:1});
-        
        fs.unlink(authorPhoto[0].photo, (err) => {
          if (err) throw err;
          console.log('File deleted!');
@@ -185,6 +193,7 @@ router.delete('/:id',authAdmin,async(req,res)=>{
        return res.status(200).json("deleted");
  }
  catch(err){
+   console.log(err);
     res.status(500).send(err);
  }
 });
