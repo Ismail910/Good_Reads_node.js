@@ -15,6 +15,7 @@ const auth = require ('../middlewares/auth')
 
 const {storageCategory}=require("../middlewares/upload");
 const {authAdmin} = require ('../middlewares/auth');
+const authorModel = require('../model/author/author');
 
 
 
@@ -270,20 +271,25 @@ router.post('/',[authAdmin,storageCategory],async(req,res) =>{
  
 //params==>url(data)
 router.put('/:id',[authAdmin,storageCategory],async (req,res)=>{
-
-    const id=req.params.id;
-
     try{
 
       const id=req.params.id;
-      const objCategory = {
-         name: req.body.name,
-      };
-      if(req.file)
-      {
-         objAuthor.img=req.file.path;
+      const oldCategory = await CategoryModel.findOne({_id:id},{img:1,name:1});
+      
+      const objCategory = {};
+      if(oldCategory.name!=req.body.name){
+         objCategory.name= req.body.name;
       }
-        const category = await CategoryModel.findByIdAndUpdate(id, objCategory);
+      
+        if(req.file)
+        {
+         fs.unlink(oldCategory.img, (err) => {
+           if (err) throw err;
+           console.log('File deleted!');
+         });
+         objCategory.img=req.file.path;
+      }
+      const category = await CategoryModel.updateOne({_id:id},objCategory);
      return res.json(category);
   }
   catch(err){
@@ -295,6 +301,13 @@ router.delete('/:id',async(req,res)=>{
   
     try{
       const id=req.params.id;
+      const bookIds = await BookModel.distinct('_id', { category: id });
+      
+       const result = await authorModel.updateMany(
+         { books: { $in: bookIds } },
+         { $pull: { books: { $in: bookIds } } }
+       );
+
        await BookModel.deleteMany({category: req.params.id});
        const categoryPhoto = await CategoryModel.find({_id:id},{img:1});
        fs.unlink(categoryPhoto[0].img, (err) => {
@@ -306,6 +319,7 @@ router.delete('/:id',async(req,res)=>{
      return res.json(category);
        }
   catch(err){
+   console.log(err);
      res.status(500).send(err);
   }
 })

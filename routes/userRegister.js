@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 const TOKEN_KEY=process.env.TOKEN_KEY || "ITI"
 // const  emailFormat = /^[a-zA-Z0-9_.+]+(?<!^[0-9]*)@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
 
-router.post("/", async (req, res) => {
+router.post("/",storageUser,async (req, res) => {
 
     // Our register logic starts here
     try {
