@@ -271,7 +271,7 @@ router.put('/:id',[authAdmin,storageCategory],async (req,res)=>{
          objCategory.name= req.body.name;
       }
       
-        if(req.file)
+        if(req.file.path)
         {
          fs.unlink(oldCategory.img, (err) => {
            if (err) throw err;
