@@ -6,13 +6,11 @@ const router = express.Router();
 
 
 router.get('/popularBook', async (req, res)=>{
-  console.log("asd");
     try{
-      console.log("asd");
         const popularBook = await bookModel.find({},{'name':1, 'img':1,'avg_rate':1,"category":1,'_id':1})
         .sort({avg_rate: -1}).limit(5)
         .populate({path:'category', select: {'name':1,'img':1, _id:0}}).populate({path:'author', select: {'firstName':1,'lastName':1}});
-        console.log(popularBook);
+       
          res.json(popularBook);
     }catch(err){
         res.status(500).send(err);
@@ -123,11 +121,12 @@ router.get('/popularCategory', async (req,res)=>{
         // console.log(popularBook);
 
         // return res.json({"sortAuthor":"jjj"});
+
         const popularCategories = await bookModel.aggregate([
           {
             $group: {
               _id: "$category",
-              rate: { $sum: avg_rate }
+              rate: { $avg: "$avg_rate" }
             }
           },
           {
@@ -138,7 +137,7 @@ router.get('/popularCategory', async (req,res)=>{
           }
         ]);
         console.log(popularCategories) 
-       
+
         let respopularCategories = await Promise.all(  //wait to store data in array 
           popularCategories.map(async (element) => {
           let res={};
