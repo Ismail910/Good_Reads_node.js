@@ -70,7 +70,7 @@ router.get("/all/page/:page",async(req,res)=>{
       const limit=process.env.limit;
       const bookCount=await bookModel.find({}).count();
       const totalPages=Math.ceil(bookCount/limit); 
-      const books = await bookModel.find({},{img:1,name:1,avg_rate:1,summary:1,id:1,author:1,category:1})
+      const books = await bookModel.find({},{img:1,name:1,avg_rate:1,summary:1,id:1,author:1,category:1,bookUser:1})
       .populate([
         {
         path:'author',
@@ -79,6 +79,9 @@ router.get("/all/page/:page",async(req,res)=>{
         {
             path:'category',
             select:{'name':1}
+        },{
+            path:'bookUser',
+            select:{'rating':1,'status':1}
         }
     ])
      .limit(limit).skip((page-1)*limit).exec();
