@@ -12,16 +12,18 @@ const bookUserModel = require('../model/books/bookUser');
 
 
 async function cal_avreg(){
-       // calculate average for all books
+       //calculate average for all books
        const avrgrating = await bookUserModel
        .aggregate([{$group: {_id:"$book", avg_val:{$avg:"$rating"}}}]);
-    //   console.log(avrgrating);
+       //console.log(avrgrating);
        //assign average to book
        avrgrating.forEach( async(element) => {
            await bookModel.updateOne({_id:element._id},{$set:{avg_rate:element.avg_val}})
        });
 }
+
 //display all books with details
+
 router.get("/all/page/:page/:userID",async(req,res)=>{
     try {
         cal_avreg();
@@ -36,8 +38,7 @@ router.get("/all/page/:page/:userID",async(req,res)=>{
             {
             path:'author',
             select:{'firstName':1,'lastName':1,"_id":0}        
-            },
-            {
+            },{
                 path:'category',
                 select:{'name':1}
             }
@@ -60,8 +61,8 @@ router.get("/all/page/:page/:userID",async(req,res)=>{
     }
 })//get
 
-
 //display all books 
+
 router.get("/all/page/:page",async(req,res)=>{
     try {
         cal_avreg();

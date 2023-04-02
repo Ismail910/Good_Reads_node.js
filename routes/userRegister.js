@@ -41,7 +41,6 @@ router.post("/",storageUser,async (req, res) => {
         confirmPassword: encryptedConfirmPassword,
         isAdmin,
       };
-
       if(req.file)
       {
         objUser.img=req.file.path;
