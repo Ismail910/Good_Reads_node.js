@@ -225,14 +225,15 @@ router.delete('/:id',async(req,res)=>{
  
 
 
-// router.get('/',async (req ,res)=>{ 
-//    try {
-//        const category = await CategoryModel.find({});
-//          return res.json(category)  
-//    } catch (err) {
-//     res.status(500).send(err)
-//    }
-// });
+ router.get('/',async (req ,res)=>{ 
+    try {
+       const category = await CategoryModel.find({});
+         return res.json(category)  
+   } catch (err) {
+     res.status(500).send(err)
+    }
+ });
+>>>>>>> 7c27d5cd00f13fb0e70e37d0dd035f18e04a1290
 
 
 
